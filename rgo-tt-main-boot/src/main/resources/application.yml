@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    active: dev
+
+persistence:
+  url: jdbc:postgresql://tasks-db:5432/tasks
+  schema: docs
+  username: task
+  password: qwe123
+  maxPoolSize: 10
