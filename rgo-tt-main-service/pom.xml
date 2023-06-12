@@ -10,23 +10,21 @@
         <version>23.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>rgo-tt-main-boot</artifactId>
+    <artifactId>rgo-tt-main-service</artifactId>
 
     <dependencies>
+        <!-- self modules -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-main-service</artifactId>
+            <artifactId>rgo-tt-main-persistence</artifactId>
         </dependency>
+        <!-- self modules -->
 
-        <!-- spring -->
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- spring -->
+        <!-- test -->
     </dependencies>
 </project>
