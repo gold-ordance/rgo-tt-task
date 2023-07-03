@@ -13,10 +13,12 @@
     <artifactId>rgo-tt-main-boot</artifactId>
 
     <dependencies>
+        <!-- self modules -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-tt-main-service</artifactId>
         </dependency>
+        <!-- self modules -->
 
         <!-- spring -->
         <dependency>
