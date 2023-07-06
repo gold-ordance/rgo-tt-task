@@ -13,12 +13,17 @@
     <artifactId>rgo-tt-main-persistence</artifactId>
 
     <dependencies>
-        <!-- self modules -->
+        <!-- external modules -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-main-common</artifactId>
+            <artifactId>rgo-tt-common-utils</artifactId>
+            <version>${rgo-tt-common.version}</version>
         </dependency>
-        <!-- self modules -->
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-tt-common-exceptions</artifactId>
+        </dependency>
+        <!-- external modules -->
 
         <!-- spring -->
         <dependency>

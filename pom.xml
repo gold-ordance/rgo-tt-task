@@ -20,22 +20,19 @@
     <modules>
         <module>rgo-tt-main-boot</module>
         <module>rgo-tt-main-persistence</module>
-        <module>rgo-tt-main-common</module>
         <module>rgo-tt-main-service</module>
+        <module>rgo-tt-main-rest-api</module>
     </modules>
 
     <properties>
         <java.version>11</java.version>
+
+        <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- self modules -->
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-main-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-tt-main-persistence</artifactId>
@@ -46,7 +43,35 @@
                 <artifactId>rgo-tt-main-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-main-rest-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- self modules -->
+
+            <!-- external modules -->
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-common-rest-api</artifactId>
+                <version>${rgo-tt-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-common-validator</artifactId>
+                <version>${rgo-tt-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-common-utils</artifactId>
+                <version>${rgo-tt-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-common-exceptions</artifactId>
+                <version>${rgo-tt-common.version}</version>
+            </dependency>
+            <!-- external modules -->
 
             <!-- others -->
             <dependency>

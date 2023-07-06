@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.jdbc.datasource.SmartDataSource;
+import rgo.tt.common.exceptions.BaseException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -46,28 +47,22 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
         }
 
         acquireConnection();
-        T result = null;
-        Throwable error = null;
 
         try {
-            result = supplier.get();
+            T result = supplier.get();
             commit();
-        } catch (Throwable th) {
-            error = th;
-            silentRollback().ifPresent(e -> log.warn("Tx rollback failed", e));
+            return result;
+        } catch (Exception exp) {
+            silentRollback().ifPresent(e -> log.warn("Tx rollback failed.", e));
+            if (exp instanceof RuntimeException) throw (RuntimeException) exp;
+            throw new BaseException("Tx failed.", exp);
         } finally {
-            silentReleaseConnection().ifPresent(e -> log.warn("Connection release failed", e));
+            silentReleaseConnection().ifPresent(e -> log.warn("Connection release failed.", e));
         }
-
-        if (error != null) {
-            throw new RuntimeException("Tx failed", error);
-        }
-
-        return result;
     }
 
     private void commit() throws SQLException {
-        log.trace("Commit tx");
+        log.trace("Commit tx.");
         ConnectionHolder connectionHolder = txConnection.get();
 
         if (connectionHolder.connection != null) {
@@ -80,18 +75,18 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
     }
 
     private void acquireConnection() {
-        log.trace("Start tx");
+        log.trace("Start tx.");
         txConnection.set(new ConnectionHolder());
     }
 
-    private Optional<Throwable> silentRollback() {
-        log.trace("Rollback tx");
+    private Optional<Exception> silentRollback() {
+        log.trace("Rollback tx.");
         ConnectionHolder connectionHolder = txConnection.get();
 
         if (connectionHolder.connection != null) {
             try {
                 connectionHolder.connection.rollback();
-            } catch (Throwable th) {
+            } catch (Exception th) {
                 return Optional.of(th);
             }
         }
@@ -99,13 +94,13 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
         return Optional.empty();
     }
 
-    private Optional<Throwable> silentReleaseConnection() {
+    private Optional<Exception> silentReleaseConnection() {
         ConnectionHolder connectionHolder = txConnection.get();
 
         if (connectionHolder.connection != null) {
             try {
                 connectionHolder.connection.close();
-            } catch (Throwable th) {
+            } catch (Exception th) {
                 return Optional.of(th);
             } finally {
                 txConnection.remove();

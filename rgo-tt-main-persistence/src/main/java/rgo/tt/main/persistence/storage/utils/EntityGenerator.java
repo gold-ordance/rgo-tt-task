@@ -1,8 +1,8 @@
-package rgo.tt.main.persistence;
+package rgo.tt.main.persistence.storage.utils;
 
 import rgo.tt.main.persistence.storage.entity.Task;
 
-import static rgo.tt.main.common.utils.CommonUtils.randomString;
+import static rgo.tt.common.utils.RandomUtils.randomString;
 
 public final class EntityGenerator {
 
