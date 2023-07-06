@@ -11,7 +11,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import rgo.tt.main.persistence.EntityGenerator;
+import rgo.tt.common.exceptions.BaseException;
+import rgo.tt.common.exceptions.InvalidEntityException;
+import rgo.tt.main.persistence.storage.utils.EntityGenerator;
 import rgo.tt.main.persistence.config.PersistenceConfig;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
@@ -26,8 +28,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static rgo.tt.main.common.utils.CommonUtils.randomPositiveLong;
-import static rgo.tt.main.common.utils.CommonUtils.randomString;
+import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
+import static rgo.tt.common.utils.RandomUtils.randomString;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -62,7 +65,7 @@ class TaskRepositoryTest {
 
     @Test
     void findByEntityId_found() {
-        Task created = EntityGenerator.randomTask();
+        Task created = randomTask();
         Task expected = insert(created);
 
         Optional<Task> opt = repository.findByEntityId(expected.getEntityId());
@@ -74,10 +77,10 @@ class TaskRepositoryTest {
     void findSoftlyByName() {
         String name = randomString();
 
-        Task task1 = EntityGenerator.randomTask(name);
-        Task task2 = EntityGenerator.randomTask(randomString() + name);
-        Task task3 = EntityGenerator.randomTask(name + randomString());
-        Task task4 = EntityGenerator.randomTask(randomString() + name + randomString());
+        Task task1 = randomTask(name);
+        Task task2 = randomTask(randomString() + name);
+        Task task3 = randomTask(name + randomString());
+        Task task4 = randomTask(randomString() + name + randomString());
 
         List<Task> tasks = List.of(task1, task2, task3, task4);
         List<Task> savedTasks = insertTasks(tasks);
@@ -88,18 +91,24 @@ class TaskRepositoryTest {
 
     @Test
     void save() {
-        Task created = EntityGenerator.randomTask();
+        Task created = randomTask();
 
         Task savedTask = repository.save(created);
         assertEquals(created.getName(), savedTask.getName());
     }
 
     @Test
+    void update_entityIdIsFake() {
+        Task created = randomTask(randomPositiveLong());
+        assertThrows(BaseException.class, () -> repository.update(created), "The entityId not found in the storage.");
+    }
+
+    @Test
     void update() {
-        Task created = EntityGenerator.randomTask();
+        Task created = randomTask();
         Task saved = insert(created);
 
-        Task updated = EntityGenerator.randomTask(saved.getEntityId());
+        Task updated = randomTask(saved.getEntityId());
         Task actual = repository.update(updated);
 
         assertEquals(saved.getEntityId(), actual.getEntityId());
@@ -110,16 +119,15 @@ class TaskRepositoryTest {
     @Test
     void deleteByEntityId_notFound() {
         long fakeId = randomPositiveLong();
-
-        assertThrows(RuntimeException.class, () -> repository.deleteByEntityId(fakeId), "Task delete by entity id error.");
+        assertFalse(repository.deleteByEntityId(fakeId));
     }
 
     @Test
     void deleteByEntityId_found() {
-        Task created = EntityGenerator.randomTask();
+        Task created = randomTask();
         Task saved = insert(created);
 
-        assertDoesNotThrow(() -> repository.deleteByEntityId(saved.getEntityId()));
+        assertTrue(repository.deleteByEntityId(saved.getEntityId()));
     }
 
     private List<Task> insertRandomTasks() {

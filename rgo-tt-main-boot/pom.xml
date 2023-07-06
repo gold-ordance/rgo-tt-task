@@ -16,19 +16,8 @@
         <!-- self modules -->
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-main-service</artifactId>
+            <artifactId>rgo-tt-main-rest-api</artifactId>
         </dependency>
         <!-- self modules -->
-
-        <!-- spring -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- spring -->
     </dependencies>
 </project>

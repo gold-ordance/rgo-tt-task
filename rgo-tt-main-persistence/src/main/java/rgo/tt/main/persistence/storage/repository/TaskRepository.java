@@ -8,9 +8,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.persistence.storage.exception.PersistenceException;
+import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.main.persistence.storage.query.TaskQuery;
 
 import java.util.List;
@@ -98,7 +99,13 @@ public class TaskRepository {
             int result = jdbc.update(TaskQuery.update(), params, keyHolder, new String[]{"entity_id"});
             Number key = keyHolder.getKey();
 
-            if (result != 1 || key == null) {
+            if (result == 0) {
+                String errorMsg = "The entityId not found in the storage.";
+                log.error(errorMsg);
+                throw new InvalidEntityException(errorMsg);
+            }
+
+            if (result > 1 || key == null) {
                 String errorMsg = "Task update error.";
                 log.error(errorMsg);
                 throw new PersistenceException(errorMsg);
@@ -115,16 +122,14 @@ public class TaskRepository {
         });
     }
 
-    public void deleteByEntityId(Long entityId) {
-        txManager.tx(() -> {
+    public boolean deleteByEntityId(Long entityId) {
+        return txManager.tx(() -> {
             MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-
             int result = jdbc.update(TaskQuery.deleteByEntityId(), params);
-            if (result != 1) {
-                String errorMsg = "Task delete by entity id error.";
-                log.error(errorMsg);
-                throw new PersistenceException(errorMsg);
-            }
+
+            if (result > 1) throw new PersistenceException("Tasks by object ID greater than 1: " + result);
+
+            return result == 1;
         });
     }
 

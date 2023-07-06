@@ -50,7 +50,7 @@ class DbTxManagerTest {
             });
             fail();
         } catch (Exception e) {
-            assertInstanceOf(ExpectedException.class, e.getCause());
+            assertInstanceOf(ExpectedException.class, e);
         }
 
         assertNotNull(connection.get());
@@ -88,7 +88,7 @@ class DbTxManagerTest {
             });
             fail();
         } catch (Exception e) {
-            assertInstanceOf(ExpectedException.class, e.getCause());
+            assertInstanceOf(ExpectedException.class, e);
         }
 
         assertNotNull(innerConnection.get());
