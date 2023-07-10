@@ -22,6 +22,7 @@
         <module>rgo-tt-main-persistence</module>
         <module>rgo-tt-main-service</module>
         <module>rgo-tt-main-rest-api</module>
+        <module>rgo-tt-main-db-migration</module>
     </modules>
 
     <properties>
