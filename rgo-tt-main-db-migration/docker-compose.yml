@@ -40,5 +40,13 @@ services:
       - ./src/main/resources/db/migration:/flyway/sql
       - ./src/main/resources/flyway/config/migration:/flyway/conf
     depends_on:
-      - flyway-manual-task
-    restart: on-failure
+      flyway-manual-task:
+        condition: service_completed_successfully
+
+
+  stub-container:
+    image: ogajun/stub-container:latest
+    container_name: stub_container
+    depends_on:
+      flyway-migration-task:
+        condition: service_completed_successfully
