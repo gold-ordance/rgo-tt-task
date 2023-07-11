@@ -1,10 +1,10 @@
 spring:
   profiles:
-    active: dev
+    active: production
 
 persistence:
-  url: jdbc:postgresql://tasks-db:5432/tasks
-  schema: docs
-  username: task
+  url: jdbc:postgresql://task-db:5432/task
+  schema: task
+  username: task_appl
   password: qwe123
   maxPoolSize: 10
