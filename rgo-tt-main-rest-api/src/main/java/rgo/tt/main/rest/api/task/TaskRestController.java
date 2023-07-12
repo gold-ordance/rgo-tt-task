@@ -22,7 +22,7 @@ import static rgo.tt.main.rest.api.task.TaskMapper.map;
 
 @RestController
 @RequestMapping("/tasks")
-public class TaskRestController {
+public class TaskRestController implements TaskController {
 
     private final TaskService service;
 
@@ -30,6 +30,7 @@ public class TaskRestController {
         this.service = service;
     }
 
+    @Override
     @GetMapping
     public ResponseEntity<Response> getAll() {
         List<Task> tasks = service.findAll();
@@ -37,6 +38,7 @@ public class TaskRestController {
         return convert(response);
     }
 
+    @Override
     @GetMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> getByEntityId(@PathVariable Long entityId) {
         Optional<Task> task = service.findByEntityId(entityId);
@@ -47,13 +49,15 @@ public class TaskRestController {
         return convert(response);
     }
 
+    @Override
     @GetMapping(params = "name")
-    public ResponseEntity<Response> getByName(@RequestParam String name) {
+    public ResponseEntity<Response> getByName(String name) {
         List<Task> tasks = service.findSoftlyByName(name);
         Response response = TaskGetListResponse.success(tasks);
         return convert(response);
     }
 
+    @Override
     @PostMapping
     public ResponseEntity<Response> save(@RequestBody TaskSaveRequest rq) {
         Task stored = service.save(map(rq));
@@ -61,6 +65,7 @@ public class TaskRestController {
         return convert(response);
     }
 
+    @Override
     @PutMapping
     public ResponseEntity<Response> put(@RequestBody TaskPutRequest rq) {
         Task updated = service.update(map(rq));
@@ -68,6 +73,7 @@ public class TaskRestController {
         return convert(response);
     }
 
+    @Override
     @DeleteMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> deleteByEntityId(@PathVariable Long entityId) {
         boolean deleted = service.deleteByEntityId(entityId);

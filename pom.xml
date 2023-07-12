@@ -80,6 +80,11 @@
                 <artifactId>guava</artifactId>
                 <version>31.1-jre</version>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>1.7.0</version>
+            </dependency>
             <!-- others -->
         </dependencies>
     </dependencyManagement>
