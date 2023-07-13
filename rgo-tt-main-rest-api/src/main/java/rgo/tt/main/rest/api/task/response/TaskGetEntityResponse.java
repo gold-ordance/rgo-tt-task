@@ -27,5 +27,13 @@ public class TaskGetEntityResponse implements Response {
     public Task getTask() {
         return task;
     }
+
+    @Override
+    public String toString() {
+        return "TaskGetEntityResponse{" +
+                "status=" + status +
+                ", task=" + task +
+                '}';
+    }
 }
 
