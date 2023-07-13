@@ -29,4 +29,12 @@ public class TaskGetListResponse implements Response {
     public List<Task> getTasks() {
         return tasks;
     }
+
+    @Override
+    public String toString() {
+        return "TaskGetListResponse{" +
+                "status=" + status +
+                ", tasksSize=" + tasks.size() +
+                '}';
+    }
 }

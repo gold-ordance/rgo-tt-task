@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class TaskRepository {
 
-    private static final Logger log = LoggerFactory.getLogger(TaskRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskRepository.class);
 
     private final DbTxManager txManager;
     private final NamedParameterJdbcTemplate jdbc;
@@ -43,13 +43,13 @@ public class TaskRepository {
 
     private Optional<Task> first(List<Task> tasks) {
         if (tasks.isEmpty()) {
-            log.info("The task not found.");
+            LOGGER.info("The task not found.");
             return Optional.empty();
         }
 
         if (tasks.size() > 1) {
             String errorMsg = "The number of tasks is not equal to 1.";
-            log.error(errorMsg);
+            LOGGER.error(errorMsg);
             throw new PersistenceException(errorMsg);
         }
 
@@ -74,14 +74,14 @@ public class TaskRepository {
 
             if (result != 1 || key == null) {
                 String errorMsg = "Task save error.";
-                log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 throw new PersistenceException(errorMsg);
             }
 
             Optional<Task> opt = findByEntityId(key.longValue());
             if (opt.isEmpty()) {
                 String errorMsg = "Task save error during searching.";
-                log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 throw new PersistenceException(errorMsg);
             }
 
@@ -101,20 +101,20 @@ public class TaskRepository {
 
             if (result == 0) {
                 String errorMsg = "The entityId not found in the storage.";
-                log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 throw new InvalidEntityException(errorMsg);
             }
 
             if (result > 1 || key == null) {
                 String errorMsg = "Task update error.";
-                log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 throw new PersistenceException(errorMsg);
             }
 
             Optional<Task> opt = findByEntityId(key.longValue());
             if (opt.isEmpty()) {
                 String errorMsg = "Task update error during searching.";
-                log.error(errorMsg);
+                LOGGER.error(errorMsg);
                 throw new PersistenceException(errorMsg);
             }
 

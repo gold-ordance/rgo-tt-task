@@ -35,4 +35,12 @@ public class TaskModifyResponse implements Response {
     public Task getTask() {
         return task;
     }
+
+    @Override
+    public String toString() {
+        return "TaskModifyResponse{" +
+                "status=" + status +
+                ", task=" + task +
+                '}';
+    }
 }
