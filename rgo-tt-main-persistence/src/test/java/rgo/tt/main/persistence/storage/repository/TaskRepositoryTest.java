@@ -113,7 +113,8 @@ class TaskRepositoryTest {
 
         assertEquals(saved.getEntityId(), actual.getEntityId());
         assertNotEquals(saved.getName(), actual.getName());
-        assertEquals(updated, actual);
+        assertEquals(saved.getCreatedDate(), actual.getCreatedDate());
+        assertNotEquals(saved.getLastModifiedDate(), actual.getLastModifiedDate());
     }
 
     @Test
