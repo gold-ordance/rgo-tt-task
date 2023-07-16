@@ -26,7 +26,8 @@ public final class TaskQuery {
 
     public static String update() {
         return  "UPDATE " + TABLE_NAME + " " +
-                "SET name = :name " +
+                "SET name = :name, " +
+                "    last_modified_date = :lmd " +
                 "WHERE entity_id = :entity_id";
     }
 
@@ -37,7 +38,9 @@ public final class TaskQuery {
 
     private static String select() {
         return  "SELECT entity_id, " +
-                "       name " +
+                "       name, " +
+                "       created_date, " +
+                "       last_modified_date " +
                 "FROM " + TABLE_NAME + " ";
     }
 }

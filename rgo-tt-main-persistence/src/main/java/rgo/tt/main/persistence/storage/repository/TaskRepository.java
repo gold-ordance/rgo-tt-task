@@ -14,6 +14,8 @@ import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.main.persistence.storage.query.TaskQuery;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -93,7 +95,8 @@ public class TaskRepository {
         return txManager.tx(() -> {
             MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                     "entity_id", task.getEntityId(),
-                    "name", task.getName()));
+                    "name", task.getName(),
+                    "lmd", LocalDateTime.now(ZoneOffset.UTC)));
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             int result = jdbc.update(TaskQuery.update(), params, keyHolder, new String[]{"entity_id"});
@@ -137,5 +140,7 @@ public class TaskRepository {
     static final RowMapper<Task> mapper = (rs, num) -> Task.builder()
             .setEntityId(rs.getLong("entity_id"))
             .setName(rs.getString("name"))
+            .setCreatedDate(rs.getTimestamp("created_date").toLocalDateTime())
+            .setLastModifiedDate(rs.getTimestamp("last_modified_date").toLocalDateTime())
             .build();
 }

@@ -69,7 +69,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())));
+                .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(saved.getCreatedDate().toString())))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
     }
 
     @Test
@@ -93,7 +95,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.task.entityId", is(saved.getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.name", is(saved.getName())));
+                .andExpect(jsonPath("$.task.name", is(saved.getName())))
+                .andExpect(jsonPath("$.task.createdDate", startsWith(saved.getCreatedDate().toString())))
+                .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
     }
 
     @Test
@@ -130,7 +134,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())));
+                .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(saved.getCreatedDate().toString())))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
     }
 
     @Test
@@ -167,7 +173,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.STORED.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.task.entityId", notNullValue()))
-                .andExpect(jsonPath("$.task.name", is(rq.getName())));
+                .andExpect(jsonPath("$.task.name", is(rq.getName())))
+                .andExpect(jsonPath("$.task.createdDate", notNullValue()))
+                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()));
     }
 
     @Test
@@ -246,7 +254,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.task.entityId", is(rq.getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.name", is(rq.getName())));
+                .andExpect(jsonPath("$.task.name", is(rq.getName())))
+                .andExpect(jsonPath("$.task.createdDate", notNullValue()))
+                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()));
     }
 
     @Test
