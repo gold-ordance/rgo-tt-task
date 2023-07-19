@@ -18,6 +18,9 @@ import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.service.task.TaskService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -70,8 +73,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
-                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(saved.getCreatedDate().toString())))
-                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
     }
 
     @Test
@@ -96,8 +99,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.status.message", nullValue()))
                 .andExpect(jsonPath("$.task.entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.task.name", is(saved.getName())))
-                .andExpect(jsonPath("$.task.createdDate", startsWith(saved.getCreatedDate().toString())))
-                .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
+                .andExpect(jsonPath("$.task.createdDate", startsWith(toString(saved.getCreatedDate()))))
+                .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
     }
 
     @Test
@@ -135,8 +138,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
-                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(saved.getCreatedDate().toString())))
-                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(saved.getLastModifiedDate().toString())));
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
     }
 
     @Test
@@ -279,6 +282,10 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.NO_CONTENT.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NO_CONTENT.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()));
+    }
+
+    private static String toString(LocalDateTime time) {
+        return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
     }
 
     private Task insertTask() {
