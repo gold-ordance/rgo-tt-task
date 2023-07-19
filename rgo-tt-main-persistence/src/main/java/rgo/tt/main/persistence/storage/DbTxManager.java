@@ -54,7 +54,7 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
             return result;
         } catch (Exception exp) {
             silentRollback().ifPresent(e -> log.warn("Tx rollback failed.", e));
-            if (exp instanceof RuntimeException) throw (RuntimeException) exp;
+            if (exp instanceof BaseException) throw (BaseException) exp;
             throw new BaseException("Tx failed.", exp);
         } finally {
             silentReleaseConnection().ifPresent(e -> log.warn("Connection release failed.", e));

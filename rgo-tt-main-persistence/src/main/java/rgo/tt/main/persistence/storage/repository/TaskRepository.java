@@ -12,7 +12,9 @@ import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.common.exceptions.PersistenceException;
+import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.query.TaskQuery;
+import rgo.tt.main.persistence.storage.query.TaskStatusQuery;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -93,10 +95,13 @@ public class TaskRepository {
 
     public Task update(Task task) {
         return txManager.tx(() -> {
+            checkStatusIdForExistence(task.getStatus().getEntityId());
+
             MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
                     "entity_id", task.getEntityId(),
                     "name", task.getName(),
-                    "lmd", LocalDateTime.now(ZoneOffset.UTC)));
+                    "lmd", LocalDateTime.now(ZoneOffset.UTC),
+                    "status", task.getStatus().getEntityId()));
 
             KeyHolder keyHolder = new GeneratedKeyHolder();
             int result = jdbc.update(TaskQuery.update(), params, keyHolder, new String[]{"entity_id"});
@@ -125,6 +130,17 @@ public class TaskRepository {
         });
     }
 
+    private void checkStatusIdForExistence(Long statusId) {
+        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", statusId);
+        List<?> list = jdbc.query(TaskStatusQuery.findByEntityId(), params, (rs, num) -> rs);
+
+        if (list.isEmpty()) {
+            String errorMsg = "The statusId not found in the storage.";
+            LOGGER.error(errorMsg);
+            throw new InvalidEntityException(errorMsg);
+        }
+    }
+
     public boolean deleteByEntityId(Long entityId) {
         return txManager.tx(() -> {
             MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
@@ -138,9 +154,13 @@ public class TaskRepository {
 
     @VisibleForTesting
     static final RowMapper<Task> mapper = (rs, num) -> Task.builder()
-            .setEntityId(rs.getLong("entity_id"))
-            .setName(rs.getString("name"))
-            .setCreatedDate(rs.getTimestamp("created_date").toLocalDateTime())
-            .setLastModifiedDate(rs.getTimestamp("last_modified_date").toLocalDateTime())
+            .setEntityId(rs.getLong("t_entity_id"))
+            .setName(rs.getString("t_name"))
+            .setCreatedDate(rs.getTimestamp("t_created_date").toLocalDateTime())
+            .setLastModifiedDate(rs.getTimestamp("t_last_modified_date").toLocalDateTime())
+            .setStatus(TaskStatus.builder()
+                    .setEntityId(rs.getLong("ts_entity_id"))
+                    .setName(rs.getString("ts_name"))
+                    .build())
             .build();
 }

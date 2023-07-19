@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfig.class)
@@ -74,10 +74,10 @@ class TaskRepositoryTest {
     void findSoftlyByName() {
         String name = randomString();
 
-        Task task1 = randomTask(name);
-        Task task2 = randomTask(randomString() + name);
-        Task task3 = randomTask(name + randomString());
-        Task task4 = randomTask(randomString() + name + randomString());
+        Task task1 = randomTaskBuilder().setName(name).build();
+        Task task2 = randomTaskBuilder().setName(randomString() + name).build();
+        Task task3 = randomTaskBuilder().setName(name + randomString()).build();
+        Task task4 = randomTaskBuilder().setName(randomString() + name + randomString()).build();
 
         List<Task> tasks = List.of(task1, task2, task3, task4);
         List<Task> savedTasks = insertTasks(tasks);
@@ -92,11 +92,12 @@ class TaskRepositoryTest {
 
         Task savedTask = repository.save(created);
         assertEquals(created.getName(), savedTask.getName());
+        assertEquals(TO_DO, savedTask.getStatus());
     }
 
     @Test
     void update_entityIdIsFake() {
-        Task created = randomTask(randomPositiveLong());
+        Task created = randomTaskBuilder().setEntityId(randomPositiveLong()).build();
         assertThrows(BaseException.class, () -> repository.update(created), "The entityId not found in the storage.");
     }
 
@@ -105,13 +106,14 @@ class TaskRepositoryTest {
         Task created = randomTask();
         Task saved = insert(created);
 
-        Task updated = randomTask(saved.getEntityId());
+        Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).build();
         Task actual = repository.update(updated);
 
         assertEquals(saved.getEntityId(), actual.getEntityId());
-        assertNotEquals(saved.getName(), actual.getName());
+        assertEquals(updated.getName(), actual.getName());
         assertEquals(saved.getCreatedDate(), actual.getCreatedDate());
         assertNotEquals(saved.getLastModifiedDate(), actual.getLastModifiedDate());
+        assertEquals(updated.getStatus(), actual.getStatus());
     }
 
     @Test

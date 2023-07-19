@@ -1,6 +1,7 @@
 package rgo.tt.main.rest.api.task;
 
 import rgo.tt.main.persistence.storage.entity.Task;
+import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 
@@ -19,6 +20,9 @@ public final class TaskMapper {
         return Task.builder()
                 .setEntityId(rq.getEntityId())
                 .setName(rq.getName())
+                .setStatus(TaskStatus.builder()
+                        .setEntityId(rq.getStatusId())
+                        .build())
                 .build();
     }
 }

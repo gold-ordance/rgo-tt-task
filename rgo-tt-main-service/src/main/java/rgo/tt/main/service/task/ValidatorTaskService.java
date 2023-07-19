@@ -51,6 +51,7 @@ public class ValidatorTaskService implements TaskService {
     public Task update(Task task) {
         LOGGER.info("Request 'update' received: task={}", task);
         checkObjectId(task.getEntityId(), "entityId");
+        checkObjectId(task.getStatus().getEntityId(), "statusId");
         checkString(task.getName(), "name");
         return delegate.update(task);
     }
