@@ -2,10 +2,10 @@ package rgo.tt.main.persistence.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import rgo.tt.main.persistence.config.properties.DbProperties;
@@ -21,7 +21,7 @@ public class PersistenceConfig {
     private static final String DB_NAME = "task";
 
     @Bean
-    @Profile("dev | test")
+    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
     public DataSource h2() {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
@@ -31,7 +31,7 @@ public class PersistenceConfig {
     }
 
     @Bean
-    @Profile("!dev & !test")
+    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
     public DataSource pg(DbProperties dbProp) {
         HikariConfig hk = new HikariConfig();
         hk.setJdbcUrl(dbProp.getUrl());

@@ -1,13 +1,10 @@
-spring:
-  profiles:
-    active: production
-
 springdoc:
   swagger-ui:
     enabled: true
     path: /docs
 
 persistence:
+  dialect: POSTGRES
   url: jdbc:postgresql://task-db:5432/task
   schema: task
   username: task_appl

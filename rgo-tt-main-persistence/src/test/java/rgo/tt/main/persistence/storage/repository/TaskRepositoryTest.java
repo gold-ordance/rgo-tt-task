@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.common.exceptions.BaseException;
-import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.storage.utils.EntityGenerator;
 import rgo.tt.main.persistence.config.PersistenceConfig;
 import rgo.tt.main.persistence.storage.DbTxManager;
@@ -32,7 +30,6 @@ import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
 
-@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfig.class)
 class TaskRepositoryTest {

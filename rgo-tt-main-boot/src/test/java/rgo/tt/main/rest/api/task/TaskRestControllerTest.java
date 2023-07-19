@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,7 +30,6 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
 
 @SpringBootTest
 @WebAppConfiguration
-@ActiveProfiles("test")
 class TaskRestControllerTest {
 
     private static final String BASE_ENDPOINT = "/tasks";

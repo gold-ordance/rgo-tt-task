@@ -52,6 +52,11 @@
                             <password>${docker.password}</password>
                         </auth>
                     </to>
+                    <container>
+                        <args>
+                            <arg>--spring.profiles.active=production</arg>
+                        </args>
+                    </container>
                 </configuration>
                 <executions>
                     <execution>
