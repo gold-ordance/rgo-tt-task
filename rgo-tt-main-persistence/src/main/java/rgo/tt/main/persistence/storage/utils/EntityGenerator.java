@@ -1,30 +1,43 @@
 package rgo.tt.main.persistence.storage.utils;
 
 import rgo.tt.main.persistence.storage.entity.Task;
+import rgo.tt.main.persistence.storage.entity.TaskStatus;
 
-import static rgo.tt.common.utils.RandomUtils.randomString;
+import java.util.List;
+
+import static rgo.tt.common.utils.RandomUtils.*;
 
 public final class EntityGenerator {
+
+    public static final TaskStatus TO_DO = TaskStatus.builder().setEntityId(1L).setName("TO DO").build();
+
+    private static final List<TaskStatus> STATUSES = List.of(
+            TO_DO,
+            TaskStatus.builder().setEntityId(2L).setName("IN PROGRESS").build(),
+            TaskStatus.builder().setEntityId(3L).setName("DONE").build()
+    );
 
     private EntityGenerator() {
     }
 
     public static Task randomTask() {
-        return Task.builder()
-                .setName(randomString())
-                .build();
+        return randomTaskBuilder().build();
     }
 
-    public static Task randomTask(Long entityId) {
+    public static Task.Builder randomTaskBuilder() {
         return Task.builder()
-                .setEntityId(entityId)
-                .setName(randomString())
-                .build();
+               .setEntityId(randomPositiveLong())
+               .setName(randomString())
+               .setStatus(randomElement(STATUSES));
     }
 
-    public static Task randomTask(String name) {
-        return Task.builder()
-                .setName(name)
-                .build();
+    public static TaskStatus randomTaskStatus() {
+        return randomElement(STATUSES);
+    }
+
+    public static TaskStatus.Builder randomTaskStatusBuilder() {
+        return TaskStatus.builder()
+              .setEntityId(randomPositiveLong())
+              .setName(randomString());
     }
 }

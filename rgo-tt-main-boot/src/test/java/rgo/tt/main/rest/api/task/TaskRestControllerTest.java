@@ -26,7 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static rgo.tt.common.rest.api.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
+import static rgo.tt.main.rest.api.RequestGenerator.createTaskPutRequest;
+import static rgo.tt.main.rest.api.RequestGenerator.createTaskSaveRequest;
 
 @SpringBootTest
 @WebAppConfiguration
@@ -72,7 +74,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
-                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
+                .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())));
     }
 
     @Test
@@ -98,7 +102,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.task.name", is(saved.getName())))
                 .andExpect(jsonPath("$.task.createdDate", startsWith(toString(saved.getCreatedDate()))))
-                .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
+                .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
+                .andExpect(jsonPath("$.task.status.entityId", is(saved.getStatus().getEntityId().intValue())))
+                .andExpect(jsonPath("$.task.status.name", is(saved.getStatus().getName())));
     }
 
     @Test
@@ -137,12 +143,15 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
-                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))));
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
+                .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())));
     }
 
     @Test
     void save_invalidRq_nameIsNull() throws Exception {
-        TaskSaveRequest rq = new TaskSaveRequest();
+        TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setName(null);
 
         mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -153,7 +162,7 @@ class TaskRestControllerTest {
 
     @Test
     void save_invalidRq_nameIsEmpty() throws Exception {
-        TaskSaveRequest rq = new TaskSaveRequest();
+        TaskSaveRequest rq = createTaskSaveRequest();
         rq.setName("");
 
         mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
@@ -165,8 +174,7 @@ class TaskRestControllerTest {
 
     @Test
     void save() throws Exception {
-        TaskSaveRequest rq = new TaskSaveRequest();
-        rq.setName(randomString());
+        TaskSaveRequest rq = createTaskSaveRequest();
 
         mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -176,13 +184,15 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.entityId", notNullValue()))
                 .andExpect(jsonPath("$.task.name", is(rq.getName())))
                 .andExpect(jsonPath("$.task.createdDate", notNullValue()))
-                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()));
+                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()))
+                .andExpect(jsonPath("$.task.status.entityId", is(TO_DO.getEntityId().intValue())))
+                .andExpect(jsonPath("$.task.status.name", is(TO_DO.getName())));
     }
 
     @Test
     void put_invalidRq_entityIdIsNull() throws Exception {
-        TaskPutRequest rq = new TaskPutRequest();
-        rq.setName(randomString());
+        TaskPutRequest rq = createTaskPutRequest();
+        rq.setEntityId(null);
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -193,9 +203,8 @@ class TaskRestControllerTest {
 
     @Test
     void put_invalidRq_entityIdIsNegative() throws Exception {
-        TaskPutRequest rq = new TaskPutRequest();
+        TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(-randomPositiveLong());
-        rq.setName(randomString());
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -206,8 +215,8 @@ class TaskRestControllerTest {
 
     @Test
     void put_invalidRq_nameIsNull() throws Exception {
-        TaskPutRequest rq = new TaskPutRequest();
-        rq.setEntityId(randomPositiveLong());
+        TaskPutRequest rq = createTaskPutRequest();
+        rq.setName(null);
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -218,8 +227,7 @@ class TaskRestControllerTest {
 
     @Test
     void put_invalidRq_nameIsEmpty() throws Exception {
-        TaskPutRequest rq = new TaskPutRequest();
-        rq.setEntityId(randomPositiveLong());
+        TaskPutRequest rq = createTaskPutRequest();
         rq.setName("");
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
@@ -230,10 +238,32 @@ class TaskRestControllerTest {
     }
 
     @Test
+    void put_invalidRq_statusIdIsNull() throws Exception {
+        TaskPutRequest rq = createTaskPutRequest();
+        rq.setStatusId(null);
+
+        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The statusId is null.")));
+    }
+
+    @Test
+    void put_invalidRq_statusIdIsNegative() throws Exception {
+        TaskPutRequest rq = createTaskPutRequest();
+        rq.setStatusId(-randomPositiveLong());
+
+        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The statusId is negative.")));
+    }
+
+    @Test
     void put_invalidEntity_entityIdIsFake() throws Exception {
-        TaskPutRequest rq = new TaskPutRequest();
-        rq.setEntityId(randomPositiveLong());
-        rq.setName(randomString());
+        TaskPutRequest rq = createTaskPutRequest();
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -243,11 +273,26 @@ class TaskRestControllerTest {
     }
 
     @Test
+    void put_invalidEntity_statusIdIsFake() throws Exception {
+        Task saved = insertTask();
+
+        TaskPutRequest rq = createTaskPutRequest();
+        rq.setEntityId(saved.getEntityId());
+        rq.setStatusId(0L);
+
+        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
+                .andExpect(jsonPath("$.status.message", is("The statusId not found in the storage.")));
+    }
+
+    @Test
     void putTask() throws Exception {
         Task saved = insertTask();
-        TaskPutRequest rq = new TaskPutRequest();
+
+        TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(saved.getEntityId());
-        rq.setName(randomString());
 
         mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -257,7 +302,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.entityId", is(rq.getEntityId().intValue())))
                 .andExpect(jsonPath("$.task.name", is(rq.getName())))
                 .andExpect(jsonPath("$.task.createdDate", notNullValue()))
-                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()));
+                .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()))
+                .andExpect(jsonPath("$.task.status.entityId", is(rq.getStatusId().intValue())));
     }
 
     @Test

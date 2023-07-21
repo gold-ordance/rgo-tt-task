@@ -14,7 +14,8 @@ import rgo.tt.main.service.config.ServiceConfig;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
-import static rgo.tt.common.utils.RandomUtils.randomString;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatusBuilder;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ServiceConfig.class)
@@ -52,41 +53,50 @@ class TaskServiceTest {
 
     @Test
     void save_invalidRq_nameIsNull() {
-        Task task = Task.builder().build();
+        Task task = randomTaskBuilder().setName(null).build();
         assertThrows(ValidateException.class, () -> service.save(task), "The name is null.");
     }
 
     @Test
     void save_invalidRq_nameIsEmpty() {
-        String name = "";
-        Task task = Task.builder().setName(name).build();
+        Task task = randomTaskBuilder().setName("").build();
         assertThrows(ValidateException.class, () -> service.save(task), "The name is empty.");
     }
 
     @Test
     void update_invalidRq_nameIsNull() {
-        Task task = Task.builder().setEntityId(randomPositiveLong()).build();
+        Task task = randomTaskBuilder().setName(null).build();
         assertThrows(ValidateException.class, () -> service.update(task), "The name is null.");
     }
 
     @Test
     void update_invalidRq_nameIsEmpty() {
-        String name = "";
-        Task task = Task.builder().setEntityId(randomPositiveLong()).setName(name).build();
+        Task task = randomTaskBuilder().setName("").build();
         assertThrows(ValidateException.class, () -> service.update(task), "The name is empty.");
     }
 
     @Test
     void update_invalidRq_entityIdIsNull() {
-        Task task = Task.builder().setName(randomString()).build();
+        Task task = randomTaskBuilder().setEntityId(null).build();
         assertThrows(ValidateException.class, () -> service.update(task), "The entityId is null.");
     }
 
     @Test
     void update_invalidRq_entityIdIsNegative() {
-        Long entityId = -randomPositiveLong();
-        Task task = Task.builder().setEntityId(entityId).setName(randomString()).build();
+        Task task = randomTaskBuilder().setEntityId(-randomPositiveLong()).build();
         assertThrows(ValidateException.class, () -> service.update(task), "The entityId is negative.");
+    }
+
+    @Test
+    void update_invalidRq_statusIdIsNull() {
+        Task task = randomTaskBuilder().setStatus(randomTaskStatusBuilder().setEntityId(null).build()).build();
+        assertThrows(ValidateException.class, () -> service.update(task), "The statusId is null.");
+    }
+
+    @Test
+    void update_invalidRq_statusIdIsNegative() {
+        Task task = randomTaskBuilder().setStatus(randomTaskStatusBuilder().setEntityId(-randomPositiveLong()).build()).build();
+        assertThrows(ValidateException.class, () -> service.update(task), "The statusId is negative.");
     }
 
     @Test

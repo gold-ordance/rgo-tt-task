@@ -1,0 +1,14 @@
+CREATE SEQUENCE task_status_sequence;
+
+CREATE TABLE TASK_STATUS (
+    ENTITY_ID BIGINT PRIMARY KEY DEFAULT nextval('task_status_sequence'),
+    NAME      VARCHAR(128) NOT NULL
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TASK_STATUS TO ${appRole};
+GRANT SELECT ON TASK_STATUS TO ${readerRole};
+
+INSERT INTO TASK_STATUS(name)
+VALUES ('TO DO'),
+       ('IN PROGRESS'),
+       ('DONE');
