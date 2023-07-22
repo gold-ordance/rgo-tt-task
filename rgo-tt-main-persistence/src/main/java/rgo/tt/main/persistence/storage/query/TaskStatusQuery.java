@@ -7,6 +7,10 @@ public final class TaskStatusQuery {
     private TaskStatusQuery() {
     }
 
+    public static String findAll() {
+        return select();
+    }
+
     public static String findByEntityId() {
         return select() + "WHERE entity_id = :entity_id";
     }

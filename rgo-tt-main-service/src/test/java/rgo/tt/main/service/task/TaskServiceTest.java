@@ -21,8 +21,8 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskSt
 @ContextConfiguration(classes = ServiceConfig.class)
 class TaskServiceTest {
 
-    @Autowired TaskService service;
-    @Autowired DbTxManager tx;
+    @Autowired private TaskService service;
+    @Autowired private DbTxManager tx;
 
     @BeforeEach
     void setUp() {
