@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import rgo.tt.main.persistence.config.properties.DbProperties;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.repository.TaskRepository;
+import rgo.tt.main.persistence.storage.repository.TaskStatusRepository;
 
 import javax.sql.DataSource;
 
@@ -50,5 +51,10 @@ public class PersistenceConfig {
     @Bean
     public TaskRepository taskRepository(DbTxManager txManager) {
         return new TaskRepository(txManager);
+    }
+
+    @Bean
+    public TaskStatusRepository taskStatusRepository(DbTxManager txManager) {
+        return new TaskStatusRepository(txManager);
     }
 }
