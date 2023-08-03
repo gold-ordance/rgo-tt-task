@@ -26,7 +26,7 @@ class TasksBoardServiceTest {
 
     @Test
     void findByEntityId_invalidRq_entityIdIsNegative() {
-        Long fakeId = -randomPositiveLong();
+        long fakeId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findByEntityId(fakeId), "The entityId is negative.");
     }
 
@@ -73,7 +73,7 @@ class TasksBoardServiceTest {
 
     @Test
     void deleteByEntityId_invalidRq_entityIdIsNegative() {
-        Long fakeId = -randomPositiveLong();
+        long fakeId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.deleteByEntityId(fakeId), "The entityId is negative.");
     }
 }

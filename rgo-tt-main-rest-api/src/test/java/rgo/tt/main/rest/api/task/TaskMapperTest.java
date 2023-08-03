@@ -21,7 +21,7 @@ class TaskMapperTest {
 
         assertEquals(rq.getName(), task.getName());
 
-        List<String> nonEmptyFields = List.of("name", "board");
+        List<String> nonEmptyFields = List.of("name", "board", "description");
         assertNullFields(task, nonEmptyFields);
     }
 
@@ -34,7 +34,7 @@ class TaskMapperTest {
         assertEquals(rq.getName(), task.getName());
         assertEquals(rq.getStatusId(), task.getStatus().getEntityId());
 
-        List<String> nonEmptyFields = List.of("entityId", "name", "status");
+        List<String> nonEmptyFields = List.of("entityId", "name", "status", "description");
         assertNullFields(task, nonEmptyFields);
     }
 }

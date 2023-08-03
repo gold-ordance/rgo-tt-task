@@ -5,8 +5,7 @@ import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardPutRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 
-import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
-import static rgo.tt.common.utils.RandomUtils.randomString;
+import static rgo.tt.common.utils.RandomUtils.*;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatus;
 
 public final class RequestGenerator {
@@ -18,6 +17,7 @@ public final class RequestGenerator {
         TaskSaveRequest rq = new TaskSaveRequest();
         rq.setName(randomString());
         rq.setBoardId(randomPositiveLong());
+        rq.setDescription(randomBigString());
         return rq;
     }
 
@@ -26,6 +26,7 @@ public final class RequestGenerator {
         rq.setEntityId(randomPositiveLong());
         rq.setName(randomString());
         rq.setStatusId(randomTaskStatus().getEntityId());
+        rq.setDescription(randomBigString());
         return rq;
     }
 

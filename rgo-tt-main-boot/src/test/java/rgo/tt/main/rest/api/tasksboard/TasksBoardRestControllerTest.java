@@ -71,7 +71,7 @@ class TasksBoardRestControllerTest {
 
     @Test
     void getByEntityId_entityIdIsFake() throws Exception {
-        Long fakeEntityId = randomPositiveLong();
+        long fakeEntityId = randomPositiveLong();
 
         mvc.perform(get(TasksBoardRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -206,7 +206,7 @@ class TasksBoardRestControllerTest {
 
     @Test
     void deleteByEntityId_entityIdIsFake() throws Exception {
-        Long fakeEntityId = randomPositiveLong();
+        long fakeEntityId = randomPositiveLong();
 
         mvc.perform(delete(TasksBoardRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

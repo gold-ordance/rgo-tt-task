@@ -28,7 +28,7 @@ class TaskServiceTest {
 
     @Test
     void findAll_invalidRq_boardIdIsNegative() {
-        Long fakeBoardId = -randomPositiveLong();
+        long fakeBoardId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findAll(fakeBoardId), "The boardId is negative.");
     }
 
@@ -39,20 +39,20 @@ class TaskServiceTest {
 
     @Test
     void findByEntityId_invalidRq_entityIdIsNegative() {
-        Long fakeId = -randomPositiveLong();
+        long fakeId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findByEntityId(fakeId), "The entityId is negative.");
     }
 
     @Test
     void findBySoftlyName_invalidRq_nameIsNull() {
-        Long boardId = randomPositiveLong();
+        long boardId = randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findSoftlyByName(null, boardId), "The name is null.");
     }
 
     @Test
     void findBySoftlyName_invalidRq_nameIsEmpty() {
         String emptyName = "";
-        Long boardId = randomPositiveLong();
+        long boardId = randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findSoftlyByName(emptyName, boardId), "The name is empty.");
     }
 
@@ -65,7 +65,7 @@ class TaskServiceTest {
     @Test
     void findBySoftlyName_invalidRq_boardIdIsNegative() {
         String name = randomString();
-        Long fakeBoardId = -randomPositiveLong();
+        long fakeBoardId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.findSoftlyByName(name, fakeBoardId), "The boardId is negative.");
     }
 
@@ -138,7 +138,7 @@ class TaskServiceTest {
 
     @Test
     void deleteByEntityId_invalidRq_entityIdIsNegative() {
-        Long fakeId = -randomPositiveLong();
+        long fakeId = -randomPositiveLong();
         assertThrows(ValidateException.class, () -> service.deleteByEntityId(fakeId), "The entityId is negative.");
     }
 }

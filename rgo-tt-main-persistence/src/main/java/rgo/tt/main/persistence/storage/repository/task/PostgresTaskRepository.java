@@ -76,9 +76,10 @@ public class PostgresTaskRepository implements TaskRepository {
     public Task save(Task task) {
         checkBoardIdForExistence(task.getBoard().getEntityId());
 
-        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "name", task.getName(),
-                "board_id", task.getBoard().getEntityId()));
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("name", task.getName())
+                .addValue("board_id", task.getBoard().getEntityId())
+                .addValue("description", task.getDescription());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = jdbc.update(TaskQuery.save(), params, keyHolder, new String[]{"entity_id"});
@@ -119,11 +120,12 @@ public class PostgresTaskRepository implements TaskRepository {
     public Task update(Task task) {
         checkStatusIdForExistence(task.getStatus().getEntityId());
 
-        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "entity_id", task.getEntityId(),
-                "name", task.getName(),
-                "lmd", LocalDateTime.now(ZoneOffset.UTC),
-                "status_id", task.getStatus().getEntityId()));
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("entity_id", task.getEntityId())
+                .addValue("name", task.getName())
+                .addValue("lmd", LocalDateTime.now(ZoneOffset.UTC))
+                .addValue("status_id", task.getStatus().getEntityId())
+                .addValue("description", task.getDescription());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = jdbc.update(TaskQuery.update(), params, keyHolder, new String[]{"entity_id"});
@@ -176,5 +178,6 @@ public class PostgresTaskRepository implements TaskRepository {
                     .setEntityId(rs.getLong("ts_entity_id"))
                     .setName(rs.getString("ts_name"))
                     .build())
+            .setDescription(rs.getString("t_description"))
             .build();
 }

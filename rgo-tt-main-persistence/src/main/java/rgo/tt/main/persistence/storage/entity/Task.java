@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import static rgo.tt.common.utils.HelperUtils.size;
+
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +16,7 @@ public class Task implements Serializable {
     private final LocalDateTime lastModifiedDate;
     private final TasksBoard board;
     private final TaskStatus status;
+    private final String description;
 
     public Task(Builder builder) {
         entityId = builder.entityId;
@@ -22,6 +25,7 @@ public class Task implements Serializable {
         lastModifiedDate = builder.lastModifiedDate;
         board = builder.board;
         status = builder.status;
+        description = builder.description;
     }
 
     public Long getEntityId() {
@@ -48,6 +52,10 @@ public class Task implements Serializable {
         return status;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +66,13 @@ public class Task implements Serializable {
                 && Objects.equals(createdDate, task.createdDate)
                 && Objects.equals(lastModifiedDate, task.lastModifiedDate)
                 && Objects.equals(board, task.board)
-                && Objects.equals(status, task.status);
+                && Objects.equals(status, task.status)
+                && Objects.equals(description, task.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name, createdDate, lastModifiedDate, board, status);
+        return Objects.hash(entityId, name, createdDate, lastModifiedDate, board, status, description);
     }
 
     @Override
@@ -75,6 +84,7 @@ public class Task implements Serializable {
                 ", lastModifiedDate=" + lastModifiedDate +
                 ", board=" + board +
                 ", status=" + status +
+                ", description=" + size(description) +
                 '}';
     }
 
@@ -90,6 +100,7 @@ public class Task implements Serializable {
         private LocalDateTime lastModifiedDate;
         private TasksBoard board;
         private TaskStatus status;
+        private String description;
 
         public Builder setEntityId(Long entityId) {
             this.entityId = entityId;
@@ -118,6 +129,11 @@ public class Task implements Serializable {
 
         public Builder setStatus(TaskStatus status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            this.description = description;
             return this;
         }
 

@@ -61,7 +61,7 @@ class TaskRestControllerTest {
 
     @Test
     void getAll_boardIdIsFake() throws Exception {
-        Long boardId = randomPositiveLong();
+        long boardId = randomPositiveLong();
 
         mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + boardId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -102,7 +102,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
                 .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())))
+                .andExpect(jsonPath("$.tasks[0].description", is(saved.getDescription())));
     }
 
     @Test
@@ -128,12 +129,13 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved1.getStatus().getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].status.name", is(saved1.getStatus().getName())))
                 .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved1.getBoard().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].board.name", is(saved1.getBoard().getName())));
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved1.getBoard().getName())))
+                .andExpect(jsonPath("$.tasks[0].description", is(saved1.getDescription())));
     }
 
     @Test
     void getByEntityId_entityIdIsFake() throws Exception {
-        Long fakeEntityId = randomPositiveLong();
+        long fakeEntityId = randomPositiveLong();
 
         mvc.perform(get(TaskRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -159,7 +161,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.status.entityId", is(saved.getStatus().getEntityId().intValue())))
                 .andExpect(jsonPath("$.task.status.name", is(saved.getStatus().getName())))
                 .andExpect(jsonPath("$.task.board.entityId", is(saved.getBoard().getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.board.name", is(saved.getBoard().getName())));
+                .andExpect(jsonPath("$.task.board.name", is(saved.getBoard().getName())))
+                .andExpect(jsonPath("$.task.description", is(saved.getDescription())));
     }
 
     @Test
@@ -201,7 +204,7 @@ class TaskRestControllerTest {
     @Test
     void getByName_boardIdIsFake() throws Exception {
         String name = randomString();
-        Long boardId = randomPositiveLong();
+        long boardId = randomPositiveLong();
 
         mvc.perform(get(TaskRestController.BASE_URL + "?name=" + name + "&boardId=" + boardId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -229,7 +232,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
                 .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())))
+                .andExpect(jsonPath("$.tasks[0].description", is(saved.getDescription())));
     }
 
     @Test
@@ -253,7 +257,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
                 .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())))
+                .andExpect(jsonPath("$.tasks[0].description", is(saved.getDescription())));
     }
 
     @Test
@@ -322,7 +327,8 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.status.entityId", is(TO_DO.getEntityId().intValue())))
                 .andExpect(jsonPath("$.task.status.name", is(TO_DO.getName())))
                 .andExpect(jsonPath("$.task.board.entityId", is(board.getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.board.name", is(board.getName())));
+                .andExpect(jsonPath("$.task.board.name", is(board.getName())))
+                .andExpect(jsonPath("$.task.description", is(rq.getDescription())));
     }
 
     @Test
@@ -441,12 +447,13 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.name", is(rq.getName())))
                 .andExpect(jsonPath("$.task.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()))
-                .andExpect(jsonPath("$.task.status.entityId", is(rq.getStatusId().intValue())));
+                .andExpect(jsonPath("$.task.status.entityId", is(rq.getStatusId().intValue())))
+                .andExpect(jsonPath("$.task.description", is(rq.getDescription())));
     }
 
     @Test
     void deleteByEntityId_entityIdIsFake() throws Exception {
-        Long fakeEntityId = randomPositiveLong();
+        long fakeEntityId = randomPositiveLong();
 
         mvc.perform(delete(TaskRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

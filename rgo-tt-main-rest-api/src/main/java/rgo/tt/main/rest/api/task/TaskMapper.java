@@ -17,6 +17,7 @@ public final class TaskMapper {
                 .setBoard(TasksBoard.builder()
                         .setEntityId(rq.getBoardId())
                         .build())
+                .setDescription(rq.getDescription())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public final class TaskMapper {
                 .setStatus(TaskStatus.builder()
                         .setEntityId(rq.getStatusId())
                         .build())
+                .setDescription(rq.getDescription())
                 .build();
     }
 }

@@ -22,15 +22,16 @@ public final class TaskQuery {
     }
 
     public static String save() {
-        return  "INSERT INTO " + TABLE_NAME + "(name, board_id) " +
-                "VALUES(:name, :board_id)";
+        return  "INSERT INTO " + TABLE_NAME + "(name, board_id, description) " +
+                "VALUES(:name, :board_id, :description)";
     }
 
     public static String update() {
         return  "UPDATE " + TABLE_NAME + " " +
                 "SET name = :name, " +
                 "    last_modified_date = :lmd, " +
-                "    status_id = :status_id " +
+                "    status_id = :status_id, " +
+                "    description = :description " +
                 "WHERE entity_id = :entity_id";
     }
 
@@ -47,7 +48,8 @@ public final class TaskQuery {
                 "       tb.entity_id         AS tb_entity_id, " +
                 "       tb.name              AS tb_name, " +
                 "       ts.entity_id         AS ts_entity_id, " +
-                "       ts.name              AS ts_name " +
+                "       ts.name              AS ts_name, " +
+                "       t.description        AS t_description " +
                 "FROM " + TABLE_NAME + " t " +
                 "JOIN task_status ts " +
                 "   ON t.status_id = ts.entity_id " +

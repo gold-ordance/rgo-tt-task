@@ -28,7 +28,8 @@ public final class EntityGenerator {
                 .setEntityId(randomPositiveLong())
                 .setName(randomString())
                 .setBoard(randomTasksBoard())
-                .setStatus(randomElement(STATUSES));
+                .setStatus(randomElement(STATUSES))
+                .setDescription(randomBigString());
     }
 
     public static TaskStatus randomTaskStatus() {

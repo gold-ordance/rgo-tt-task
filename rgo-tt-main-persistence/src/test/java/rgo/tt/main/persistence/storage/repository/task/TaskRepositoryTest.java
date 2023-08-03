@@ -45,7 +45,7 @@ class TaskRepositoryTest {
 
     @Test
     void findAll_boardIdIsFake() {
-        Long fakeBoardId = randomPositiveLong();
+        long fakeBoardId = randomPositiveLong();
         assertThrows(InvalidEntityException.class, () -> repository.findAll(fakeBoardId), "The boardId not found in the storage.");
     }
 
@@ -97,7 +97,7 @@ class TaskRepositoryTest {
     @Test
     void findSoftlyByName_boardIdIsFake() {
         String name = randomString();
-        Long fakeBoardId = randomPositiveLong();
+        long fakeBoardId = randomPositiveLong();
         assertThrows(InvalidEntityException.class, () -> repository.findSoftlyByName(name, fakeBoardId), "The boardId not found in the storage.");
     }
 
@@ -136,6 +136,19 @@ class TaskRepositoryTest {
 
         Task savedTask = repository.save(created);
         assertEquals(created.getName(), savedTask.getName());
+        assertEquals(created.getDescription(), savedTask.getDescription());
+        assertEquals(TO_DO, savedTask.getStatus());
+        assertEquals(board, savedTask.getBoard());
+    }
+
+    @Test
+    void save_descriptionIsNull() {
+        TasksBoard board = insertBoard(randomTasksBoard());
+        Task created = randomTaskBuilder().setBoard(board).setDescription(null).build();
+
+        Task savedTask = repository.save(created);
+        assertEquals(created.getName(), savedTask.getName());
+        assertNull(savedTask.getDescription());
         assertEquals(TO_DO, savedTask.getStatus());
         assertEquals(board, savedTask.getBoard());
     }
@@ -167,6 +180,7 @@ class TaskRepositoryTest {
         assertNotEquals(saved.getLastModifiedDate(), actual.getLastModifiedDate());
         assertEquals(updated.getStatus(), actual.getStatus());
         assertEquals(saved.getBoard(), actual.getBoard());
+        assertEquals(updated.getDescription(), actual.getDescription());
     }
 
     @Test
