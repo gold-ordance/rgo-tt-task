@@ -18,7 +18,7 @@ public final class TaskQuery {
     public static String findSoftlyByName() {
         return select() +
                 "WHERE t.board_id = :board_id " +
-                "      AND LOWER(t.name) LIKE LOWER(:name)";
+                "      AND lower(t.name) LIKE lower(:name)";
     }
 
     public static String save() {

@@ -10,5 +10,8 @@ CREATE TABLE TASK (
     DESCRIPTION        VARCHAR(4096)
 );
 
+CREATE INDEX board_id_name_task_idx ON TASK(BOARD_ID, lower(NAME))
+    TABLESPACE ${tbsIndexes};
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON TASK TO ${appRole};
 GRANT SELECT ON TASK TO ${readerRole};
