@@ -1,32 +1,35 @@
 package rgo.tt.main.service.task;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.common.validator.ValidateException;
-import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
-import rgo.tt.main.service.config.ServiceConfig;
+import rgo.tt.main.persistence.storage.entity.TasksBoard;
+import rgo.tt.main.service.ServiceConfig;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatusBuilder;
+import static rgo.tt.common.utils.RandomUtils.randomString;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = ServiceConfig.class)
 class TaskServiceTest {
 
     @Autowired private TaskService service;
-    @Autowired private DbTxManager tx;
 
-    @BeforeEach
-    void setUp() {
-        PersistenceUtils.truncateTables(tx);
+    @Test
+    void findAll_invalidRq_boardIdIsNull() {
+        assertThrows(ValidateException.class, () -> service.findAll(null), "The boardId is null.");
+    }
+
+    @Test
+    void findAll_invalidRq_boardIdIsNegative() {
+        Long fakeBoardId = -randomPositiveLong();
+        assertThrows(ValidateException.class, () -> service.findAll(fakeBoardId), "The boardId is negative.");
     }
 
     @Test
@@ -41,14 +44,29 @@ class TaskServiceTest {
     }
 
     @Test
-    void findBySoftlyName_invalidRq_nameIdIsNull() {
-        assertThrows(ValidateException.class, () -> service.findSoftlyByName(null), "The name is null.");
+    void findBySoftlyName_invalidRq_nameIsNull() {
+        Long boardId = randomPositiveLong();
+        assertThrows(ValidateException.class, () -> service.findSoftlyByName(null, boardId), "The name is null.");
     }
 
     @Test
     void findBySoftlyName_invalidRq_nameIsEmpty() {
         String emptyName = "";
-        assertThrows(ValidateException.class, () -> service.findSoftlyByName(emptyName), "The name is empty.");
+        Long boardId = randomPositiveLong();
+        assertThrows(ValidateException.class, () -> service.findSoftlyByName(emptyName, boardId), "The name is empty.");
+    }
+
+    @Test
+    void findBySoftlyName_invalidRq_boardIdIsNull() {
+        String name = randomString();
+        assertThrows(ValidateException.class, () -> service.findSoftlyByName(name, null), "The boardId is null.");
+    }
+
+    @Test
+    void findBySoftlyName_invalidRq_boardIdIsNegative() {
+        String name = randomString();
+        Long fakeBoardId = -randomPositiveLong();
+        assertThrows(ValidateException.class, () -> service.findSoftlyByName(name, fakeBoardId), "The boardId is negative.");
     }
 
     @Test
@@ -64,15 +82,17 @@ class TaskServiceTest {
     }
 
     @Test
-    void update_invalidRq_nameIsNull() {
-        Task task = randomTaskBuilder().setName(null).build();
-        assertThrows(ValidateException.class, () -> service.update(task), "The name is null.");
+    void save_invalidRq_boardIdIsNull() {
+        TasksBoard board = randomTasksBoardBuilder().setEntityId(null).build();
+        Task task = randomTaskBuilder().setBoard(board).build();
+        assertThrows(ValidateException.class, () -> service.save(task), "The boardId is null.");
     }
 
     @Test
-    void update_invalidRq_nameIsEmpty() {
-        Task task = randomTaskBuilder().setName("").build();
-        assertThrows(ValidateException.class, () -> service.update(task), "The name is empty.");
+    void save_invalidRq_boardIdIsNegative() {
+        TasksBoard board = randomTasksBoardBuilder().setEntityId(-randomPositiveLong()).build();
+        Task task = randomTaskBuilder().setBoard(board).build();
+        assertThrows(ValidateException.class, () -> service.save(task), "The boardId is negative.");
     }
 
     @Test
@@ -85,6 +105,18 @@ class TaskServiceTest {
     void update_invalidRq_entityIdIsNegative() {
         Task task = randomTaskBuilder().setEntityId(-randomPositiveLong()).build();
         assertThrows(ValidateException.class, () -> service.update(task), "The entityId is negative.");
+    }
+
+    @Test
+    void update_invalidRq_nameIsNull() {
+        Task task = randomTaskBuilder().setName(null).build();
+        assertThrows(ValidateException.class, () -> service.update(task), "The name is null.");
+    }
+
+    @Test
+    void update_invalidRq_nameIsEmpty() {
+        Task task = randomTaskBuilder().setName("").build();
+        assertThrows(ValidateException.class, () -> service.update(task), "The name is empty.");
     }
 
     @Test

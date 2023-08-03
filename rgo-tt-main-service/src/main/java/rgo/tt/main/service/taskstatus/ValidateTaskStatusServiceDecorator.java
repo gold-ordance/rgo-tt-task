@@ -6,13 +6,13 @@ import rgo.tt.main.persistence.storage.entity.TaskStatus;
 
 import java.util.List;
 
-public class ValidatorTaskStatusService implements TaskStatusService {
+public class ValidateTaskStatusServiceDecorator implements TaskStatusService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidatorTaskStatusService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidateTaskStatusServiceDecorator.class);
 
     private final TaskStatusService delegate;
 
-    public ValidatorTaskStatusService(TaskStatusService delegate) {
+    public ValidateTaskStatusServiceDecorator(TaskStatusService delegate) {
         this.delegate = delegate;
     }
 

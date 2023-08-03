@@ -14,8 +14,10 @@ import java.util.List;
 import static rgo.tt.common.rest.api.RestUtils.convert;
 
 @RestController
-@RequestMapping("/statuses")
+@RequestMapping(TaskStatusRestController.BASE_URL)
 public class TaskStatusRestController implements TaskStatusController {
+
+    public static final String BASE_URL = "/statuses";
 
     private final TaskStatusService service;
 

@@ -10,20 +10,21 @@ import java.util.Optional;
 import static rgo.tt.common.validator.ValidatorUtils.checkObjectId;
 import static rgo.tt.common.validator.ValidatorUtils.checkString;
 
-public class ValidatorTaskService implements TaskService {
+public class ValidateTaskServiceDecorator implements TaskService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidatorTaskService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidateTaskServiceDecorator.class);
 
     private final TaskService delegate;
 
-    public ValidatorTaskService(TaskService delegate) {
+    public ValidateTaskServiceDecorator(TaskService delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public List<Task> findAll() {
-        LOGGER.info("Request 'findAll' received.");
-        return delegate.findAll();
+    public List<Task> findAll(Long boardId) {
+        LOGGER.info("Request 'findAll' received: boardId={}", boardId);
+        checkObjectId(boardId, "boardId");
+        return delegate.findAll(boardId);
     }
 
     @Override
@@ -34,16 +35,18 @@ public class ValidatorTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> findSoftlyByName(String name) {
-        LOGGER.info("Request 'findSoftlyByName' received: name={}", name);
+    public List<Task> findSoftlyByName(String name, Long boardId) {
+        LOGGER.info("Request 'findSoftlyByName' received: name={}, boardId={}", name, boardId);
         checkString(name, "name");
-        return delegate.findSoftlyByName(name);
+        checkObjectId(boardId, "boardId");
+        return delegate.findSoftlyByName(name, boardId);
     }
 
     @Override
     public Task save(Task task) {
         LOGGER.info("Request 'save' received: task={}", task);
         checkString(task.getName(), "name");
+        checkObjectId(task.getBoard().getEntityId(), "boardId");
         return delegate.save(task);
     }
 

@@ -1,7 +1,7 @@
 package rgo.tt.main.service.taskstatus;
 
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
-import rgo.tt.main.persistence.storage.repository.TaskStatusRepository;
+import rgo.tt.main.persistence.storage.repository.taskstatus.TaskStatusRepository;
 
 import java.util.List;
 

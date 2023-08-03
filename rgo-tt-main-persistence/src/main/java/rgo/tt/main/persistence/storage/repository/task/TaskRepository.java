@@ -1,11 +1,11 @@
-package rgo.tt.main.service.task;
+package rgo.tt.main.persistence.storage.repository.task;
 
 import rgo.tt.main.persistence.storage.entity.Task;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TaskService {
+public interface TaskRepository {
 
     List<Task> findAll(Long boardId);
 

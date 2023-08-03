@@ -49,12 +49,5 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
         <!-- test -->
-
-        <!-- others -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <!-- others -->
     </dependencies>
 </project>

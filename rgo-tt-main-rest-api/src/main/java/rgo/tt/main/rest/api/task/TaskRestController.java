@@ -15,14 +15,17 @@ import rgo.tt.main.service.task.TaskService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
 import static rgo.tt.common.rest.api.RestUtils.convert;
 import static rgo.tt.main.rest.api.task.TaskMapper.map;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping(TaskRestController.BASE_URL)
 public class TaskRestController implements TaskController {
+
+    public static final String BASE_URL = "/tasks";
 
     private final TaskService service;
 
@@ -31,10 +34,11 @@ public class TaskRestController implements TaskController {
     }
 
     @Override
-    @GetMapping
-    public ResponseEntity<Response> getAll() {
-        List<Task> tasks = service.findAll();
+    @GetMapping(params = "boardId")
+    public ResponseEntity<Response> getAll(Long boardId) {
+        List<Task> tasks = service.findAll(boardId);
         Response response = TaskGetListResponse.success(tasks);
+        ThreadLocalRandom.current().nextInt(100);
         return convert(response);
     }
 
@@ -50,9 +54,9 @@ public class TaskRestController implements TaskController {
     }
 
     @Override
-    @GetMapping(params = "name")
-    public ResponseEntity<Response> getByName(String name) {
-        List<Task> tasks = service.findSoftlyByName(name);
+    @GetMapping(params = {"name", "boardId"})
+    public ResponseEntity<Response> getByName(String name, Long boardId) {
+        List<Task> tasks = service.findSoftlyByName(name, boardId);
         Response response = TaskGetListResponse.success(tasks);
         return convert(response);
     }

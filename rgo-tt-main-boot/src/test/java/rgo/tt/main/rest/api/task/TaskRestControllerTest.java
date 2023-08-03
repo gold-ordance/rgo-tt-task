@@ -12,10 +12,13 @@ import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
+import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
 import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
+import rgo.tt.main.rest.api.tasksboard.TasksBoardRestController;
 import rgo.tt.main.service.task.TaskService;
+import rgo.tt.main.service.tasksboard.TasksBoardService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -34,10 +37,9 @@ import static rgo.tt.main.rest.api.RequestGenerator.createTaskSaveRequest;
 @WebAppConfiguration
 class TaskRestControllerTest {
 
-    private static final String BASE_ENDPOINT = "/tasks";
-
     @Autowired private WebApplicationContext context;
     @Autowired private TaskService service;
+    @Autowired private TasksBoardService boardService;
     @Autowired private DbTxManager tx;
 
     private MockMvc mvc;
@@ -45,14 +47,35 @@ class TaskRestControllerTest {
     @BeforeEach
     void setUp() {
         PersistenceUtils.truncateTables(tx);
-        mvc =  MockMvcBuilders.webAppContextSetup(context).build();
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+    }
+
+    @Test
+    void getAll_boardIdIsNull() throws Exception {
+        mvc.perform(get(TaskRestController.BASE_URL + "?boardId="))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId is null.")));
+    }
+
+    @Test
+    void getAll_boardIdIsFake() throws Exception {
+        Long boardId = randomPositiveLong();
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + boardId))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId not found in the storage.")));
     }
 
     @Test
     void getAll_empty() throws Exception {
+        TasksBoard board = insertTasksBoard();
         int taskSize = 0;
 
-        mvc.perform(get(BASE_ENDPOINT))
+        mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -61,11 +84,12 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void getAll_nonEmpty() throws Exception {
+    void getAll_oneBoard() throws Exception {
         int tasksSize = 1;
-        Task saved = insertTask();
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
 
-        mvc.perform(get(BASE_ENDPOINT))
+        mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -76,14 +100,42 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
                 .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())));
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
+                .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
+    }
+
+    @Test
+    void getAll_twoBoard() throws Exception {
+        int tasksSize = 1;
+
+        TasksBoard board1 = insertTasksBoard();
+        Task saved1 = insertTask(board1);
+
+        TasksBoard board2 = insertTasksBoard();
+        insertTask(board2);
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + board1.getEntityId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.message", nullValue()))
+                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks[0].entityId", is(saved1.getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].name", is(saved1.getName())))
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved1.getCreatedDate()))))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved1.getLastModifiedDate()))))
+                .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved1.getStatus().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved1.getStatus().getName())))
+                .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved1.getBoard().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved1.getBoard().getName())));
     }
 
     @Test
     void getByEntityId_entityIdIsFake() throws Exception {
         Long fakeEntityId = randomPositiveLong();
 
-        mvc.perform(get(BASE_ENDPOINT + "/" + fakeEntityId))
+        mvc.perform(get(TaskRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.NOT_FOUND.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NOT_FOUND.name())))
@@ -92,9 +144,10 @@ class TaskRestControllerTest {
 
     @Test
     void getByEntityId() throws Exception {
-        Task saved = insertTask();
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
 
-        mvc.perform(get(BASE_ENDPOINT + "/" + saved.getEntityId()))
+        mvc.perform(get(TaskRestController.BASE_URL + "/" + saved.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -104,12 +157,16 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.createdDate", startsWith(toString(saved.getCreatedDate()))))
                 .andExpect(jsonPath("$.task.lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
                 .andExpect(jsonPath("$.task.status.entityId", is(saved.getStatus().getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.status.name", is(saved.getStatus().getName())));
+                .andExpect(jsonPath("$.task.status.name", is(saved.getStatus().getName())))
+                .andExpect(jsonPath("$.task.board.entityId", is(saved.getBoard().getEntityId().intValue())))
+                .andExpect(jsonPath("$.task.board.name", is(saved.getBoard().getName())));
     }
 
     @Test
     void getByName_nameIsEmpty() throws Exception {
-        mvc.perform(get(BASE_ENDPOINT + "?name="))
+        TasksBoard board = insertTasksBoard();
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=&boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -119,9 +176,10 @@ class TaskRestControllerTest {
     @Test
     void getByName_nameIsFake() throws Exception {
         int taskSize = 0;
+        TasksBoard board = insertTasksBoard();
         String fakeName = randomString();
 
-        mvc.perform(get(BASE_ENDPOINT + "?name=" + fakeName))
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=" + fakeName + "&boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -130,11 +188,35 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void getByName() throws Exception {
-        int tasksSize = 1;
-        Task saved = insertTask();
+    void getByName_boardIdIsNull() throws Exception {
+        String name = randomString();
 
-        mvc.perform(get(BASE_ENDPOINT + "?name=" + saved.getName()))
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=" + name + "&boardId="))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId is null.")));
+    }
+
+    @Test
+    void getByName_boardIdIsFake() throws Exception {
+        String name = randomString();
+        Long boardId = randomPositiveLong();
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=" + name + "&boardId=" + boardId))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId not found in the storage.")));
+    }
+
+    @Test
+    void getByName_oneBoard() throws Exception {
+        int tasksSize = 1;
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=" + saved.getName() + "&boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -145,7 +227,33 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
                 .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
                 .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
-                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())));
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
+                .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
+    }
+
+    @Test
+    void getByName_twoBoard() throws Exception {
+        int tasksSize = 1;
+        TasksBoard board1 = insertTasksBoard();
+        TasksBoard board2 = insertTasksBoard();
+        Task saved = insertTask(board1);
+        insertTask(board2);
+
+        mvc.perform(get(TaskRestController.BASE_URL + "?name=" + saved.getName() + "&boardId=" + board1.getEntityId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
+                .andExpect(jsonPath("$.status.message", nullValue()))
+                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
+                .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
+                .andExpect(jsonPath("$.tasks[0].lastModifiedDate", startsWith(toString(saved.getLastModifiedDate()))))
+                .andExpect(jsonPath("$.tasks[0].status.entityId", is(saved.getStatus().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].status.name", is(saved.getStatus().getName())))
+                .andExpect(jsonPath("$.tasks[0].board.entityId", is(saved.getBoard().getEntityId().intValue())))
+                .andExpect(jsonPath("$.tasks[0].board.name", is(saved.getBoard().getName())));
     }
 
     @Test
@@ -153,7 +261,7 @@ class TaskRestControllerTest {
         TaskSaveRequest rq = createTaskSaveRequest();
         rq.setName(null);
 
-        mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -165,7 +273,7 @@ class TaskRestControllerTest {
         TaskSaveRequest rq = createTaskSaveRequest();
         rq.setName("");
 
-        mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -173,10 +281,36 @@ class TaskRestControllerTest {
     }
 
     @Test
-    void save() throws Exception {
+    void save_invalidRq_boardIdIsNull() throws Exception {
         TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setBoardId(null);
 
-        mvc.perform(post(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId is null.")));
+    }
+
+    @Test
+    void save_invalidRq_boardIdIsNegative() throws Exception {
+        TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setBoardId(-randomPositiveLong());
+
+        mvc.perform(post(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
+                .andExpect(jsonPath("$.status.message", is("The boardId is negative.")));
+    }
+
+    @Test
+    void save() throws Exception {
+        TasksBoard board = insertTasksBoard();
+        TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setBoardId(board.getEntityId());
+
+        mvc.perform(post(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.STORED.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.STORED.name())))
@@ -186,7 +320,9 @@ class TaskRestControllerTest {
                 .andExpect(jsonPath("$.task.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.task.lastModifiedDate", notNullValue()))
                 .andExpect(jsonPath("$.task.status.entityId", is(TO_DO.getEntityId().intValue())))
-                .andExpect(jsonPath("$.task.status.name", is(TO_DO.getName())));
+                .andExpect(jsonPath("$.task.status.name", is(TO_DO.getName())))
+                .andExpect(jsonPath("$.task.board.entityId", is(board.getEntityId().intValue())))
+                .andExpect(jsonPath("$.task.board.name", is(board.getName())));
     }
 
     @Test
@@ -194,7 +330,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(null);
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -206,7 +342,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(-randomPositiveLong());
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -218,7 +354,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setName(null);
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -230,7 +366,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setName("");
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -242,7 +378,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setStatusId(null);
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -254,7 +390,7 @@ class TaskRestControllerTest {
         TaskPutRequest rq = createTaskPutRequest();
         rq.setStatusId(-randomPositiveLong());
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
@@ -265,7 +401,7 @@ class TaskRestControllerTest {
     void put_invalidEntity_entityIdIsFake() throws Exception {
         TaskPutRequest rq = createTaskPutRequest();
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
@@ -274,13 +410,14 @@ class TaskRestControllerTest {
 
     @Test
     void put_invalidEntity_statusIdIsFake() throws Exception {
-        Task saved = insertTask();
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
 
         TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(saved.getEntityId());
         rq.setStatusId(0L);
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
@@ -289,12 +426,13 @@ class TaskRestControllerTest {
 
     @Test
     void putTask() throws Exception {
-        Task saved = insertTask();
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
 
         TaskPutRequest rq = createTaskPutRequest();
         rq.setEntityId(saved.getEntityId());
 
-        mvc.perform(put(BASE_ENDPOINT).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(put(TaskRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
@@ -310,7 +448,7 @@ class TaskRestControllerTest {
     void deleteByEntityId_entityIdIsFake() throws Exception {
         Long fakeEntityId = randomPositiveLong();
 
-        mvc.perform(delete(BASE_ENDPOINT + "/" + fakeEntityId))
+        mvc.perform(delete(TaskRestController.BASE_URL + "/" + fakeEntityId))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.NOT_FOUND.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NOT_FOUND.name())))
@@ -319,12 +457,31 @@ class TaskRestControllerTest {
 
     @Test
     void deleteByEntityId() throws Exception {
-        Task saved = insertTask();
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
 
-        mvc.perform(delete(BASE_ENDPOINT + "/" + saved.getEntityId()))
+        mvc.perform(delete(TaskRestController.BASE_URL + "/" + saved.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.NO_CONTENT.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NO_CONTENT.name())))
+                .andExpect(jsonPath("$.status.message", nullValue()));
+    }
+
+    @Test
+    void deleteTasksBoardByEntityId_tasksShouldBeDeleted() throws Exception {
+        TasksBoard board = insertTasksBoard();
+        Task saved = insertTask(board);
+
+        mvc.perform(delete(TasksBoardRestController.BASE_URL + "/" + saved.getEntityId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.NO_CONTENT.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NO_CONTENT.name())))
+                .andExpect(jsonPath("$.status.message", nullValue()));
+
+        mvc.perform(get(TaskRestController.BASE_URL + "/" + saved.getEntityId()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.NOT_FOUND.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.NOT_FOUND.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()));
     }
 
@@ -332,8 +489,13 @@ class TaskRestControllerTest {
         return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
     }
 
-    private Task insertTask() {
-        Task created = randomTask();
+    private Task insertTask(TasksBoard board) {
+        Task created = randomTaskBuilder().setBoard(board).build();
         return service.save(created);
+    }
+
+    private TasksBoard insertTasksBoard() {
+        TasksBoard created = randomTasksBoard();
+        return boardService.save(created);
     }
 }

@@ -22,8 +22,6 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
 @WebAppConfiguration
 class TaskStatusRestControllerTest {
 
-    private static final String BASE_ENDPOINT = "/statuses";
-
     @Autowired private WebApplicationContext context;
     @Autowired private DbTxManager tx;
 
@@ -37,7 +35,7 @@ class TaskStatusRestControllerTest {
 
     @Test
     void getAll() throws Exception {
-        mvc.perform(get(BASE_ENDPOINT))
+        mvc.perform(get(TaskStatusRestController.BASE_URL))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))

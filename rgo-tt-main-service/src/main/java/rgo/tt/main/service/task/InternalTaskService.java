@@ -1,7 +1,7 @@
 package rgo.tt.main.service.task;
 
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.persistence.storage.repository.TaskRepository;
+import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +15,8 @@ public class InternalTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> findAll() {
-        return repository.findAll();
+    public List<Task> findAll(Long boardId) {
+        return repository.findAll(boardId);
     }
 
     @Override
@@ -25,8 +25,8 @@ public class InternalTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> findSoftlyByName(String name) {
-        return repository.findSoftlyByName(name);
+    public List<Task> findSoftlyByName(String name, Long boardId) {
+        return repository.findSoftlyByName(name, boardId);
     }
 
     @Override

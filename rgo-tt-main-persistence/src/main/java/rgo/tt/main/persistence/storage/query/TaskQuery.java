@@ -8,7 +8,7 @@ public final class TaskQuery {
     }
 
     public static String findAll() {
-        return select();
+        return select() + "WHERE t.board_id = :board_id";
     }
 
     public static String findByEntityId() {
@@ -16,19 +16,21 @@ public final class TaskQuery {
     }
 
     public static String findSoftlyByName() {
-        return select() + "WHERE LOWER(t.name) LIKE LOWER(:name)";
+        return select() +
+                "WHERE t.board_id = :board_id " +
+                "      AND LOWER(t.name) LIKE LOWER(:name)";
     }
 
     public static String save() {
-        return  "INSERT INTO " + TABLE_NAME + "(name) " +
-                "VALUES(:name)";
+        return  "INSERT INTO " + TABLE_NAME + "(name, board_id) " +
+                "VALUES(:name, :board_id)";
     }
 
     public static String update() {
         return  "UPDATE " + TABLE_NAME + " " +
                 "SET name = :name, " +
                 "    last_modified_date = :lmd, " +
-                "    status = :status " +
+                "    status_id = :status_id " +
                 "WHERE entity_id = :entity_id";
     }
 
@@ -42,10 +44,14 @@ public final class TaskQuery {
                 "       t.name               AS t_name, " +
                 "       t.created_date       AS t_created_date, " +
                 "       t.last_modified_date AS t_last_modified_date, " +
+                "       tb.entity_id         AS tb_entity_id, " +
+                "       tb.name              AS tb_name, " +
                 "       ts.entity_id         AS ts_entity_id, " +
                 "       ts.name              AS ts_name " +
                 "FROM " + TABLE_NAME + " t " +
                 "JOIN task_status ts " +
-                "   ON t.status = ts.entity_id ";
+                "   ON t.status_id = ts.entity_id " +
+                "JOIN tasks_board tb " +
+                "   ON t.board_id = tb.entity_id ";
     }
 }

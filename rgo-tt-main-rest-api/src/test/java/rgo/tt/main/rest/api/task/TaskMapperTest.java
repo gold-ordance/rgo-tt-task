@@ -21,7 +21,7 @@ class TaskMapperTest {
 
         assertEquals(rq.getName(), task.getName());
 
-        List<String> nonEmptyFields = List.of("name");
+        List<String> nonEmptyFields = List.of("name", "board");
         assertNullFields(task, nonEmptyFields);
     }
 

@@ -1,4 +1,4 @@
-package rgo.tt.main.persistence.storage.repository;
+package rgo.tt.main.persistence.storage.repository.taskstatus;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

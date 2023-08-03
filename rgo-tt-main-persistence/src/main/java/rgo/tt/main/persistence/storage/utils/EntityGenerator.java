@@ -2,6 +2,7 @@ package rgo.tt.main.persistence.storage.utils;
 
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
+import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 import java.util.List;
 
@@ -24,9 +25,10 @@ public final class EntityGenerator {
 
     public static Task.Builder randomTaskBuilder() {
         return Task.builder()
-               .setEntityId(randomPositiveLong())
-               .setName(randomString())
-               .setStatus(randomElement(STATUSES));
+                .setEntityId(randomPositiveLong())
+                .setName(randomString())
+                .setBoard(randomTasksBoard())
+                .setStatus(randomElement(STATUSES));
     }
 
     public static TaskStatus randomTaskStatus() {
@@ -35,7 +37,17 @@ public final class EntityGenerator {
 
     public static TaskStatus.Builder randomTaskStatusBuilder() {
         return TaskStatus.builder()
-              .setEntityId(randomPositiveLong())
-              .setName(randomString());
+                .setEntityId(randomPositiveLong())
+                .setName(randomString());
+    }
+
+    public static TasksBoard randomTasksBoard() {
+        return randomTasksBoardBuilder().build();
+    }
+
+    public static TasksBoard.Builder randomTasksBoardBuilder() {
+        return TasksBoard.builder()
+                .setEntityId(randomPositiveLong())
+                .setName(randomString());
     }
 }

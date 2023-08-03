@@ -1,46 +1,40 @@
 package rgo.tt.main.persistence.config;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import rgo.tt.main.persistence.config.properties.DbProperties;
 import rgo.tt.main.persistence.storage.DbTxManager;
-import rgo.tt.main.persistence.storage.repository.TaskRepository;
-import rgo.tt.main.persistence.storage.repository.TaskStatusRepository;
+import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
+import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
+import rgo.tt.main.persistence.storage.repository.task.TxTaskRepositoryDecorator;
+import rgo.tt.main.persistence.storage.repository.tasksboard.PostgresTasksBoardRepository;
+import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
+import rgo.tt.main.persistence.storage.repository.tasksboard.TxTasksBoardRepositoryDecorator;
+import rgo.tt.main.persistence.storage.repository.taskstatus.PostgresTaskStatusRepository;
+import rgo.tt.main.persistence.storage.repository.taskstatus.TaskStatusRepository;
+import rgo.tt.main.persistence.storage.repository.taskstatus.TxTaskStatusRepositoryDecorator;
 
 import javax.sql.DataSource;
+
+import static rgo.tt.main.persistence.storage.utils.PersistenceUtils.h2Source;
+import static rgo.tt.main.persistence.storage.utils.PersistenceUtils.hikariSource;
 
 @Configuration
 @ConfigurationPropertiesScan
 public class PersistenceConfig {
 
-    private static final String DB_NAME = "task";
-
     @Bean
     @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
     public DataSource h2() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .setName(DB_NAME)
-                .addScript("classpath:h2/init.sql")
-                .build();
+        return h2Source();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
     public DataSource pg(DbProperties dbProp) {
-        HikariConfig hk = new HikariConfig();
-        hk.setJdbcUrl(dbProp.getUrl());
-        hk.setSchema(dbProp.getSchema());
-        hk.setUsername(dbProp.getUsername());
-        hk.setPassword(dbProp.getPassword());
-        hk.setMaximumPoolSize(dbProp.getMaxPoolSize());
-        return new HikariDataSource(hk);
+        return hikariSource(dbProp);
     }
 
     @Bean
@@ -49,12 +43,20 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public TaskRepository taskRepository(DbTxManager txManager) {
-        return new TaskRepository(txManager);
+    public TasksBoardRepository tasksBoardRepository(DbTxManager txManager) {
+        return new TxTasksBoardRepositoryDecorator(
+                new PostgresTasksBoardRepository(txManager), txManager);
     }
 
     @Bean
     public TaskStatusRepository taskStatusRepository(DbTxManager txManager) {
-        return new TaskStatusRepository(txManager);
+        return new TxTaskStatusRepositoryDecorator(
+                new PostgresTaskStatusRepository(txManager), txManager);
+    }
+
+    @Bean
+    public TaskRepository taskRepository(DbTxManager txManager) {
+        return new TxTaskRepositoryDecorator(
+                new PostgresTaskRepository(txManager), txManager);
     }
 }

@@ -12,6 +12,7 @@ public class Task implements Serializable {
     private final String name;
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
+    private final TasksBoard board;
     private final TaskStatus status;
 
     public Task(Builder builder) {
@@ -19,6 +20,7 @@ public class Task implements Serializable {
         name = builder.name;
         createdDate = builder.createdDate;
         lastModifiedDate = builder.lastModifiedDate;
+        board = builder.board;
         status = builder.status;
     }
 
@@ -38,6 +40,10 @@ public class Task implements Serializable {
         return lastModifiedDate;
     }
 
+    public TasksBoard getBoard() {
+        return board;
+    }
+
     public TaskStatus getStatus() {
         return status;
     }
@@ -51,12 +57,13 @@ public class Task implements Serializable {
                 && Objects.equals(name, task.name)
                 && Objects.equals(createdDate, task.createdDate)
                 && Objects.equals(lastModifiedDate, task.lastModifiedDate)
+                && Objects.equals(board, task.board)
                 && Objects.equals(status, task.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name, createdDate, lastModifiedDate, status);
+        return Objects.hash(entityId, name, createdDate, lastModifiedDate, board, status);
     }
 
     @Override
@@ -66,6 +73,7 @@ public class Task implements Serializable {
                 ", name='" + name + '\'' +
                 ", createdDate=" + createdDate +
                 ", lastModifiedDate=" + lastModifiedDate +
+                ", board=" + board +
                 ", status=" + status +
                 '}';
     }
@@ -80,6 +88,7 @@ public class Task implements Serializable {
         private String name;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
+        private TasksBoard board;
         private TaskStatus status;
 
         public Builder setEntityId(Long entityId) {
@@ -99,6 +108,11 @@ public class Task implements Serializable {
 
         public Builder setLastModifiedDate(LocalDateTime lastModifiedDate) {
             this.lastModifiedDate = lastModifiedDate;
+            return this;
+        }
+
+        public Builder setBoard(TasksBoard board) {
+            this.board = board;
             return this;
         }
 
