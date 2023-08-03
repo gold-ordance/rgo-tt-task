@@ -16,24 +16,33 @@ public final class TasksBoardQuery {
     }
 
     public static String save() {
-        return  "INSERT INTO " + TABLE_NAME + "(name) " +
-                "VALUES(:name)";
+        return """
+                INSERT INTO %s(name)
+                VALUES(:name)
+                """.formatted(TABLE_NAME);
     }
 
     public static String update() {
-        return  "UPDATE " + TABLE_NAME + " " +
-                "SET name = :name " +
-                "WHERE entity_id = :entity_id";
+        return """
+                UPDATE %s
+                   SET name = :name
+                 WHERE entity_id = :entity_id
+                """.formatted(TABLE_NAME);
     }
 
     public static String deleteByEntityId() {
-        return  "DELETE FROM " + TABLE_NAME + " " +
-                "WHERE entity_id = :entity_id";
+        return """
+                DELETE
+                  FROM %s
+                 WHERE entity_id = :entity_id
+                """.formatted(TABLE_NAME);
     }
 
     private static String select() {
-        return  "SELECT entity_id, " +
-                "       name " +
-                "FROM " + TABLE_NAME + " tb ";
+        return """
+                SELECT entity_id,
+                       name
+                  FROM %s
+                """.formatted(TABLE_NAME);
     }
 }

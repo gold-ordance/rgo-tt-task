@@ -1,7 +1,7 @@
 CREATE TABLESPACE ${tbsTables}
-OWNER postgres
-LOCATION '${tbsTablesDataFile}';
+            OWNER postgres
+         LOCATION '${tbsTablesDataFile}';
 
 CREATE TABLESPACE ${tbsIndexes}
-OWNER postgres
-LOCATION '${tbsIndexesDataFile}';
+            OWNER postgres
+         LOCATION '${tbsIndexesDataFile}';

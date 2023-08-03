@@ -16,44 +16,55 @@ public final class TaskQuery {
     }
 
     public static String findSoftlyByName() {
-        return select() +
-                "WHERE t.board_id = :board_id " +
-                "      AND lower(t.name) LIKE lower(:name)";
+        return select() + """
+                WHERE t.board_id = :board_id
+                  AND lower(t.name) LIKE lower(:name)
+                 """;
     }
 
     public static String save() {
-        return  "INSERT INTO " + TABLE_NAME + "(name, board_id, description) " +
-                "VALUES(:name, :board_id, :description)";
+        return """
+                INSERT INTO %s(name, board_id, description)
+                VALUES(:name, :board_id, :description)
+                """.formatted(TABLE_NAME);
     }
 
     public static String update() {
-        return  "UPDATE " + TABLE_NAME + " " +
-                "SET name = :name, " +
-                "    last_modified_date = :lmd, " +
-                "    status_id = :status_id, " +
-                "    description = :description " +
-                "WHERE entity_id = :entity_id";
+        return """
+                UPDATE %s
+                   SET name = :name,
+                       last_modified_date = :lmd,
+                       status_id = :status_id,
+                       description = :description
+                 WHERE entity_id = :entity_id
+                """.formatted(TABLE_NAME);
     }
 
     public static String deleteByEntityId() {
-        return  "DELETE FROM " + TABLE_NAME + " " +
-                "WHERE entity_id = :entity_id";
+        return """
+                DELETE
+                  FROM %s
+                 WHERE entity_id = :entity_id
+                """.formatted(TABLE_NAME);
     }
 
     private static String select() {
-        return  "SELECT t.entity_id          AS t_entity_id, " +
-                "       t.name               AS t_name, " +
-                "       t.created_date       AS t_created_date, " +
-                "       t.last_modified_date AS t_last_modified_date, " +
-                "       tb.entity_id         AS tb_entity_id, " +
-                "       tb.name              AS tb_name, " +
-                "       ts.entity_id         AS ts_entity_id, " +
-                "       ts.name              AS ts_name, " +
-                "       t.description        AS t_description " +
-                "FROM " + TABLE_NAME + " t " +
-                "JOIN task_status ts " +
-                "   ON t.status_id = ts.entity_id " +
-                "JOIN tasks_board tb " +
-                "   ON t.board_id = tb.entity_id ";
+        return """
+                SELECT t.entity_id          AS t_entity_id,
+                       t.name               AS t_name,
+                       t.created_date       AS t_created_date,
+                       t.last_modified_date AS t_last_modified_date,
+                       tb.entity_id         AS tb_entity_id,
+                       tb.name              AS tb_name,
+                       ts.entity_id         AS ts_entity_id,
+                       ts.name              AS ts_name,
+                       t.description        AS t_description
+                  FROM %s AS t
+                       JOIN task_status AS ts
+                       ON t.status_id = ts.entity_id
+                       
+                       JOIN tasks_board tb
+                       ON t.board_id = tb.entity_id
+                """.formatted(TABLE_NAME);
     }
 }

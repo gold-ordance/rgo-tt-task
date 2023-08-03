@@ -26,7 +26,7 @@
     </modules>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>15</java.version>
 
         <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
     </properties>

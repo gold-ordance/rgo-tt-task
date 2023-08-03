@@ -16,8 +16,10 @@ public final class TaskStatusQuery {
     }
 
     private static String select() {
-        return  "SELECT entity_id, " +
-                "       name " +
-                "FROM " + TABLE_NAME + " ts ";
+        return """
+                SELECT entity_id,
+                       name
+                  FROM %s
+                """.formatted(TABLE_NAME);
     }
 }
