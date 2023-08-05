@@ -1,7 +1,9 @@
-CREATE SCHEMA ${userOwner} AUTHORIZATION owner_role_${userOwner};
+CREATE SCHEMA ${userOwner}
+AUTHORIZATION owner_role_${userOwner};
 
-ALTER ROLE ${appRole} SET search_path TO ${userOwner}, public;
-GRANT USAGE ON SCHEMA ${userOwner} TO ${appRole};
+GRANT USAGE
+  ON SCHEMA ${userOwner}
+         TO ${appRole}, ${readerRole};
 
-ALTER ROLE ${readerRole} SET search_path TO ${userOwner}, public;
-GRANT USAGE ON SCHEMA ${userOwner} TO ${readerRole};
+ALTER DATABASE ${database}
+           SET search_path TO ${userOwner}, public;

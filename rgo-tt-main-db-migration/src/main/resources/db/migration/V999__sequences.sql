@@ -1,1 +1,4 @@
-GRANT USAGE ON ALL SEQUENCES IN SCHEMA ${userOwner} TO ${appRole};
+     GRANT USAGE
+ON ALL SEQUENCES
+       IN SCHEMA ${userOwner}
+              TO ${appRole};
