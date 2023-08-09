@@ -15,6 +15,9 @@ import rgo.tt.main.persistence.storage.repository.tasksboard.TxTasksBoardReposit
 import rgo.tt.main.persistence.storage.repository.taskstatus.PostgresTaskStatusRepository;
 import rgo.tt.main.persistence.storage.repository.taskstatus.TaskStatusRepository;
 import rgo.tt.main.persistence.storage.repository.taskstatus.TxTaskStatusRepositoryDecorator;
+import rgo.tt.main.persistence.storage.repository.tasktype.PostgresTaskTypeRepository;
+import rgo.tt.main.persistence.storage.repository.tasktype.TaskTypeRepository;
+import rgo.tt.main.persistence.storage.repository.tasktype.TxTaskTypeRepositoryDecorator;
 
 import javax.sql.DataSource;
 
@@ -52,6 +55,12 @@ public class PersistenceConfig {
     public TaskStatusRepository taskStatusRepository(DbTxManager txManager) {
         return new TxTaskStatusRepositoryDecorator(
                 new PostgresTaskStatusRepository(txManager), txManager);
+    }
+
+    @Bean
+    public TaskTypeRepository taskTypeRepository(DbTxManager txManager) {
+        return new TxTaskTypeRepositoryDecorator(
+                new PostgresTaskTypeRepository(txManager), txManager);
     }
 
     @Bean

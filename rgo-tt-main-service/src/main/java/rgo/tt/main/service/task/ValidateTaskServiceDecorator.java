@@ -47,6 +47,7 @@ public class ValidateTaskServiceDecorator implements TaskService {
         LOGGER.info("Request 'save' received: task={}", task);
         checkString(task.getName(), "name");
         checkObjectId(task.getBoard().getEntityId(), "boardId");
+        checkObjectId(task.getType().getEntityId(), "typeId");
         return delegate.save(task);
     }
 
@@ -54,8 +55,9 @@ public class ValidateTaskServiceDecorator implements TaskService {
     public Task update(Task task) {
         LOGGER.info("Request 'update' received: task={}", task);
         checkObjectId(task.getEntityId(), "entityId");
-        checkObjectId(task.getStatus().getEntityId(), "statusId");
         checkString(task.getName(), "name");
+        checkObjectId(task.getType().getEntityId(), "typeId");
+        checkObjectId(task.getStatus().getEntityId(), "statusId");
         return delegate.update(task);
     }
 

@@ -146,7 +146,7 @@ interface TaskController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "The name parameter is empty or the boardId parameter is (empty/negative)",
+                    description = "The name parameter is empty or the (boardId/typeId) parameter is (empty/negative)",
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -155,7 +155,7 @@ interface TaskController {
             ),
             @ApiResponse(
                     responseCode = "422",
-                    description = "The boardId not found in the storage.",
+                    description = "The (boardId/typeId) not found in the storage.",
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -187,7 +187,7 @@ interface TaskController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "The entityId parameter is (null/negative) or the name parameter is (null/empty)",
+                    description = "The (entityId/typeId/statusId) parameter is (null/negative) or the name parameter is (null/empty)",
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -196,7 +196,7 @@ interface TaskController {
             ),
             @ApiResponse(
                     responseCode = "422",
-                    description = "The (entityId/statusId) not found in the storage.",
+                    description = "The (entityId/typeId/statusId) not found in the storage.",
                     content = {
                             @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,

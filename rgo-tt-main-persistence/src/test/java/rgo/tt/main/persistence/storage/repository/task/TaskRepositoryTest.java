@@ -6,11 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import rgo.tt.common.exceptions.BaseException;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.config.PersistenceConfig;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
+import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 import rgo.tt.main.persistence.storage.utils.EntityGenerator;
@@ -22,10 +22,21 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
+import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TO_DO;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatusBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskTypeBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfig.class)
@@ -46,7 +57,10 @@ class TaskRepositoryTest {
     @Test
     void findAll_boardIdIsFake() {
         long fakeBoardId = randomPositiveLong();
-        assertThrows(InvalidEntityException.class, () -> repository.findAll(fakeBoardId), "The boardId not found in the storage.");
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.findAll(fakeBoardId),
+                "The boardId not found in the storage.");
     }
 
     @Test
@@ -98,7 +112,10 @@ class TaskRepositoryTest {
     void findSoftlyByName_boardIdIsFake() {
         String name = randomString();
         long fakeBoardId = randomPositiveLong();
-        assertThrows(InvalidEntityException.class, () -> repository.findSoftlyByName(name, fakeBoardId), "The boardId not found in the storage.");
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.findSoftlyByName(name, fakeBoardId),
+                "The boardId not found in the storage.");
     }
 
     @Test
@@ -126,7 +143,21 @@ class TaskRepositoryTest {
     void save_boardIsFake() {
         TasksBoard fakeBoard = randomTasksBoard();
         Task created = randomTaskBuilder().setBoard(fakeBoard).build();
-        assertThrows(InvalidEntityException.class, () -> repository.save(created), "The boardId not found in the storage.");
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.save(created),
+                "The boardId not found in the storage.");
+    }
+
+    @Test
+    void save_typeIsFake() {
+        TasksBoard board = insertBoard(randomTasksBoard());
+        TaskType fakeType = randomTaskTypeBuilder().build();
+        Task created = randomTaskBuilder().setBoard(board).setType(fakeType).build();
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.save(created),
+                "The typeId not found in the storage.");
     }
 
     @Test
@@ -139,6 +170,7 @@ class TaskRepositoryTest {
         assertEquals(created.getDescription(), savedTask.getDescription());
         assertEquals(TO_DO, savedTask.getStatus());
         assertEquals(board, savedTask.getBoard());
+        assertEquals(created.getType(), savedTask.getType());
     }
 
     @Test
@@ -151,18 +183,38 @@ class TaskRepositoryTest {
         assertNull(savedTask.getDescription());
         assertEquals(TO_DO, savedTask.getStatus());
         assertEquals(board, savedTask.getBoard());
+        assertEquals(created.getType(), savedTask.getType());
     }
 
     @Test
     void update_entityIdIsFake() {
         Task created = randomTask();
-        assertThrows(BaseException.class, () -> repository.update(created), "The entityId not found in the storage.");
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.update(created),
+                "The entityId not found in the storage.");
     }
 
     @Test
     void update_statusIdIsFake() {
-        Task created = randomTaskBuilder().setStatus(randomTaskStatus()).build();
-        assertThrows(BaseException.class, () -> repository.update(created), "The statusId not found in the storage.");
+        TasksBoard board = insertBoard(randomTasksBoard());
+        Task created = randomTaskBuilder().setBoard(board).build();
+        Task saved = insert(created);
+        Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).setStatus(randomTaskStatusBuilder().build()).build();
+
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.update(updated),
+                "The statusId not found in the storage.");
+    }
+
+    @Test
+    void update_typeIdIsFake() {
+        Task created = randomTaskBuilder().setType(randomTaskTypeBuilder().build()).build();
+        assertThrowsWithMessage(
+                InvalidEntityException.class,
+                () -> repository.update(created),
+                "The typeId not found in the storage.");
     }
 
     @Test
@@ -180,6 +232,7 @@ class TaskRepositoryTest {
         assertNotEquals(saved.getLastModifiedDate(), actual.getLastModifiedDate());
         assertEquals(updated.getStatus(), actual.getStatus());
         assertEquals(saved.getBoard(), actual.getBoard());
+        assertEquals(updated.getType(), actual.getType());
         assertEquals(updated.getDescription(), actual.getDescription());
     }
 

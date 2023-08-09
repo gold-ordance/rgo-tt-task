@@ -6,8 +6,9 @@ public class TaskPutRequest {
 
     private Long entityId;
     private String name;
-    private Long statusId;
     private String description;
+    private Long typeId;
+    private Long statusId;
 
     public Long getEntityId() {
         return entityId;
@@ -25,14 +26,6 @@ public class TaskPutRequest {
         this.name = name;
     }
 
-    public Long getStatusId() {
-        return statusId;
-    }
-
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -41,13 +34,30 @@ public class TaskPutRequest {
         this.description = description;
     }
 
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
+    }
+
     @Override
     public String toString() {
         return "TaskPutRequest{" +
                 "entityId=" + entityId +
                 ", name='" + name + '\'' +
-                ", statusId=" + statusId +
                 ", description=" + size(description) +
+                ", typeId=" + typeId +
+                ", statusId=" + statusId +
                 '}';
     }
 }
