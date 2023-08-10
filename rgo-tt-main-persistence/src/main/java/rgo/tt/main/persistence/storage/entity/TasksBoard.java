@@ -1,11 +1,12 @@
 package rgo.tt.main.persistence.storage.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class TasksBoard implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    @Serial private static final long serialVersionUID = 1L;
 
     private final Long entityId;
     private final String name;

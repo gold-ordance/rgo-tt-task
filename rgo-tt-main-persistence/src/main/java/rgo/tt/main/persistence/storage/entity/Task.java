@@ -1,5 +1,6 @@
 package rgo.tt.main.persistence.storage.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -8,7 +9,7 @@ import static rgo.tt.common.utils.HelperUtils.size;
 
 public class Task implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    @Serial private static final long serialVersionUID = 1L;
 
     private final Long entityId;
     private final String name;
