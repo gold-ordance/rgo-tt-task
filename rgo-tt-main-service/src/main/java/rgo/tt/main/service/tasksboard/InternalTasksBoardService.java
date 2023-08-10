@@ -26,16 +26,24 @@ public class InternalTasksBoardService implements TasksBoardService {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        return repository.save(board);
+        TasksBoard cleared = clearSpaces(board);
+        return repository.save(cleared);
     }
 
     @Override
     public TasksBoard update(TasksBoard board) {
-        return repository.update(board);
+        TasksBoard cleared = clearSpaces(board);
+        return repository.update(cleared);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
         return repository.deleteByEntityId(entityId);
+    }
+
+    private static TasksBoard clearSpaces(TasksBoard board) {
+        return board.toBuilder()
+                .setName(board.getName().strip())
+                .build();
     }
 }

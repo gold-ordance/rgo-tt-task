@@ -11,7 +11,7 @@ public class TasksBoard implements Serializable {
     private final Long entityId;
     private final String name;
 
-    public TasksBoard(Builder builder) {
+    private TasksBoard(Builder builder) {
         entityId = builder.entityId;
         name = builder.name;
     }
@@ -43,6 +43,12 @@ public class TasksBoard implements Serializable {
                 "entityId=" + entityId +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    public Builder toBuilder() {
+        return new Builder()
+                .setEntityId(entityId)
+                .setName(name);
     }
 
     public static Builder builder() {

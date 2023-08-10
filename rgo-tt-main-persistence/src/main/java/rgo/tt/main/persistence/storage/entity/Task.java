@@ -20,7 +20,7 @@ public class Task implements Serializable {
     private final TaskType type;
     private final TaskStatus status;
 
-    public Task(Builder builder) {
+    private Task(Builder builder) {
         entityId = builder.entityId;
         name = builder.name;
         createdDate = builder.createdDate;
@@ -97,10 +97,21 @@ public class Task implements Serializable {
                 '}';
     }
 
+    public Builder toBuilder() {
+        return new Builder()
+                .setEntityId(entityId)
+                .setName(name)
+                .setCreatedDate(createdDate)
+                .setLastModifiedDate(lastModifiedDate)
+                .setDescription(description)
+                .setBoard(board)
+                .setType(type)
+                .setStatus(status);
+    }
+
     public static Builder builder() {
         return new Builder();
     }
-
     public static class Builder {
 
         private Long entityId;
