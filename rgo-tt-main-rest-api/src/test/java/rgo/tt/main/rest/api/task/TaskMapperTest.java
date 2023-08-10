@@ -20,8 +20,11 @@ class TaskMapperTest {
         Task task = TaskMapper.map(rq);
 
         assertEquals(rq.getName(), task.getName());
+        assertEquals(rq.getDescription(), task.getDescription());
+        assertEquals(rq.getBoardId(), task.getBoard().getEntityId());
+        assertEquals(rq.getTypeId(), task.getType().getEntityId());
 
-        List<String> nonEmptyFields = List.of("name", "board", "description");
+        List<String> nonEmptyFields = List.of("name", "description", "board", "type");
         assertNullFields(task, nonEmptyFields);
     }
 
@@ -32,9 +35,10 @@ class TaskMapperTest {
 
         assertEquals(rq.getEntityId(), task.getEntityId());
         assertEquals(rq.getName(), task.getName());
+        assertEquals(rq.getTypeId(), task.getType().getEntityId());
         assertEquals(rq.getStatusId(), task.getStatus().getEntityId());
 
-        List<String> nonEmptyFields = List.of("entityId", "name", "status", "description");
+        List<String> nonEmptyFields = List.of("entityId", "name", "description", "type", "status");
         assertNullFields(task, nonEmptyFields);
     }
 }

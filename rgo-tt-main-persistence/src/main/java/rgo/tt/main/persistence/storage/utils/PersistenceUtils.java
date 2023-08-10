@@ -33,7 +33,7 @@ public final class PersistenceUtils {
         return new EmbeddedDatabaseBuilder()
                 .setType(EmbeddedDatabaseType.H2)
                 .setName(DB_NAME)
-                .addScript("classpath:h2/init.sql")
+                .addScript("classpath:h2/init-tables.sql")
                 .build();
     }
 

@@ -1,4 +1,4 @@
-package rgo.tt.main.rest.api.taskstatus;
+package rgo.tt.main.rest.api.tasktype;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,21 +13,20 @@ import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.DONE;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.IN_PROGRESS;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.STATUSES;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TO_DO;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.BUG;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TASK;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TYPES;
 
 @SpringBootTest
 @WebAppConfiguration
-class TaskStatusRestControllerTest {
+class TaskTypeRestControllerTest {
 
     @Autowired private WebApplicationContext context;
     @Autowired private DbTxManager tx;
@@ -42,18 +41,16 @@ class TaskStatusRestControllerTest {
 
     @Test
     void getAll() throws Exception {
-        mvc.perform(get(TaskStatusRestController.BASE_URL))
+        mvc.perform(get(TaskTypeRestController.BASE_URL))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.taskStatuses", hasSize(STATUSES.size())))
-                .andExpect(jsonPath("$.taskStatuses[0].entityId", is(TO_DO.getEntityId().intValue())))
-                .andExpect(jsonPath("$.taskStatuses[0].name", is(TO_DO.getName())))
-                .andExpect(jsonPath("$.taskStatuses[1].entityId", is(IN_PROGRESS.getEntityId().intValue())))
-                .andExpect(jsonPath("$.taskStatuses[1].name", is(IN_PROGRESS.getName())))
-                .andExpect(jsonPath("$.taskStatuses[2].entityId", is(DONE.getEntityId().intValue())))
-                .andExpect(jsonPath("$.taskStatuses[2].name", is(DONE.getName())));
+                .andExpect(jsonPath("$.types", hasSize(TYPES.size())))
+                .andExpect(jsonPath("$.types[0].entityId", is(TASK.getEntityId().intValue())))
+                .andExpect(jsonPath("$.types[0].name", is(TASK.getName())))
+                .andExpect(jsonPath("$.types[1].entityId", is(BUG.getEntityId().intValue())))
+                .andExpect(jsonPath("$.types[1].name", is(BUG.getName())));
 
     }
 }

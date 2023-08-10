@@ -15,18 +15,20 @@ public class Task implements Serializable {
     private final String name;
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
-    private final TasksBoard board;
-    private final TaskStatus status;
     private final String description;
+    private final TasksBoard board;
+    private final TaskType type;
+    private final TaskStatus status;
 
     public Task(Builder builder) {
         entityId = builder.entityId;
         name = builder.name;
         createdDate = builder.createdDate;
         lastModifiedDate = builder.lastModifiedDate;
-        board = builder.board;
-        status = builder.status;
         description = builder.description;
+        board = builder.board;
+        type = builder.type;
+        status = builder.status;
     }
 
     public Long getEntityId() {
@@ -45,16 +47,20 @@ public class Task implements Serializable {
         return lastModifiedDate;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public TasksBoard getBoard() {
         return board;
     }
 
-    public TaskStatus getStatus() {
-        return status;
+    public TaskType getType() {
+        return type;
     }
 
-    public String getDescription() {
-        return description;
+    public TaskStatus getStatus() {
+        return status;
     }
 
     @Override
@@ -66,14 +72,15 @@ public class Task implements Serializable {
                 && Objects.equals(name, task.name)
                 && Objects.equals(createdDate, task.createdDate)
                 && Objects.equals(lastModifiedDate, task.lastModifiedDate)
+                && Objects.equals(description, task.description)
                 && Objects.equals(board, task.board)
-                && Objects.equals(status, task.status)
-                && Objects.equals(description, task.description);
+                && Objects.equals(type, task.type)
+                && Objects.equals(status, task.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name, createdDate, lastModifiedDate, board, status, description);
+        return Objects.hash(entityId, name, createdDate, lastModifiedDate, description, board, type, status);
     }
 
     @Override
@@ -83,9 +90,10 @@ public class Task implements Serializable {
                 ", name='" + name + '\'' +
                 ", createdDate=" + createdDate +
                 ", lastModifiedDate=" + lastModifiedDate +
-                ", board=" + board +
-                ", status=" + status +
                 ", description=" + size(description) +
+                ", board=" + board +
+                ", type=" + type +
+                ", status=" + status +
                 '}';
     }
 
@@ -99,9 +107,10 @@ public class Task implements Serializable {
         private String name;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
-        private TasksBoard board;
-        private TaskStatus status;
         private String description;
+        private TasksBoard board;
+        private TaskType type;
+        private TaskStatus status;
 
         public Builder setEntityId(Long entityId) {
             this.entityId = entityId;
@@ -123,18 +132,23 @@ public class Task implements Serializable {
             return this;
         }
 
+        public Builder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Builder setBoard(TasksBoard board) {
             this.board = board;
             return this;
         }
 
-        public Builder setStatus(TaskStatus status) {
-            this.status = status;
+        public Builder setType(TaskType type) {
+            this.type = type;
             return this;
         }
 
-        public Builder setDescription(String description) {
-            this.description = description;
+        public Builder setStatus(TaskStatus status) {
+            this.status = status;
             return this;
         }
 

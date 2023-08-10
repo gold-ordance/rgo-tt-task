@@ -2,11 +2,15 @@ package rgo.tt.main.persistence.storage.utils;
 
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
+import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 import java.util.List;
 
-import static rgo.tt.common.utils.RandomUtils.*;
+import static rgo.tt.common.utils.RandomUtils.randomBigString;
+import static rgo.tt.common.utils.RandomUtils.randomElement;
+import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
+import static rgo.tt.common.utils.RandomUtils.randomString;
 
 public final class EntityGenerator {
 
@@ -15,6 +19,11 @@ public final class EntityGenerator {
     public static final TaskStatus DONE = TaskStatus.builder().setEntityId(3L).setName("DONE").build();
 
     public static final List<TaskStatus> STATUSES = List.of(TO_DO, IN_PROGRESS, DONE);
+
+    public static final TaskType TASK = TaskType.builder().setEntityId(1L).setName("Task").build();
+    public static final TaskType BUG = TaskType.builder().setEntityId(2L).setName("Bug").build();
+
+    public static final List<TaskType> TYPES = List.of(TASK, BUG);
 
     private EntityGenerator() {
     }
@@ -28,6 +37,7 @@ public final class EntityGenerator {
                 .setEntityId(randomPositiveLong())
                 .setName(randomString())
                 .setBoard(randomTasksBoard())
+                .setType(randomElement(TYPES))
                 .setStatus(randomElement(STATUSES))
                 .setDescription(randomBigString());
     }
@@ -48,6 +58,16 @@ public final class EntityGenerator {
 
     public static TasksBoard.Builder randomTasksBoardBuilder() {
         return TasksBoard.builder()
+                .setEntityId(randomPositiveLong())
+                .setName(randomString());
+    }
+
+    public static TaskType randomTaskType() {
+        return randomElement(TYPES);
+    }
+
+    public static TaskType.Builder randomTaskTypeBuilder() {
+        return TaskType.builder()
                 .setEntityId(randomPositiveLong())
                 .setName(randomString());
     }

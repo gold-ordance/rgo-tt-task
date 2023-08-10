@@ -5,8 +5,9 @@ import static rgo.tt.common.utils.HelperUtils.size;
 public class TaskSaveRequest {
 
     private String name;
-    private Long boardId;
     private String description;
+    private Long boardId;
+    private Long typeId;
 
     public String getName() {
         return name;
@@ -14,14 +15,6 @@ public class TaskSaveRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(Long boardId) {
-        this.boardId = boardId;
     }
 
     public String getDescription() {
@@ -32,12 +25,29 @@ public class TaskSaveRequest {
         this.description = description;
     }
 
+    public Long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
     @Override
     public String toString() {
         return "TaskSaveRequest{" +
                 "name='" + name + '\'' +
-                ", boardId=" + boardId +
                 ", description=" + size(description) +
+                ", boardId=" + boardId +
+                ", typeId=" + typeId +
                 '}';
     }
 }

@@ -24,8 +24,8 @@ public final class TaskQuery {
 
     public static String save() {
         return """
-                INSERT INTO %s(name, board_id, description)
-                VALUES(:name, :board_id, :description)
+                INSERT INTO %s(name, description, board_id, type_id)
+                VALUES(:name, :description, :board_id, :type_id)
                 """.formatted(TABLE_NAME);
     }
 
@@ -34,8 +34,9 @@ public final class TaskQuery {
                 UPDATE %s
                    SET name = :name,
                        last_modified_date = :lmd,
-                       status_id = :status_id,
-                       description = :description
+                       description = :description,
+                       type_id = :type_id,
+                       status_id = :status_id
                  WHERE entity_id = :entity_id
                 """.formatted(TABLE_NAME);
     }
@@ -54,17 +55,22 @@ public final class TaskQuery {
                        t.name               AS t_name,
                        t.created_date       AS t_created_date,
                        t.last_modified_date AS t_last_modified_date,
+                       t.description        AS t_description,
                        tb.entity_id         AS tb_entity_id,
                        tb.name              AS tb_name,
                        ts.entity_id         AS ts_entity_id,
                        ts.name              AS ts_name,
-                       t.description        AS t_description
+                       tt.entity_id         AS tt_entity_id,
+                       tt.name              AS tt_name
                   FROM %s AS t
                        JOIN task_status AS ts
                        ON t.status_id = ts.entity_id
                        
                        JOIN tasks_board tb
                        ON t.board_id = tb.entity_id
+                       
+                       JOIN task_type tt
+                       ON t.type_id = tt.entity_id
                 """.formatted(TABLE_NAME);
     }
 }
