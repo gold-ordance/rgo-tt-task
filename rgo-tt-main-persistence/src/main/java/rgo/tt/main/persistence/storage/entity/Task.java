@@ -112,6 +112,7 @@ public class Task implements Serializable {
     public static Builder builder() {
         return new Builder();
     }
+
     public static class Builder {
 
         private Long entityId;

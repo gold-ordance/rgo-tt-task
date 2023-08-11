@@ -45,9 +45,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
         }
 
         if (boards.size() > 1) {
-            String errorMsg = "The number of boards is not equal to 1.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("The number of boards is not equal to 1.");
         }
 
         return Optional.of(boards.get(0));
@@ -62,16 +60,12 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
         Number key = keyHolder.getKey();
 
         if (result != 1 || key == null) {
-            String errorMsg = "TasksBoard save error.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("TasksBoard save error.");
         }
 
         Optional<TasksBoard> opt = findByEntityId(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "TasksBoard save error during searching.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("TasksBoard save error during searching.");
         }
 
         return opt.get();
@@ -88,22 +82,16 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
         Number key = keyHolder.getKey();
 
         if (result == 0) {
-            String errorMsg = "The entityId not found in the storage.";
-            LOGGER.error(errorMsg);
-            throw new InvalidEntityException(errorMsg);
+            throw new InvalidEntityException("The entityId not found in the storage.");
         }
 
         if (result > 1 || key == null) {
-            String errorMsg = "TasksBoard update error.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("TasksBoard update error.");
         }
 
         Optional<TasksBoard> opt = findByEntityId(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "TasksBoard update error during searching.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("TasksBoard update error during searching.");
         }
 
         return opt.get();

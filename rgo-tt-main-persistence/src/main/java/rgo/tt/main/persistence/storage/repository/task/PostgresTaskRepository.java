@@ -55,9 +55,7 @@ public class PostgresTaskRepository implements TaskRepository {
         }
 
         if (tasks.size() > 1) {
-            String errorMsg = "The number of tasks is not equal to 1.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("The number of tasks is not equal to 1.");
         }
 
         return Optional.of(tasks.get(0));
@@ -90,16 +88,12 @@ public class PostgresTaskRepository implements TaskRepository {
         Number key = keyHolder.getKey();
 
         if (result != 1 || key == null) {
-            String errorMsg = "Task save error.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("Task save error.");
         }
 
         Optional<Task> opt = findByEntityId(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "Task save error during searching.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("Task save error during searching.");
         }
 
         return opt.get();
@@ -120,7 +114,6 @@ public class PostgresTaskRepository implements TaskRepository {
         List<?> list = jdbc.query(sql, params, (rs, num) -> rs);
 
         if (list.isEmpty()) {
-            LOGGER.error(errorMsg);
             throw new InvalidEntityException(errorMsg);
         }
     }
@@ -143,22 +136,16 @@ public class PostgresTaskRepository implements TaskRepository {
         Number key = keyHolder.getKey();
 
         if (result == 0) {
-            String errorMsg = "The entityId not found in the storage.";
-            LOGGER.error(errorMsg);
-            throw new InvalidEntityException(errorMsg);
+            throw new InvalidEntityException("The entityId not found in the storage.");
         }
 
         if (result > 1 || key == null) {
-            String errorMsg = "Task update error.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("Task update error.");
         }
 
         Optional<Task> opt = findByEntityId(key.longValue());
         if (opt.isEmpty()) {
-            String errorMsg = "Task update error during searching.";
-            LOGGER.error(errorMsg);
-            throw new PersistenceException(errorMsg);
+            throw new PersistenceException("Task update error during searching.");
         }
 
         return opt.get();
