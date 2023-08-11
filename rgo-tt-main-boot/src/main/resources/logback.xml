@@ -3,20 +3,26 @@
     <property name="LOG_DIR" value="/var/log/app-boot"/>
     <property name="LOG_FILE" value="log"/>
 
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/${LOG_FILE}.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+    <springProfile name="production">
+        <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_DIR}/${LOG_FILE}.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
 
-            <maxHistory>7</maxHistory>
-            <totalSizeCap>1GB</totalSizeCap>
-        </rollingPolicy>
-        <encoder>
-            <pattern>
+                <maxHistory>7</maxHistory>
+                <totalSizeCap>1GB</totalSizeCap>
+            </rollingPolicy>
+            <encoder>
+                <pattern>
                 %d{yyyy-MM-dd HH:mm:ss.SSS} trace.id=[%X{trace.id}] %-5p %c: %m%n
-            </pattern>
-        </encoder>
-    </appender>
+                </pattern>
+            </encoder>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="file"/>
+        </root>
+    </springProfile>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <Target>System.out</Target>
@@ -32,9 +38,5 @@
 
     <root level="info">
         <appender-ref ref="stdout"/>
-    </root>
-
-    <root level="info">
-        <appender-ref ref="file"/>
     </root>
 </configuration>
