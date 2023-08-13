@@ -3,8 +3,11 @@ package rgo.tt.main.service.tasksboard;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class InternalTasksBoardService implements TasksBoardService {
 
@@ -27,7 +30,10 @@ public class InternalTasksBoardService implements TasksBoardService {
     @Override
     public TasksBoard save(TasksBoard board) {
         TasksBoard cleared = clearSpaces(board);
-        return repository.save(cleared);
+        TasksBoard withShortName = cleared.toBuilder()
+                .setShortName(shortName(cleared.getName()))
+                .build();
+        return repository.save(withShortName);
     }
 
     @Override
@@ -39,5 +45,12 @@ public class InternalTasksBoardService implements TasksBoardService {
         return board.toBuilder()
                 .setName(board.getName().strip())
                 .build();
+    }
+
+    private static String shortName(String name) {
+        return Arrays.stream(name.split(" "))
+                .map(s -> String.valueOf(s.charAt(0)))
+                .collect(Collectors.joining())
+                .toUpperCase(Locale.ENGLISH);
     }
 }

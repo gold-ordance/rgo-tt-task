@@ -10,10 +10,12 @@ public class TasksBoard implements Serializable {
 
     private final Long entityId;
     private final String name;
+    private final String shortName;
 
     private TasksBoard(Builder builder) {
         entityId = builder.entityId;
         name = builder.name;
+        shortName = builder.shortName;
     }
 
     public Long getEntityId() {
@@ -24,17 +26,23 @@ public class TasksBoard implements Serializable {
         return name;
     }
 
+    public String getShortName() {
+        return shortName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TasksBoard that = (TasksBoard) o;
-        return Objects.equals(entityId, that.entityId) && Objects.equals(name, that.name);
+        return Objects.equals(entityId, that.entityId)
+                && Objects.equals(name, that.name)
+                && Objects.equals(shortName, that.shortName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name);
+        return Objects.hash(entityId, name, shortName);
     }
 
     @Override
@@ -42,13 +50,15 @@ public class TasksBoard implements Serializable {
         return "TasksBoard{" +
                 "entityId=" + entityId +
                 ", name='" + name + '\'' +
+                ", shortName='" + shortName + '\'' +
                 '}';
     }
 
     public Builder toBuilder() {
         return new Builder()
                 .setEntityId(entityId)
-                .setName(name);
+                .setName(name)
+                .setShortName(shortName);
     }
 
     public static Builder builder() {
@@ -59,6 +69,7 @@ public class TasksBoard implements Serializable {
 
         private Long entityId;
         private String name;
+        private String shortName;
 
         public Builder setEntityId(Long entityId) {
             this.entityId = entityId;
@@ -67,6 +78,11 @@ public class TasksBoard implements Serializable {
 
         public Builder setName(String name) {
             this.name = name;
+            return this;
+        }
+
+        public Builder setShortName(String shortName) {
+            this.shortName = shortName;
             return this;
         }
 

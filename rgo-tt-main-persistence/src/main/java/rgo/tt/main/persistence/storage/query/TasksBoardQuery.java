@@ -17,8 +17,8 @@ public final class TasksBoardQuery {
 
     public static String save() {
         return """
-                INSERT INTO %s(name)
-                VALUES(:name)
+                INSERT INTO %s(name, short_name)
+                VALUES(:name, :short_name)
                 """.formatted(TABLE_NAME);
     }
 
@@ -33,7 +33,8 @@ public final class TasksBoardQuery {
     private static String select() {
         return """
                 SELECT entity_id,
-                       name
+                       name,
+                       short_name
                   FROM %s
                 """.formatted(TABLE_NAME);
     }

@@ -1,7 +1,8 @@
 CREATE TABLE tasks_board (
     PRIMARY KEY(entity_id),
-    entity_id IDENTITY,
-    name      VARCHAR(64) NOT NULL
+    entity_id  IDENTITY,
+    name       VARCHAR(64) NOT NULL,
+    short_name VARCHAR(16) NOT NULL
 );
 
 CREATE TABLE task_status (
