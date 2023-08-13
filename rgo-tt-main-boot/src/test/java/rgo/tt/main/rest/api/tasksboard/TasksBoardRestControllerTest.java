@@ -13,24 +13,15 @@ import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
-import rgo.tt.main.rest.api.tasksboard.request.TasksBoardPutRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import rgo.tt.main.service.tasksboard.TasksBoardService;
 
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static rgo.tt.common.rest.api.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
-import static rgo.tt.main.rest.api.RequestGenerator.createTasksBoardPutRequest;
 import static rgo.tt.main.rest.api.RequestGenerator.createTasksBoardSaveRequest;
 
 @SpringBootTest
@@ -133,81 +124,6 @@ class TasksBoardRestControllerTest {
                 .andExpect(status().is(StatusCode.STORED.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.STORED.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.board.name", is(rq.getName())));
-    }
-
-    @Test
-    void put_invalidRq_entityIdIsNull() throws Exception {
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-        rq.setEntityId(null);
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
-                .andExpect(jsonPath("$.status.message", is("The entityId is null.")));
-    }
-
-    @Test
-    void put_invalidRq_entityIdIsNegative() throws Exception {
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-        rq.setEntityId(-randomPositiveLong());
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
-                .andExpect(jsonPath("$.status.message", is("The entityId is negative.")));
-    }
-
-    @Test
-    void put_invalidRq_nameIsNull() throws Exception {
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-        rq.setName(null);
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
-                .andExpect(jsonPath("$.status.message", is("The name is null.")));
-    }
-
-    @Test
-    void put_invalidRq_nameIsEmpty() throws Exception {
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-        rq.setName("");
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
-                .andExpect(jsonPath("$.status.message", is("The name is empty.")));
-    }
-
-    @Test
-    void put_invalidEntity_entityIdIsFake() throws Exception {
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.INVALID_ENTITY.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_ENTITY.name())))
-                .andExpect(jsonPath("$.status.message", is("The entityId not found in the storage.")));
-    }
-
-    @Test
-    void putTask() throws Exception {
-        TasksBoard board = insertTasksBoard();
-
-        TasksBoardPutRequest rq = createTasksBoardPutRequest();
-        rq.setEntityId(board.getEntityId());
-
-        mvc.perform(put(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
-                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
-                .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.board.entityId", is(rq.getEntityId().intValue())))
                 .andExpect(jsonPath("$.board.name", is(rq.getName())));
     }
 

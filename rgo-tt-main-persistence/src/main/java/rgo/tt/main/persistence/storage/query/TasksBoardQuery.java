@@ -22,14 +22,6 @@ public final class TasksBoardQuery {
                 """.formatted(TABLE_NAME);
     }
 
-    public static String update() {
-        return """
-                UPDATE %s
-                   SET name = :name
-                 WHERE entity_id = :entity_id
-                """.formatted(TABLE_NAME);
-    }
-
     public static String deleteByEntityId() {
         return """
                 DELETE

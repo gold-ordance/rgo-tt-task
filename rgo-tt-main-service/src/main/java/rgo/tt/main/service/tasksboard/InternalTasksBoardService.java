@@ -31,12 +31,6 @@ public class InternalTasksBoardService implements TasksBoardService {
     }
 
     @Override
-    public TasksBoard update(TasksBoard board) {
-        TasksBoard cleared = clearSpaces(board);
-        return repository.update(cleared);
-    }
-
-    @Override
     public boolean deleteByEntityId(Long entityId) {
         return repository.deleteByEntityId(entityId);
     }

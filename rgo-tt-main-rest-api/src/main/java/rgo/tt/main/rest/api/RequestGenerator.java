@@ -2,7 +2,6 @@ package rgo.tt.main.rest.api;
 
 import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
-import rgo.tt.main.rest.api.tasksboard.request.TasksBoardPutRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 
 import static rgo.tt.common.utils.RandomUtils.randomBigString;
@@ -37,13 +36,6 @@ public final class RequestGenerator {
 
     public static TasksBoardSaveRequest createTasksBoardSaveRequest() {
         TasksBoardSaveRequest rq = new TasksBoardSaveRequest();
-        rq.setName(randomString());
-        return rq;
-    }
-
-    public static TasksBoardPutRequest createTasksBoardPutRequest() {
-        TasksBoardPutRequest rq = new TasksBoardPutRequest();
-        rq.setEntityId(randomPositiveLong());
         rq.setName(randomString());
         return rq;
     }

@@ -41,14 +41,6 @@ public class ValidateTasksBoardServiceDecorator implements TasksBoardService {
     }
 
     @Override
-    public TasksBoard update(TasksBoard board) {
-        LOGGER.info("Request 'update' received: board={}", board);
-        checkObjectId(board.getEntityId(), "entityId");
-        checkString(board.getName(), "name");
-        return delegate.update(board);
-    }
-
-    @Override
     public boolean deleteByEntityId(Long entityId) {
         LOGGER.info("Request 'deleteByEntityId' received: entityId={}", entityId);
         checkObjectId(entityId, "entityId");

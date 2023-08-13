@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
-import rgo.tt.main.rest.api.tasksboard.request.TasksBoardPutRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import rgo.tt.main.rest.api.tasksboard.response.TasksBoardGetEntityResponse;
 import rgo.tt.main.rest.api.tasksboard.response.TasksBoardGetListResponse;
@@ -105,47 +104,6 @@ public interface TasksBoardController {
             )
     })
     ResponseEntity<Response> save(TasksBoardSaveRequest rq);
-
-    @Operation(summary = "Update board")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successfully updating the board",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = TasksBoardModifyResponse.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "The entityId parameter is (null/negative) or the name parameter is (null/empty)",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ErrorResponse.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "422",
-                    description = "The entityId not found in the storage.",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ErrorResponse.class))
-                    }
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal unexpected error",
-                    content = {
-                            @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ErrorResponse.class))
-                    }
-            )
-    })
-    ResponseEntity<Response> put(TasksBoardPutRequest rq);
 
     @Operation(summary = "Delete board by entityId")
     @ApiResponses(value = {

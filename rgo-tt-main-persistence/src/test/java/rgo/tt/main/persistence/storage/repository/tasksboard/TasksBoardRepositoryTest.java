@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.config.PersistenceConfig;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
@@ -19,14 +18,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
-import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoardBuilder;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfig.class)
@@ -74,27 +68,6 @@ class TasksBoardRepositoryTest {
 
         TasksBoard savedBoard = repository.save(created);
         assertEquals(created.getName(), savedBoard.getName());
-    }
-
-    @Test
-    void update_entityIdIsFake() {
-        TasksBoard created = randomTasksBoard();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.update(created),
-                "The entityId not found in the storage.");
-    }
-
-    @Test
-    void update() {
-        TasksBoard created = randomTasksBoard();
-        TasksBoard saved = insert(created);
-
-        TasksBoard updated = randomTasksBoardBuilder().setEntityId(saved.getEntityId()).build();
-        TasksBoard actual = repository.update(updated);
-
-        assertEquals(saved.getEntityId(), actual.getEntityId());
-        assertEquals(updated.getName(), actual.getName());
     }
 
     @Test

@@ -77,67 +77,6 @@ class TasksBoardServiceTest {
     }
 
     @Test
-    void update_invalidRq_entityIdIsNull() {
-        TasksBoard board = randomTasksBoardBuilder()
-                .setEntityId(null)
-                .build();
-
-        assertThrowsWithMessage(
-                ValidateException.class,
-                () -> service.update(board),
-                "The entityId is null.");
-    }
-
-    @Test
-    void update_invalidRq_entityIdIsNegative() {
-        TasksBoard board = randomTasksBoardBuilder()
-                .setEntityId(-randomPositiveLong())
-                .build();
-
-        assertThrowsWithMessage(
-                ValidateException.class,
-                () -> service.update(board),
-                "The entityId is negative.");
-    }
-
-    @Test
-    void update_invalidRq_nameIsNull() {
-        TasksBoard board = randomTasksBoardBuilder()
-                .setName(null)
-                .build();
-
-        assertThrowsWithMessage(
-                ValidateException.class,
-                () -> service.update(board),
-                "The name is null.");
-    }
-
-    @Test
-    void update_invalidRq_nameIsEmpty() {
-        TasksBoard board = randomTasksBoardBuilder()
-                .setName("")
-                .build();
-
-        assertThrowsWithMessage(
-                ValidateException.class,
-                () -> service.update(board),
-                "The name is empty.");
-    }
-
-    @Test
-    void update_clearedBoard() {
-        String clearedName = randomString();
-        TasksBoard saved = insertBoard();
-        TasksBoard updated = randomTasksBoardBuilder()
-                .setEntityId(saved.getEntityId())
-                .setName(" " + clearedName + "  ")
-                .build();
-        TasksBoard actual = service.update(updated);
-
-        assertEquals(clearedName, actual.getName());
-    }
-
-    @Test
     void deleteByEntityId_invalidRq_entityIdIsNull() {
         assertThrowsWithMessage(
                 ValidateException.class,

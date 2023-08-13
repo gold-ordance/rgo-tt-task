@@ -13,7 +13,5 @@ public interface TasksBoardService {
 
     TasksBoard save(TasksBoard board);
 
-    TasksBoard update(TasksBoard board);
-
     boolean deleteByEntityId(Long entityId);
 }

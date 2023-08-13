@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
@@ -66,32 +65,6 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
         Optional<TasksBoard> opt = findByEntityId(key.longValue());
         if (opt.isEmpty()) {
             throw new PersistenceException("TasksBoard save error during searching.");
-        }
-
-        return opt.get();
-    }
-
-    @Override
-    public TasksBoard update(TasksBoard board) {
-        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "entity_id", board.getEntityId(),
-                "name", board.getName()));
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int result = jdbc.update(TasksBoardQuery.update(), params, keyHolder, new String[]{"entity_id"});
-        Number key = keyHolder.getKey();
-
-        if (result == 0) {
-            throw new InvalidEntityException("The entityId not found in the storage.");
-        }
-
-        if (result > 1 || key == null) {
-            throw new PersistenceException("TasksBoard update error.");
-        }
-
-        Optional<TasksBoard> opt = findByEntityId(key.longValue());
-        if (opt.isEmpty()) {
-            throw new PersistenceException("TasksBoard update error during searching.");
         }
 
         return opt.get();

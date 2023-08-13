@@ -32,11 +32,6 @@ public class TxTasksBoardRepositoryDecorator implements TasksBoardRepository {
     }
 
     @Override
-    public TasksBoard update(TasksBoard board) {
-        return tx.tx(() -> repository.update(board));
-    }
-
-    @Override
     public boolean deleteByEntityId(Long entityId) {
         return tx.tx(() -> repository.deleteByEntityId(entityId));
     }

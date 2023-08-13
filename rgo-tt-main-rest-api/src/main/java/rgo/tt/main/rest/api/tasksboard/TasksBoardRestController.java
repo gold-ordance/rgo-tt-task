@@ -1,19 +1,11 @@
 package rgo.tt.main.rest.api.tasksboard;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.SuccessResponse;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.rest.api.tasksboard.request.TasksBoardPutRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import rgo.tt.main.rest.api.tasksboard.response.TasksBoardGetEntityResponse;
 import rgo.tt.main.rest.api.tasksboard.response.TasksBoardGetListResponse;
@@ -25,7 +17,7 @@ import java.util.Optional;
 
 import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
 import static rgo.tt.common.rest.api.RestUtils.convert;
-import static rgo.tt.main.rest.api.tasksboard.response.TasksBoardMapper.map;
+import static rgo.tt.main.rest.api.tasksboard.TasksBoardMapper.map;
 
 @RestController
 @RequestMapping(TasksBoardRestController.BASE_URL)
@@ -63,14 +55,6 @@ public class TasksBoardRestController implements TasksBoardController {
     public ResponseEntity<Response> save(@RequestBody TasksBoardSaveRequest rq) {
         TasksBoard board = service.save(map(rq));
         Response response = TasksBoardModifyResponse.saved(board);
-        return convert(response);
-    }
-
-    @Override
-    @PutMapping
-    public ResponseEntity<Response> put(@RequestBody TasksBoardPutRequest rq) {
-        TasksBoard board = service.update(map(rq));
-        Response response = TasksBoardModifyResponse.updated(board);
         return convert(response);
     }
 
