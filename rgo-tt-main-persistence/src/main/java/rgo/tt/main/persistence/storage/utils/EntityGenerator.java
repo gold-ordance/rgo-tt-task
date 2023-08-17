@@ -10,6 +10,7 @@ import java.util.List;
 import static rgo.tt.common.utils.RandomUtils.randomBigString;
 import static rgo.tt.common.utils.RandomUtils.randomElement;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
+import static rgo.tt.common.utils.RandomUtils.randomShortString;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 
 public final class EntityGenerator {
@@ -59,7 +60,8 @@ public final class EntityGenerator {
     public static TasksBoard.Builder randomTasksBoardBuilder() {
         return TasksBoard.builder()
                 .setEntityId(randomPositiveLong())
-                .setName(randomString());
+                .setName(randomString())
+                .setShortName(randomShortString());
     }
 
     public static TaskType randomTaskType() {

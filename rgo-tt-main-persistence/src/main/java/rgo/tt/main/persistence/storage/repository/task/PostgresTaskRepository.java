@@ -172,6 +172,7 @@ public class PostgresTaskRepository implements TaskRepository {
             .setBoard(TasksBoard.builder()
                     .setEntityId(rs.getLong("tb_entity_id"))
                     .setName(rs.getString("tb_name"))
+                    .setShortName(rs.getString("tb_short_name"))
                     .build())
             .setType(TaskType.builder()
                     .setEntityId(rs.getLong("tt_entity_id"))

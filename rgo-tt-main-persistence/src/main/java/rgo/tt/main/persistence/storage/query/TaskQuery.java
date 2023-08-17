@@ -58,6 +58,7 @@ public final class TaskQuery {
                        t.description        AS t_description,
                        tb.entity_id         AS tb_entity_id,
                        tb.name              AS tb_name,
+                       tb.short_name        AS tb_short_name,
                        ts.entity_id         AS ts_entity_id,
                        ts.name              AS ts_name,
                        tt.entity_id         AS tt_entity_id,

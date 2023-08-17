@@ -13,7 +13,6 @@ import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.query.TasksBoardQuery;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class PostgresTasksBoardRepository implements TasksBoardRepository {
@@ -52,7 +51,9 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        MapSqlParameterSource params = new MapSqlParameterSource(Map.of("name", board.getName()));
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("name", board.getName())
+                .addValue("short_name", board.getShortName());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int result = jdbc.update(TasksBoardQuery.save(), params, keyHolder, new String[]{"entity_id"});
@@ -80,5 +81,6 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
     private static final RowMapper<TasksBoard> mapper = (rs, rowNum) -> TasksBoard.builder()
             .setEntityId(rs.getLong("entity_id"))
             .setName(rs.getString("name"))
+            .setShortName(rs.getString("short_name"))
             .build();
 }

@@ -74,6 +74,7 @@ class TasksBoardServiceTest {
         TasksBoard actual = service.save(created);
 
         assertEquals(clearedName, actual.getName());
+        assertEquals(String.valueOf(clearedName.charAt(0)).toUpperCase(), actual.getShortName());
     }
 
     @Test
