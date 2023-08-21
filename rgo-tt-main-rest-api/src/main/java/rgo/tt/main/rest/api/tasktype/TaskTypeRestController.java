@@ -27,7 +27,7 @@ public class TaskTypeRestController implements TaskTypeController {
 
     @Override
     @GetMapping
-    public ResponseEntity<Response> getAll() {
+    public ResponseEntity<Response> findAll() {
         List<TaskType> types = service.findAll();
         Response response = TaskTypeGetListResponse.success(types);
         return convert(response);

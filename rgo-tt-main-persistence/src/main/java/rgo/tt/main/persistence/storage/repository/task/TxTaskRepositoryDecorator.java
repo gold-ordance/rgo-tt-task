@@ -17,8 +17,8 @@ public class TxTaskRepositoryDecorator implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAll(Long boardId) {
-        return tx.tx(() -> delegate.findAll(boardId));
+    public List<Task> findAllForBoard(Long boardId) {
+        return tx.tx(() -> delegate.findAllForBoard(boardId));
     }
 
     @Override

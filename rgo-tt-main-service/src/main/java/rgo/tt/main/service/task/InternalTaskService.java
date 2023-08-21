@@ -15,8 +15,8 @@ public class InternalTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> findAll(Long boardId) {
-        return repository.findAll(boardId);
+    public List<Task> findAllForBoard(Long boardId) {
+        return repository.findAllForBoard(boardId);
     }
 
     @Override

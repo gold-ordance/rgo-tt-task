@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.jdbc.datasource.SmartDataSource;
 import rgo.tt.common.exceptions.BaseException;
+import rgo.tt.common.persistence.StatementJdbcTemplateDecorator;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,15 +19,15 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
     private static final Logger log = LoggerFactory.getLogger(DbTxManager.class);
 
     private final DataSource dataSource;
-    private final NamedParameterJdbcTemplate jdbc;
+    private final StatementJdbcTemplateDecorator jdbc;
     private final ThreadLocal<ConnectionHolder> txConnection = new ThreadLocal<>();
 
     public DbTxManager(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.jdbc = new NamedParameterJdbcTemplate(this);
+        this.jdbc = new StatementJdbcTemplateDecorator(new NamedParameterJdbcTemplate(this));
     }
 
-    public NamedParameterJdbcTemplate jdbc() {
+    public StatementJdbcTemplateDecorator jdbc() {
         return jdbc;
     }
 
@@ -130,6 +131,7 @@ public class DbTxManager extends AbstractDataSource implements SmartDataSource {
     }
 
     private class ConnectionHolder {
+
         private Connection connection;
 
         Connection get() throws SQLException {

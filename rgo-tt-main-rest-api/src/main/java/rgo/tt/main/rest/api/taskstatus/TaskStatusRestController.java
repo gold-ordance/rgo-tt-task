@@ -27,7 +27,7 @@ public class TaskStatusRestController implements TaskStatusController {
 
     @Override
     @GetMapping
-    public ResponseEntity<Response> getAll() {
+    public ResponseEntity<Response> findAll() {
         List<TaskStatus> statuses = service.findAll();
         Response response = TaskStatusGetListResponse.success(statuses);
         return convert(response);

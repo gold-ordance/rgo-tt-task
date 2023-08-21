@@ -18,7 +18,7 @@ import rgo.tt.main.rest.api.tasksboard.response.TasksBoardModifyResponse;
 @Tag(name = "TasksBoard", description = "Interaction with tasks boards")
 public interface TasksBoardController {
 
-    @Operation(summary = "Get all tasks boards")
+    @Operation(summary = "Find all tasks boards")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -39,9 +39,9 @@ public interface TasksBoardController {
                     }
             )
     })
-    ResponseEntity<Response> getAll();
+    ResponseEntity<Response> findAll();
 
-    @Operation(summary = "Get tasks board by entityId")
+    @Operation(summary = "Find tasks board by entityId")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -71,7 +71,7 @@ public interface TasksBoardController {
                     }
             )
     })
-    ResponseEntity<Response> getByEntityId(Long entityId);
+    ResponseEntity<Response> findByEntityId(Long entityId);
 
     @Operation(summary = "Save board")
     @ApiResponses(value = {

@@ -2,15 +2,12 @@ package rgo.tt.main.persistence.storage.repository.tasksboard;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import rgo.tt.common.exceptions.PersistenceException;
+import rgo.tt.common.persistence.StatementJdbcTemplateDecorator;
+import rgo.tt.common.persistence.sqlquery.SqlStatement;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.query.TasksBoardQuery;
+import rgo.tt.main.persistence.storage.sqlstatement.TasksBoardSqlStatement;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +16,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgresTasksBoardRepository.class);
 
-    private final NamedParameterJdbcTemplate jdbc;
+    private final StatementJdbcTemplateDecorator jdbc;
 
     public PostgresTasksBoardRepository(DbTxManager dataSource) {
         this.jdbc = dataSource.jdbc();
@@ -27,16 +24,18 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public List<TasksBoard> findAll() {
-        return jdbc.query(TasksBoardQuery.findAll(), mapper);
+        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findAll();
+        return jdbc.query(statement);
     }
 
     @Override
     public Optional<TasksBoard> findByEntityId(Long entityId) {
-        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return first(jdbc.query(TasksBoardQuery.findByEntityId(), params, mapper));
+        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
+        List<TasksBoard> boards = jdbc.query(statement);
+        return getFirstElement(boards);
     }
 
-    private Optional<TasksBoard> first(List<TasksBoard> boards) {
+    private Optional<TasksBoard> getFirstElement(List<TasksBoard> boards) {
         if (boards.isEmpty()) {
             LOGGER.info("The board not found.");
             return Optional.empty();
@@ -51,13 +50,9 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("name", board.getName())
-                .addValue("short_name", board.getShortName());
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int result = jdbc.update(TasksBoardQuery.save(), params, keyHolder, new String[]{"entity_id"});
-        Number key = keyHolder.getKey();
+        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.save(board);
+        int result = jdbc.save(statement);
+        Number key = statement.getKeyHolder().getKey();
 
         if (result != 1 || key == null) {
             throw new PersistenceException("TasksBoard save error.");
@@ -73,14 +68,8 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        int result = jdbc.update(TasksBoardQuery.deleteByEntityId(), params);
+        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.deleteByEntityId(entityId);
+        int result = jdbc.update(statement);
         return result == 1;
     }
-
-    private static final RowMapper<TasksBoard> mapper = (rs, rowNum) -> TasksBoard.builder()
-            .setEntityId(rs.getLong("entity_id"))
-            .setName(rs.getString("name"))
-            .setShortName(rs.getString("short_name"))
-            .build();
 }

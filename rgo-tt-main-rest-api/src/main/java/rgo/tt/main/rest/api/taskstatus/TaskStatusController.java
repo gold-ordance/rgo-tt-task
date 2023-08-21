@@ -15,7 +15,7 @@ import rgo.tt.main.rest.api.taskstatus.response.TaskStatusGetListResponse;
 @Tag(name = "TaskStatus", description = "Interaction with task statuses")
 public interface TaskStatusController {
 
-    @Operation(summary = "Get all task statuses")
+    @Operation(summary = "Find all task statuses")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -36,5 +36,5 @@ public interface TaskStatusController {
                     }
             )
     })
-    ResponseEntity<Response> getAll();
+    ResponseEntity<Response> findAll();
 }

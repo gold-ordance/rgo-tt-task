@@ -33,7 +33,7 @@ public class TasksBoardRestController implements TasksBoardController {
 
     @Override
     @GetMapping
-    public ResponseEntity<Response> getAll() {
+    public ResponseEntity<Response> findAll() {
         List<TasksBoard> boards = service.findAll();
         Response response = TasksBoardGetListResponse.success(boards);
         return convert(response);
@@ -41,7 +41,7 @@ public class TasksBoardRestController implements TasksBoardController {
 
     @Override
     @GetMapping("/{entityId:" + DIGITS_PATTERN + "}")
-    public ResponseEntity<Response> getByEntityId(@PathVariable Long entityId) {
+    public ResponseEntity<Response> findByEntityId(@PathVariable Long entityId) {
         Optional<TasksBoard> board = service.findByEntityId(entityId);
         Response response = board.isPresent()
                 ? TasksBoardGetEntityResponse.success(board.get())

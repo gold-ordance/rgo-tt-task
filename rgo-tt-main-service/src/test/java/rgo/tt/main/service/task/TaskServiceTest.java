@@ -37,7 +37,7 @@ class TaskServiceTest {
     void findAll_invalidRq_boardIdIsNull() {
         assertThrowsWithMessage(
                 ValidateException.class,
-                () -> service.findAll(null),
+                () -> service.findAllForBoard(null),
                 "The boardId is null.");
     }
 
@@ -46,7 +46,7 @@ class TaskServiceTest {
         long fakeBoardId = -randomPositiveLong();
         assertThrowsWithMessage(
                 ValidateException.class,
-                () -> service.findAll(fakeBoardId),
+                () -> service.findAllForBoard(fakeBoardId),
                 "The boardId is negative.");
     }
 

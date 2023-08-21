@@ -72,6 +72,11 @@
                 <artifactId>rgo-tt-common-exceptions</artifactId>
                 <version>${rgo-tt-common.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-common-persistence</artifactId>
+                <version>${rgo-tt-common.version}</version>
+            </dependency>
             <!-- external modules -->
 
             <!-- others -->

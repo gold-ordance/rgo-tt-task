@@ -2,53 +2,48 @@ package rgo.tt.main.persistence.storage.repository.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.exceptions.PersistenceException;
+import rgo.tt.common.persistence.StatementJdbcTemplateDecorator;
+import rgo.tt.common.persistence.sqlquery.SqlStatement;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.query.TaskQuery;
-import rgo.tt.main.persistence.storage.query.TaskStatusQuery;
-import rgo.tt.main.persistence.storage.query.TaskTypeQuery;
-import rgo.tt.main.persistence.storage.query.TasksBoardQuery;
+import rgo.tt.main.persistence.storage.sqlstatement.TaskSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.TaskStatusSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.TaskTypeSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.TasksBoardSqlStatement;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class PostgresTaskRepository implements TaskRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgresTaskRepository.class);
 
-    private final NamedParameterJdbcTemplate jdbc;
+    private final StatementJdbcTemplateDecorator jdbc;
 
     public PostgresTaskRepository(DbTxManager dataSource) {
         this.jdbc = dataSource.jdbc();
     }
 
     @Override
-    public List<Task> findAll(Long boardId) {
+    public List<Task> findAllForBoard(Long boardId) {
         checkBoardIdForExistence(boardId);
-        MapSqlParameterSource params = new MapSqlParameterSource("board_id", boardId);
-        return jdbc.query(TaskQuery.findAll(), params, mapper);
+        SqlStatement<Task> statement = TaskSqlStatement.findAllForBoard(boardId);
+        return jdbc.query(statement);
     }
 
     @Override
     public Optional<Task> findByEntityId(Long entityId) {
-        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return first(jdbc.query(TaskQuery.findByEntityId(), params, mapper));
+        SqlStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
+        List<Task> tasks = jdbc.query(statement);
+        return getFirstElement(tasks);
     }
 
-    private Optional<Task> first(List<Task> tasks) {
+    private Optional<Task> getFirstElement(List<Task> tasks) {
         if (tasks.isEmpty()) {
             LOGGER.info("The task not found.");
             return Optional.empty();
@@ -64,12 +59,8 @@ public class PostgresTaskRepository implements TaskRepository {
     @Override
     public List<Task> findSoftlyByName(String name, Long boardId) {
         checkBoardIdForExistence(boardId);
-
-        MapSqlParameterSource params = new MapSqlParameterSource(Map.of(
-                "board_id", boardId,
-                "name", "%" + name + "%"));
-
-        return jdbc.query(TaskQuery.findSoftlyByName(), params, mapper);
+        SqlStatement<Task> statement = TaskSqlStatement.findSoftlyByName(name, boardId);
+        return jdbc.query(statement);
     }
 
     @Override
@@ -77,15 +68,9 @@ public class PostgresTaskRepository implements TaskRepository {
         checkBoardIdForExistence(task.getBoard().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("name", task.getName())
-                .addValue("board_id", task.getBoard().getEntityId())
-                .addValue("type_id", task.getType().getEntityId())
-                .addValue("description", task.getDescription());
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int result = jdbc.update(TaskQuery.save(), params, keyHolder, new String[]{"entity_id"});
-        Number key = keyHolder.getKey();
+        SqlStatement<Task> statement = TaskSqlStatement.save(task);
+        int result = jdbc.save(statement);
+        Number key = statement.getKeyHolder().getKey();
 
         if (result != 1 || key == null) {
             throw new PersistenceException("Task save error.");
@@ -101,19 +86,20 @@ public class PostgresTaskRepository implements TaskRepository {
 
     private void checkBoardIdForExistence(Long boardId) {
         String errorMsg = "The boardId not found in the storage.";
-        checkForExistence(boardId, TasksBoardQuery.findByEntityId(), errorMsg);
+        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
+        checkForExistence(statement, errorMsg);
     }
 
     private void checkTypeIdForExistence(Long typeId) {
         String errorMsg = "The typeId not found in the storage.";
-        checkForExistence(typeId, TaskTypeQuery.findByEntityId(), errorMsg);
+        SqlStatement<TaskType> statement = TaskTypeSqlStatement.findByEntityId(typeId);
+        checkForExistence(statement, errorMsg);
     }
 
-    private void checkForExistence(Long entityId, String sql, String errorMsg) {
-        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        List<?> list = jdbc.query(sql, params, (rs, num) -> rs);
+    private void checkForExistence(SqlStatement<?> statement, String errorMsg) {
+        List<?> result = jdbc.query(statement);
 
-        if (list.isEmpty()) {
+        if (result.isEmpty()) {
             throw new InvalidEntityException(errorMsg);
         }
     }
@@ -123,27 +109,14 @@ public class PostgresTaskRepository implements TaskRepository {
         checkStatusIdForExistence(task.getStatus().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("entity_id", task.getEntityId())
-                .addValue("name", task.getName())
-                .addValue("lmd", LocalDateTime.now(ZoneOffset.UTC))
-                .addValue("type_id", task.getType().getEntityId())
-                .addValue("status_id", task.getStatus().getEntityId())
-                .addValue("description", task.getDescription());
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int result = jdbc.update(TaskQuery.update(), params, keyHolder, new String[]{"entity_id"});
-        Number key = keyHolder.getKey();
+        SqlStatement<Task> statement = TaskSqlStatement.update(task);
+        int result = jdbc.update(statement);
 
         if (result == 0) {
             throw new InvalidEntityException("The entityId not found in the storage.");
         }
 
-        if (result > 1 || key == null) {
-            throw new PersistenceException("Task update error.");
-        }
-
-        Optional<Task> opt = findByEntityId(key.longValue());
+        Optional<Task> opt = findByEntityId(task.getEntityId());
         if (opt.isEmpty()) {
             throw new PersistenceException("Task update error during searching.");
         }
@@ -153,34 +126,14 @@ public class PostgresTaskRepository implements TaskRepository {
 
     private void checkStatusIdForExistence(Long statusId) {
         String errorMsg = "The statusId not found in the storage.";
-        checkForExistence(statusId, TaskStatusQuery.findByEntityId(), errorMsg);
+        SqlStatement<TaskStatus> statement = TaskStatusSqlStatement.findByEntityId(statusId);
+        checkForExistence(statement, errorMsg);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        int result = jdbc.update(TaskQuery.deleteByEntityId(), params);
+        SqlStatement<Task> statement = TaskSqlStatement.deleteByEntityId(entityId);
+        int result = jdbc.update(statement);
         return result == 1;
     }
-
-    private static final RowMapper<Task> mapper = (rs, num) -> Task.builder()
-            .setEntityId(rs.getLong("t_entity_id"))
-            .setName(rs.getString("t_name"))
-            .setCreatedDate(rs.getTimestamp("t_created_date").toLocalDateTime())
-            .setLastModifiedDate(rs.getTimestamp("t_last_modified_date").toLocalDateTime())
-            .setDescription(rs.getString("t_description"))
-            .setBoard(TasksBoard.builder()
-                    .setEntityId(rs.getLong("tb_entity_id"))
-                    .setName(rs.getString("tb_name"))
-                    .setShortName(rs.getString("tb_short_name"))
-                    .build())
-            .setType(TaskType.builder()
-                    .setEntityId(rs.getLong("tt_entity_id"))
-                    .setName(rs.getString("tt_name"))
-                    .build())
-            .setStatus(TaskStatus.builder()
-                    .setEntityId(rs.getLong("ts_entity_id"))
-                    .setName(rs.getString("ts_name"))
-                    .build())
-            .build();
 }

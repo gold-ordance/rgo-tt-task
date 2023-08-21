@@ -19,7 +19,7 @@ import rgo.tt.main.rest.api.task.response.TaskModifyResponse;
 @Tag(name = "Task", description = "Interaction with tasks")
 interface TaskController {
 
-    @Operation(summary = "Get all tasks")
+    @Operation(summary = "Find all tasks for the board")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -58,9 +58,9 @@ interface TaskController {
                     }
             )
     })
-    ResponseEntity<Response> getAll(Long boardId);
+    ResponseEntity<Response> findAllForBoard(Long boardId);
 
-    @Operation(summary = "Get task by entityId")
+    @Operation(summary = "Find task by entityId")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -90,9 +90,9 @@ interface TaskController {
                     }
             )
     })
-    ResponseEntity<Response> getByEntityId(Long entityId);
+    ResponseEntity<Response> findByEntityId(Long entityId);
 
-    @Operation(summary = "Get tasks by name")
+    @Operation(summary = "Find tasks by name")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -131,7 +131,7 @@ interface TaskController {
                     }
             )
     })
-    ResponseEntity<Response> getByName(String name, Long boardId);
+    ResponseEntity<Response> findByName(String name, Long boardId);
 
     @Operation(summary = "Save task")
     @ApiResponses(value = {
@@ -213,7 +213,7 @@ interface TaskController {
                     }
             )
     })
-    ResponseEntity<Response> put(TaskPutRequest rq);
+    ResponseEntity<Response> update(TaskPutRequest rq);
 
     @Operation(summary = "Delete task by entityId")
     @ApiResponses(value = {

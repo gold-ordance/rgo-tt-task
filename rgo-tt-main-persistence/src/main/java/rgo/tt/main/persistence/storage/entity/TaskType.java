@@ -29,7 +29,8 @@ public class TaskType implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaskType that = (TaskType) o;
-        return Objects.equals(entityId, that.entityId) && Objects.equals(name, that.name);
+        return Objects.equals(entityId, that.entityId)
+                && Objects.equals(name, that.name);
     }
 
     @Override

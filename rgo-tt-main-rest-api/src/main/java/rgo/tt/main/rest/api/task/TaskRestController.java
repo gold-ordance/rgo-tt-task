@@ -42,8 +42,8 @@ public class TaskRestController implements TaskController {
 
     @Override
     @GetMapping(params = "boardId")
-    public ResponseEntity<Response> getAll(Long boardId) {
-        List<Task> tasks = service.findAll(boardId);
+    public ResponseEntity<Response> findAllForBoard(Long boardId) {
+        List<Task> tasks = service.findAllForBoard(boardId);
         Response response = TaskGetListResponse.success(tasks);
         ThreadLocalRandom.current().nextInt(100);
         return convert(response);
@@ -51,7 +51,7 @@ public class TaskRestController implements TaskController {
 
     @Override
     @GetMapping("/{entityId:" + DIGITS_PATTERN + "}")
-    public ResponseEntity<Response> getByEntityId(@PathVariable Long entityId) {
+    public ResponseEntity<Response> findByEntityId(@PathVariable Long entityId) {
         Optional<Task> task = service.findByEntityId(entityId);
         Response response = task.isPresent()
                 ? TaskGetEntityResponse.success(task.get())
@@ -62,7 +62,7 @@ public class TaskRestController implements TaskController {
 
     @Override
     @GetMapping(params = {"name", "boardId"})
-    public ResponseEntity<Response> getByName(String name, Long boardId) {
+    public ResponseEntity<Response> findByName(String name, Long boardId) {
         List<Task> tasks = service.findSoftlyByName(name, boardId);
         Response response = TaskGetListResponse.success(tasks);
         return convert(response);
@@ -78,7 +78,7 @@ public class TaskRestController implements TaskController {
 
     @Override
     @PutMapping
-    public ResponseEntity<Response> put(@RequestBody TaskPutRequest rq) {
+    public ResponseEntity<Response> update(@RequestBody TaskPutRequest rq) {
         Task updated = service.update(map(rq));
         Response response = TaskModifyResponse.updated(updated);
         return convert(response);

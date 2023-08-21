@@ -1,16 +1,16 @@
 package rgo.tt.main.persistence.storage.repository.tasktype;
 
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import rgo.tt.common.persistence.StatementJdbcTemplateDecorator;
+import rgo.tt.common.persistence.sqlquery.SqlStatement;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TaskType;
-import rgo.tt.main.persistence.storage.query.TaskTypeQuery;
+import rgo.tt.main.persistence.storage.sqlstatement.TaskTypeSqlStatement;
 
 import java.util.List;
 
 public class PostgresTaskTypeRepository implements TaskTypeRepository {
 
-    private final NamedParameterJdbcTemplate jdbc;
+    private final StatementJdbcTemplateDecorator jdbc;
 
     public PostgresTaskTypeRepository(DbTxManager dataSource) {
         this.jdbc = dataSource.jdbc();
@@ -18,11 +18,7 @@ public class PostgresTaskTypeRepository implements TaskTypeRepository {
 
     @Override
     public List<TaskType> findAll() {
-        return jdbc.query(TaskTypeQuery.findAll(), mapper);
+        SqlStatement<TaskType> statement = TaskTypeSqlStatement.findAll();
+        return jdbc.query(statement);
     }
-
-    private static final RowMapper<TaskType> mapper = (rs, num) -> TaskType.builder()
-            .setEntityId(rs.getLong("entity_id"))
-            .setName(rs.getString("name"))
-            .build();
 }

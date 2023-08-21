@@ -15,7 +15,7 @@ import rgo.tt.main.rest.api.tasktype.response.TaskTypeGetListResponse;
 @Tag(name = "TaskType", description = "Interaction with task types")
 public interface TaskTypeController {
 
-    @Operation(summary = "Get all task types")
+    @Operation(summary = "Find all task types")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -36,5 +36,5 @@ public interface TaskTypeController {
                     }
             )
     })
-    ResponseEntity<Response> getAll();
+    ResponseEntity<Response> findAll();
 }

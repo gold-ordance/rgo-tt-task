@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    List<Task> findAll(Long boardId);
+    List<Task> findAllForBoard(Long boardId);
 
     Optional<Task> findByEntityId(Long entityId);
 

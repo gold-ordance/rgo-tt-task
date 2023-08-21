@@ -59,7 +59,7 @@ class TaskRepositoryTest {
         long fakeBoardId = randomPositiveLong();
         assertThrowsWithMessage(
                 InvalidEntityException.class,
-                () -> repository.findAll(fakeBoardId),
+                () -> repository.findAllForBoard(fakeBoardId),
                 "The boardId not found in the storage.");
     }
 
@@ -68,7 +68,7 @@ class TaskRepositoryTest {
         TasksBoard board = insertBoard(randomTasksBoard());
         List<Task> expected = insertRandomTasks(board);
 
-        List<Task> tasks = repository.findAll(board.getEntityId());
+        List<Task> tasks = repository.findAllForBoard(board.getEntityId());
         assertIterableEquals(expected, tasks);
     }
 
@@ -84,7 +84,7 @@ class TaskRepositoryTest {
                 .collect(Collectors.toList());
 
         for (int i = 0; i < boards.size(); i++) {
-            List<Task> tasks = repository.findAll(boards.get(i).getEntityId());
+            List<Task> tasks = repository.findAllForBoard(boards.get(i).getEntityId());
             assertIterableEquals(expectedList.get(i), tasks);
         }
     }
