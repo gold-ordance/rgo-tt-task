@@ -1,6 +1,6 @@
 package rgo.tt.main.persistence.storage.repository.tasktype;
 
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 
 import java.util.List;

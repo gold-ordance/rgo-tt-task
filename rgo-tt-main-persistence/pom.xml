@@ -20,10 +20,6 @@
         </dependency>
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-common-exceptions</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-tt-common-persistence</artifactId>
         </dependency>
         <!-- external modules -->
@@ -50,6 +46,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- test -->
     </dependencies>

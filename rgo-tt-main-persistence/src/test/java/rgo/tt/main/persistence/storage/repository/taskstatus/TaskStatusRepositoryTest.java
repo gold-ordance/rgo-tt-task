@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.main.persistence.config.PersistenceConfig;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
 

@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlquery.SqlStatement;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.sqlstatement.SqlStatement;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.sqlstatement.TasksBoardSqlStatement;
 

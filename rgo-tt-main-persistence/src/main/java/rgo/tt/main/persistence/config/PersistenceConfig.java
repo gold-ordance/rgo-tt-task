@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import rgo.tt.main.persistence.config.properties.DbProperties;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TxTaskRepositoryDecorator;

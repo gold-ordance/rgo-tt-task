@@ -2,7 +2,7 @@ package rgo.tt.main.persistence.storage.sqlstatement;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import rgo.tt.common.persistence.sqlquery.SqlStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlStatement;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 public final class TasksBoardSqlStatement {

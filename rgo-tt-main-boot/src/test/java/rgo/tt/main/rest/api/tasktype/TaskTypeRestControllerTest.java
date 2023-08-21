@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
 
 import static org.hamcrest.Matchers.nullValue;

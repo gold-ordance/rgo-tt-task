@@ -1,8 +1,8 @@
 package rgo.tt.main.persistence.storage.repository.taskstatus;
 
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlquery.SqlStatement;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.sqlstatement.SqlStatement;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.sqlstatement.TaskStatusSqlStatement;
 

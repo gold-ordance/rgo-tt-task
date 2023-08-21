@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.config.PersistenceConfig;
-import rgo.tt.main.persistence.storage.DbTxManager;
+import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
