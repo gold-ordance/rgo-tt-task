@@ -3,7 +3,7 @@ package rgo.tt.main.persistence.storage.repository.tasksboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.PersistenceException;
-import rgo.tt.common.persistence.StatementJdbcTemplateDecorator;
+import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
 import rgo.tt.common.persistence.sqlquery.SqlStatement;
 import rgo.tt.main.persistence.storage.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
@@ -16,7 +16,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgresTasksBoardRepository.class);
 
-    private final StatementJdbcTemplateDecorator jdbc;
+    private final StatementJdbcTemplateAdapter jdbc;
 
     public PostgresTasksBoardRepository(DbTxManager dataSource) {
         this.jdbc = dataSource.jdbc();
