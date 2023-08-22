@@ -1,7 +1,5 @@
 package rgo.tt.main.persistence.storage.repository.tasksboard;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
@@ -13,9 +11,9 @@ import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStat
 import java.util.List;
 import java.util.Optional;
 
-public class PostgresTasksBoardRepository implements TasksBoardRepository {
+import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstElement;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostgresTasksBoardRepository.class);
+public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
 
@@ -34,19 +32,6 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
         SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
         List<TasksBoard> boards = jdbc.query(statement);
         return getFirstElement(boards);
-    }
-
-    private Optional<TasksBoard> getFirstElement(List<TasksBoard> boards) {
-        if (boards.isEmpty()) {
-            LOGGER.info("The board not found.");
-            return Optional.empty();
-        }
-
-        if (boards.size() > 1) {
-            throw new PersistenceException("The number of boards is not equal to 1.");
-        }
-
-        return Optional.of(boards.get(0));
     }
 
     @Override

@@ -1,7 +1,5 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.common.persistence.DbTxManager;
@@ -20,9 +18,9 @@ import rgo.tt.main.persistence.storage.sqlstatement.tasktype.TaskTypeSqlStatemen
 import java.util.List;
 import java.util.Optional;
 
-public class PostgresTaskRepository implements TaskRepository {
+import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstElement;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostgresTaskRepository.class);
+public class PostgresTaskRepository implements TaskRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
 
@@ -42,19 +40,6 @@ public class PostgresTaskRepository implements TaskRepository {
         SqlReadStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
         List<Task> tasks = jdbc.query(statement);
         return getFirstElement(tasks);
-    }
-
-    private Optional<Task> getFirstElement(List<Task> tasks) {
-        if (tasks.isEmpty()) {
-            LOGGER.info("The task not found.");
-            return Optional.empty();
-        }
-
-        if (tasks.size() > 1) {
-            throw new PersistenceException("The number of tasks is not equal to 1.");
-        }
-
-        return Optional.of(tasks.get(0));
     }
 
     @Override
