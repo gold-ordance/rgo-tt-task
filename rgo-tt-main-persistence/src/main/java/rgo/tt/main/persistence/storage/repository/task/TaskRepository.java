@@ -1,15 +1,13 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
+import rgo.tt.common.persistence.CommonRepository;
 import rgo.tt.main.persistence.storage.entity.Task;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface TaskRepository {
+public interface TaskRepository extends CommonRepository<Task> {
 
     List<Task> findAllForBoard(Long boardId);
-
-    Optional<Task> findByEntityId(Long entityId);
 
     List<Task> findSoftlyByName(String name, Long boardId);
 

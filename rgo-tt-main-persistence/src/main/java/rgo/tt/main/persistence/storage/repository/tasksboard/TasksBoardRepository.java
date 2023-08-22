@@ -1,15 +1,13 @@
 package rgo.tt.main.persistence.storage.repository.tasksboard;
 
+import rgo.tt.common.persistence.CommonRepository;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface TasksBoardRepository {
+public interface TasksBoardRepository extends CommonRepository<TasksBoard> {
 
     List<TasksBoard> findAll();
-
-    Optional<TasksBoard> findByEntityId(Long entityId);
 
     TasksBoard save(TasksBoard board);
 

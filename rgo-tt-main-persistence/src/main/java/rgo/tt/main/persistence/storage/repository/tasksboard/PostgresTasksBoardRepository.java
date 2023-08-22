@@ -44,12 +44,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
             throw new PersistenceException("TasksBoard save error.");
         }
 
-        Optional<TasksBoard> opt = findByEntityId(key.longValue());
-        if (opt.isEmpty()) {
-            throw new PersistenceException("TasksBoard save error during searching.");
-        }
-
-        return opt.get();
+        return getEntityById(key.longValue());
     }
 
     @Override

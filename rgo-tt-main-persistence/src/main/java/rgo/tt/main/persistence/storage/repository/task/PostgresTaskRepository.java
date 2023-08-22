@@ -62,12 +62,7 @@ public class PostgresTaskRepository implements TaskRepository {
             throw new PersistenceException("Task save error.");
         }
 
-        Optional<Task> opt = findByEntityId(key.longValue());
-        if (opt.isEmpty()) {
-            throw new PersistenceException("Task save error during searching.");
-        }
-
-        return opt.get();
+        return getEntityById(key.longValue());
     }
 
     private void checkBoardIdForExistence(Long boardId) {
@@ -102,12 +97,7 @@ public class PostgresTaskRepository implements TaskRepository {
             throw new InvalidEntityException("The entityId not found in the storage.");
         }
 
-        Optional<Task> opt = findByEntityId(task.getEntityId());
-        if (opt.isEmpty()) {
-            throw new PersistenceException("Task update error during searching.");
-        }
-
-        return opt.get();
+        return getEntityById(task.getEntityId());
     }
 
     private void checkStatusIdForExistence(Long statusId) {
