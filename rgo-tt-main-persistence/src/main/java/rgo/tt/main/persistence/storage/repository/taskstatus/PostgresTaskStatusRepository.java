@@ -1,10 +1,10 @@
 package rgo.tt.main.persistence.storage.repository.taskstatus;
 
-import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlstatement.SqlStatement;
 import rgo.tt.common.persistence.DbTxManager;
+import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
-import rgo.tt.main.persistence.storage.sqlstatement.TaskStatusSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.taskstatus.TaskStatusSqlStatement;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class PostgresTaskStatusRepository implements TaskStatusRepository {
 
     @Override
     public List<TaskStatus> findAll() {
-        SqlStatement<TaskStatus> statement = TaskStatusSqlStatement.findAll();
+        SqlReadStatement<TaskStatus> statement = TaskStatusSqlStatement.findAll();
         return jdbc.query(statement);
     }
 }

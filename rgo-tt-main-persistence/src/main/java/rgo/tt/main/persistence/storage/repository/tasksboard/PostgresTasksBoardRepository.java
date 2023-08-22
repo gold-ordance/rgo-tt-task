@@ -3,11 +3,12 @@ package rgo.tt.main.persistence.storage.repository.tasksboard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.PersistenceException;
-import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlstatement.SqlStatement;
 import rgo.tt.common.persistence.DbTxManager;
+import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.sqlstatement.TasksBoardSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStatement;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +25,13 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public List<TasksBoard> findAll() {
-        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findAll();
+        SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findAll();
         return jdbc.query(statement);
     }
 
     @Override
     public Optional<TasksBoard> findByEntityId(Long entityId) {
-        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
+        SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
         List<TasksBoard> boards = jdbc.query(statement);
         return getFirstElement(boards);
     }
@@ -50,7 +51,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.save(board);
+        SqlWriteStatement statement = TasksBoardSqlStatement.save(board);
         int result = jdbc.save(statement);
         Number key = statement.getKeyHolder().getKey();
 
@@ -68,7 +69,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.deleteByEntityId(entityId);
+        SqlWriteStatement statement = TasksBoardSqlStatement.deleteByEntityId(entityId);
         int result = jdbc.update(statement);
         return result == 1;
     }

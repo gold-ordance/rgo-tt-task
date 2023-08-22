@@ -1,37 +1,33 @@
-package rgo.tt.main.persistence.storage.sqlstatement;
+package rgo.tt.main.persistence.storage.sqlstatement.task;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import rgo.tt.common.persistence.sqlstatement.SqlStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlRequest;
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.persistence.storage.entity.TaskStatus;
-import rgo.tt.main.persistence.storage.entity.TaskType;
-import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-public final class TaskSqlStatement {
+public final class TaskSqlRequest {
 
     private static final String TABLE_NAME = "task";
 
-    private TaskSqlStatement() {
+    private TaskSqlRequest() {
     }
 
-    public static SqlStatement<Task> findAllForBoard(Long boardId) {
+    public static SqlRequest findAllForBoard(Long boardId) {
         String query = select() + "WHERE t.board_id = :board_id";
         MapSqlParameterSource params = new MapSqlParameterSource("board_id", boardId);
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
-    public static SqlStatement<Task> findByEntityId(Long entityId) {
+    public static SqlRequest findByEntityId(Long entityId) {
         String query = select() + "WHERE t.entity_id = :entity_id";
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
-    public static SqlStatement<Task> findSoftlyByName(String name, Long boardId) {
-        String query = select() + """
+    public static SqlRequest findSoftlyByName(String name, Long boardId) {
+        String query = TaskSqlRequest.select() + """
                   WHERE t.board_id = :board_id
                     AND lower(t.name) LIKE lower(:name)
                  """;
@@ -40,10 +36,10 @@ public final class TaskSqlStatement {
                 .addValue("board_id", boardId)
                 .addValue("name", "%" + name + "%");
 
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
-    public static SqlStatement<Task> save(Task task) {
+    public static SqlRequest save(Task task) {
         String query = """
                 INSERT INTO %s(name, description, board_id, type_id)
                 VALUES(:name, :description, :board_id, :type_id)
@@ -55,10 +51,10 @@ public final class TaskSqlStatement {
                 .addValue("type_id", task.getType().getEntityId())
                 .addValue("description", task.getDescription());
 
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
-    public static SqlStatement<Task> update(Task task) {
+    public static SqlRequest update(Task task) {
         String query = """
                 UPDATE %s
                    SET name = :name,
@@ -77,10 +73,10 @@ public final class TaskSqlStatement {
                 .addValue("status_id", task.getStatus().getEntityId())
                 .addValue("description", task.getDescription());
 
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
-    public static SqlStatement<Task> deleteByEntityId(Long entityId) {
+    public static SqlRequest deleteByEntityId(Long entityId) {
         String query = """
                 DELETE
                   FROM %s
@@ -88,7 +84,7 @@ public final class TaskSqlStatement {
                 """.formatted(TABLE_NAME);
 
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return SqlStatement.from(query, TASK_ROW_MAPPER, params);
+        return new SqlRequest(query, params);
     }
 
     private static String select() {
@@ -116,25 +112,4 @@ public final class TaskSqlStatement {
                        ON t.type_id = tt.entity_id
                 """.formatted(TABLE_NAME);
     }
-
-    private static final RowMapper<Task> TASK_ROW_MAPPER = (rs, num) -> Task.builder()
-            .setEntityId(rs.getLong("t_entity_id"))
-            .setName(rs.getString("t_name"))
-            .setCreatedDate(rs.getTimestamp("t_created_date").toLocalDateTime())
-            .setLastModifiedDate(rs.getTimestamp("t_last_modified_date").toLocalDateTime())
-            .setDescription(rs.getString("t_description"))
-            .setBoard(TasksBoard.builder()
-                    .setEntityId(rs.getLong("tb_entity_id"))
-                    .setName(rs.getString("tb_name"))
-                    .setShortName(rs.getString("tb_short_name"))
-                    .build())
-            .setType(TaskType.builder()
-                    .setEntityId(rs.getLong("tt_entity_id"))
-                    .setName(rs.getString("tt_name"))
-                    .build())
-            .setStatus(TaskStatus.builder()
-                    .setEntityId(rs.getLong("ts_entity_id"))
-                    .setName(rs.getString("ts_name"))
-                    .build())
-            .build();
 }

@@ -1,28 +1,27 @@
-package rgo.tt.main.persistence.storage.sqlstatement;
+package rgo.tt.main.persistence.storage.sqlstatement.tasksboard;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import rgo.tt.common.persistence.sqlstatement.SqlStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlRequest;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
-public final class TasksBoardSqlStatement {
+public final class TasksBoardSqlRequest {
 
     private static final String TABLE_NAME = "tasks_board";
 
-    private TasksBoardSqlStatement() {
+    private TasksBoardSqlRequest() {
     }
 
-    public static SqlStatement<TasksBoard> findAll() {
-        return SqlStatement.from(select(), TASKS_BOARD_ROW_MAPPER);
+    public static SqlRequest findAll() {
+        return new SqlRequest(select());
     }
 
-    public static SqlStatement<TasksBoard> findByEntityId(Long entityId) {
+    public static SqlRequest findByEntityId(Long entityId) {
         String request = select() + "WHERE entity_id = :entity_id";
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return SqlStatement.from(request, TASKS_BOARD_ROW_MAPPER, params);
+        return new SqlRequest(request, params);
     }
 
-    public static SqlStatement<TasksBoard> save(TasksBoard board) {
+    public static SqlRequest save(TasksBoard board) {
         String request = """
                 INSERT INTO %s(name, short_name)
                 VALUES(:name, :short_name)
@@ -32,10 +31,10 @@ public final class TasksBoardSqlStatement {
                 .addValue("name", board.getName())
                 .addValue("short_name", board.getShortName());
 
-        return SqlStatement.from(request, TASKS_BOARD_ROW_MAPPER, params);
+        return new SqlRequest(request, params);
     }
 
-    public static SqlStatement<TasksBoard> deleteByEntityId(Long entityId) {
+    public static SqlRequest deleteByEntityId(Long entityId) {
         String request = """
                 DELETE
                   FROM %s
@@ -43,7 +42,7 @@ public final class TasksBoardSqlStatement {
                 """.formatted(TABLE_NAME);
 
         MapSqlParameterSource params = new MapSqlParameterSource("entity_id", entityId);
-        return SqlStatement.from(request, TASKS_BOARD_ROW_MAPPER, params);
+        return new SqlRequest(request, params);
     }
 
     private static String select() {
@@ -54,10 +53,4 @@ public final class TasksBoardSqlStatement {
                   FROM %s
                 """.formatted(TABLE_NAME);
     }
-
-    private static final RowMapper<TasksBoard> TASKS_BOARD_ROW_MAPPER = (rs, rowNum) -> TasksBoard.builder()
-            .setEntityId(rs.getLong("entity_id"))
-            .setName(rs.getString("name"))
-            .setShortName(rs.getString("short_name"))
-            .build();
 }

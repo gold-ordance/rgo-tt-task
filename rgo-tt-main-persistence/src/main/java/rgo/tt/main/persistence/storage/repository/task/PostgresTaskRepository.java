@@ -4,17 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.exceptions.PersistenceException;
-import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlstatement.SqlStatement;
 import rgo.tt.common.persistence.DbTxManager;
+import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.sqlstatement.TaskSqlStatement;
-import rgo.tt.main.persistence.storage.sqlstatement.TaskStatusSqlStatement;
-import rgo.tt.main.persistence.storage.sqlstatement.TaskTypeSqlStatement;
-import rgo.tt.main.persistence.storage.sqlstatement.TasksBoardSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.task.TaskSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.taskstatus.TaskStatusSqlStatement;
+import rgo.tt.main.persistence.storage.sqlstatement.tasktype.TaskTypeSqlStatement;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,13 +33,13 @@ public class PostgresTaskRepository implements TaskRepository {
     @Override
     public List<Task> findAllForBoard(Long boardId) {
         checkBoardIdForExistence(boardId);
-        SqlStatement<Task> statement = TaskSqlStatement.findAllForBoard(boardId);
+        SqlReadStatement<Task> statement = TaskSqlStatement.findAllForBoard(boardId);
         return jdbc.query(statement);
     }
 
     @Override
     public Optional<Task> findByEntityId(Long entityId) {
-        SqlStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
+        SqlReadStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
         List<Task> tasks = jdbc.query(statement);
         return getFirstElement(tasks);
     }
@@ -59,7 +60,7 @@ public class PostgresTaskRepository implements TaskRepository {
     @Override
     public List<Task> findSoftlyByName(String name, Long boardId) {
         checkBoardIdForExistence(boardId);
-        SqlStatement<Task> statement = TaskSqlStatement.findSoftlyByName(name, boardId);
+        SqlReadStatement<Task> statement = TaskSqlStatement.findSoftlyByName(name, boardId);
         return jdbc.query(statement);
     }
 
@@ -68,7 +69,7 @@ public class PostgresTaskRepository implements TaskRepository {
         checkBoardIdForExistence(task.getBoard().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        SqlStatement<Task> statement = TaskSqlStatement.save(task);
+        SqlWriteStatement statement = TaskSqlStatement.save(task);
         int result = jdbc.save(statement);
         Number key = statement.getKeyHolder().getKey();
 
@@ -86,17 +87,17 @@ public class PostgresTaskRepository implements TaskRepository {
 
     private void checkBoardIdForExistence(Long boardId) {
         String errorMsg = "The boardId not found in the storage.";
-        SqlStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
+        SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
         checkForExistence(statement, errorMsg);
     }
 
     private void checkTypeIdForExistence(Long typeId) {
         String errorMsg = "The typeId not found in the storage.";
-        SqlStatement<TaskType> statement = TaskTypeSqlStatement.findByEntityId(typeId);
+        SqlReadStatement<TaskType> statement = TaskTypeSqlStatement.findByEntityId(typeId);
         checkForExistence(statement, errorMsg);
     }
 
-    private void checkForExistence(SqlStatement<?> statement, String errorMsg) {
+    private void checkForExistence(SqlReadStatement<?> statement, String errorMsg) {
         List<?> result = jdbc.query(statement);
 
         if (result.isEmpty()) {
@@ -109,7 +110,7 @@ public class PostgresTaskRepository implements TaskRepository {
         checkStatusIdForExistence(task.getStatus().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        SqlStatement<Task> statement = TaskSqlStatement.update(task);
+        SqlWriteStatement statement = TaskSqlStatement.update(task);
         int result = jdbc.update(statement);
 
         if (result == 0) {
@@ -126,13 +127,13 @@ public class PostgresTaskRepository implements TaskRepository {
 
     private void checkStatusIdForExistence(Long statusId) {
         String errorMsg = "The statusId not found in the storage.";
-        SqlStatement<TaskStatus> statement = TaskStatusSqlStatement.findByEntityId(statusId);
+        SqlReadStatement<TaskStatus> statement = TaskStatusSqlStatement.findByEntityId(statusId);
         checkForExistence(statement, errorMsg);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        SqlStatement<Task> statement = TaskSqlStatement.deleteByEntityId(entityId);
+        SqlWriteStatement statement = TaskSqlStatement.deleteByEntityId(entityId);
         int result = jdbc.update(statement);
         return result == 1;
     }
