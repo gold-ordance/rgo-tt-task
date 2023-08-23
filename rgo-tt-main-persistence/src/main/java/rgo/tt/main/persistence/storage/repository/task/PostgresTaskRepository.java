@@ -1,11 +1,16 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
 import rgo.tt.common.exceptions.InvalidEntityException;
-import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
+import rgo.tt.common.persistence.sqlresult.SqlDeleteResult;
+import rgo.tt.common.persistence.sqlresult.SqlReadResult;
+import rgo.tt.common.persistence.sqlresult.SqlUpdateResult;
+import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
-import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlUpdateStatement;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.entity.TaskType;
@@ -17,6 +22,8 @@ import rgo.tt.main.persistence.storage.sqlstatement.tasktype.TaskTypeSqlStatemen
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.LongFunction;
+import java.util.function.Supplier;
 
 import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstElement;
 
@@ -32,21 +39,23 @@ public class PostgresTaskRepository implements TaskRepository {
     public List<Task> findAllForBoard(Long boardId) {
         checkBoardIdForExistence(boardId);
         SqlReadStatement<Task> statement = TaskSqlStatement.findAllForBoard(boardId);
-        return jdbc.query(statement);
+        SqlReadResult<Task> result = jdbc.read(statement);
+        return result.getEntities();
     }
 
     @Override
     public Optional<Task> findByEntityId(Long entityId) {
         SqlReadStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
-        List<Task> tasks = jdbc.query(statement);
-        return getFirstElement(tasks);
+        SqlReadResult<Task> result = jdbc.read(statement);
+        return getFirstElement(result.getEntities());
     }
 
     @Override
     public List<Task> findSoftlyByName(String name, Long boardId) {
         checkBoardIdForExistence(boardId);
         SqlReadStatement<Task> statement = TaskSqlStatement.findSoftlyByName(name, boardId);
-        return jdbc.query(statement);
+        SqlReadResult<Task> result = jdbc.read(statement);
+        return result.getEntities();
     }
 
     @Override
@@ -54,15 +63,11 @@ public class PostgresTaskRepository implements TaskRepository {
         checkBoardIdForExistence(task.getBoard().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        SqlWriteStatement statement = TaskSqlStatement.save(task);
-        int result = jdbc.save(statement);
-        Number key = statement.getKeyHolder().getKey();
+        LongFunction<Task> fetchEntity = this::getEntityById;
+        SqlCreateStatement<Task> statement = TaskSqlStatement.save(task, fetchEntity);
+        SqlCreateResult<Task> result = jdbc.save(statement);
 
-        if (result != 1 || key == null) {
-            throw new PersistenceException("Task save error.");
-        }
-
-        return getEntityById(key.longValue());
+        return result.getEntity();
     }
 
     private void checkBoardIdForExistence(Long boardId) {
@@ -78,9 +83,9 @@ public class PostgresTaskRepository implements TaskRepository {
     }
 
     private void checkForExistence(SqlReadStatement<?> statement, String errorMsg) {
-        List<?> result = jdbc.query(statement);
+        SqlReadResult<?> result = jdbc.read(statement);
 
-        if (result.isEmpty()) {
+        if (result.getEntities().isEmpty()) {
             throw new InvalidEntityException(errorMsg);
         }
     }
@@ -90,14 +95,11 @@ public class PostgresTaskRepository implements TaskRepository {
         checkStatusIdForExistence(task.getStatus().getEntityId());
         checkTypeIdForExistence(task.getType().getEntityId());
 
-        SqlWriteStatement statement = TaskSqlStatement.update(task);
-        int result = jdbc.update(statement);
+        Supplier<Task> fetchEntity = () -> getEntityById(task.getEntityId());
+        SqlUpdateStatement<Task> statement = TaskSqlStatement.update(task, fetchEntity);
+        SqlUpdateResult<Task> result = jdbc.update(statement);
 
-        if (result == 0) {
-            throw new InvalidEntityException("The entityId not found in the storage.");
-        }
-
-        return getEntityById(task.getEntityId());
+        return result.getEntity();
     }
 
     private void checkStatusIdForExistence(Long statusId) {
@@ -108,8 +110,8 @@ public class PostgresTaskRepository implements TaskRepository {
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        SqlWriteStatement statement = TaskSqlStatement.deleteByEntityId(entityId);
-        int result = jdbc.update(statement);
-        return result == 1;
+        SqlDeleteStatement statement = TaskSqlStatement.deleteByEntityId(entityId);
+        SqlDeleteResult result = jdbc.delete(statement);
+        return result.isDeleted();
     }
 }

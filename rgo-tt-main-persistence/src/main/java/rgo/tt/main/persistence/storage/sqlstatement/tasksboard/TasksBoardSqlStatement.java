@@ -1,10 +1,13 @@
 package rgo.tt.main.persistence.storage.sqlstatement.tasksboard;
 
 import org.springframework.jdbc.core.RowMapper;
+import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlRequest;
-import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
+
+import java.util.function.LongFunction;
 
 public final class TasksBoardSqlStatement {
 
@@ -21,14 +24,14 @@ public final class TasksBoardSqlStatement {
         return SqlReadStatement.from(request, TASKS_BOARD_ROW_MAPPER);
     }
 
-    public static SqlWriteStatement save(TasksBoard board) {
+    public static SqlCreateStatement<TasksBoard> save(TasksBoard board, LongFunction<TasksBoard> fetchEntity) {
         SqlRequest request = TasksBoardSqlRequest.save(board);
-        return SqlWriteStatement.from(request);
+        return SqlCreateStatement.from(request, fetchEntity);
     }
 
-    public static SqlWriteStatement deleteByEntityId(Long entityId) {
+    public static SqlDeleteStatement deleteByEntityId(Long entityId) {
         SqlRequest request = TasksBoardSqlRequest.deleteByEntityId(entityId);
-        return SqlWriteStatement.from(request);
+        return SqlDeleteStatement.from(request);
     }
 
     private static final RowMapper<TasksBoard> TASKS_BOARD_ROW_MAPPER = (rs, rowNum) -> TasksBoard.builder()

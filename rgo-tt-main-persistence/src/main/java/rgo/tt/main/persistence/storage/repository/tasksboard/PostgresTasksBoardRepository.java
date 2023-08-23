@@ -1,15 +1,19 @@
 package rgo.tt.main.persistence.storage.repository.tasksboard;
 
-import rgo.tt.common.exceptions.PersistenceException;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
+import rgo.tt.common.persistence.sqlresult.SqlDeleteResult;
+import rgo.tt.common.persistence.sqlresult.SqlReadResult;
+import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
-import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStatement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.LongFunction;
 
 import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstElement;
 
@@ -24,33 +28,29 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
     @Override
     public List<TasksBoard> findAll() {
         SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findAll();
-        return jdbc.query(statement);
+        SqlReadResult<TasksBoard> result = jdbc.read(statement);
+        return result.getEntities();
     }
 
     @Override
     public Optional<TasksBoard> findByEntityId(Long entityId) {
         SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
-        List<TasksBoard> boards = jdbc.query(statement);
-        return getFirstElement(boards);
+        SqlReadResult<TasksBoard> result = jdbc.read(statement);
+        return getFirstElement(result.getEntities());
     }
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        SqlWriteStatement statement = TasksBoardSqlStatement.save(board);
-        int result = jdbc.save(statement);
-        Number key = statement.getKeyHolder().getKey();
-
-        if (result != 1 || key == null) {
-            throw new PersistenceException("TasksBoard save error.");
-        }
-
-        return getEntityById(key.longValue());
+        LongFunction<TasksBoard> fetchEntity = this::getEntityById;
+        SqlCreateStatement<TasksBoard> statement = TasksBoardSqlStatement.save(board, fetchEntity);
+        SqlCreateResult<TasksBoard> result = jdbc.save(statement);
+        return result.getEntity();
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        SqlWriteStatement statement = TasksBoardSqlStatement.deleteByEntityId(entityId);
-        int result = jdbc.update(statement);
-        return result == 1;
+        SqlDeleteStatement statement = TasksBoardSqlStatement.deleteByEntityId(entityId);
+        SqlDeleteResult result = jdbc.delete(statement);
+        return result.isDeleted();
     }
 }

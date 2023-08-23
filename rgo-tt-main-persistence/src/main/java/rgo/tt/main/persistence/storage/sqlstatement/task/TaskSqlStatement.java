@@ -1,13 +1,18 @@
 package rgo.tt.main.persistence.storage.sqlstatement.task;
 
 import org.springframework.jdbc.core.RowMapper;
+import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlRequest;
-import rgo.tt.common.persistence.sqlstatement.SqlWriteStatement;
+import rgo.tt.common.persistence.sqlstatement.SqlUpdateStatement;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskStatus;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
+
+import java.util.function.LongFunction;
+import java.util.function.Supplier;
 
 public final class TaskSqlStatement {
 
@@ -29,19 +34,19 @@ public final class TaskSqlStatement {
         return SqlReadStatement.from(request, TASK_ROW_MAPPER);
     }
 
-    public static SqlWriteStatement save(Task task) {
+    public static SqlCreateStatement<Task> save(Task task, LongFunction<Task> fetchEntity) {
         SqlRequest request = TaskSqlRequest.save(task);
-        return SqlWriteStatement.from(request);
+        return SqlCreateStatement.from(request, fetchEntity);
     }
 
-    public static SqlWriteStatement update(Task task) {
+    public static SqlUpdateStatement<Task> update(Task task, Supplier<Task> fetchEntity) {
         SqlRequest request = TaskSqlRequest.update(task);
-        return SqlWriteStatement.from(request);
+        return SqlUpdateStatement.from(request, fetchEntity);
     }
 
-    public static SqlWriteStatement deleteByEntityId(Long entityId) {
+    public static SqlDeleteStatement deleteByEntityId(Long entityId) {
         SqlRequest request = TaskSqlRequest.deleteByEntityId(entityId);
-        return SqlWriteStatement.from(request);
+        return SqlDeleteStatement.from(request);
     }
 
     private static final RowMapper<Task> TASK_ROW_MAPPER = (rs, num) -> Task.builder()

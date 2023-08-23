@@ -2,6 +2,7 @@ package rgo.tt.main.persistence.storage.repository.tasktype;
 
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlresult.SqlReadResult;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.sqlstatement.tasktype.TaskTypeSqlStatement;
@@ -19,6 +20,7 @@ public class PostgresTaskTypeRepository implements TaskTypeRepository {
     @Override
     public List<TaskType> findAll() {
         SqlReadStatement<TaskType> statement = TaskTypeSqlStatement.findAll();
-        return jdbc.query(statement);
+        SqlReadResult<TaskType> result = jdbc.read(statement);
+        return result.getEntities();
     }
 }
