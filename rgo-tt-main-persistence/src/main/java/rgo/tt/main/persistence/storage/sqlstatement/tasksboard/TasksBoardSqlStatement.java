@@ -1,13 +1,12 @@
 package rgo.tt.main.persistence.storage.sqlstatement.tasksboard;
 
 import org.springframework.jdbc.core.RowMapper;
+import rgo.tt.common.persistence.function.FetchEntityById;
 import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlRequest;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-
-import java.util.function.LongFunction;
 
 public final class TasksBoardSqlStatement {
 
@@ -24,9 +23,9 @@ public final class TasksBoardSqlStatement {
         return SqlReadStatement.from(request, TASKS_BOARD_ROW_MAPPER);
     }
 
-    public static SqlCreateStatement<TasksBoard> save(TasksBoard board, LongFunction<TasksBoard> fetchEntity) {
+    public static SqlCreateStatement<TasksBoard> save(TasksBoard board, FetchEntityById<TasksBoard> function) {
         SqlRequest request = TasksBoardSqlRequest.save(board);
-        return SqlCreateStatement.from(request, fetchEntity);
+        return SqlCreateStatement.from(request, function);
     }
 
     public static SqlDeleteStatement deleteByEntityId(Long entityId) {

@@ -2,6 +2,7 @@ package rgo.tt.main.persistence.storage.repository.tasksboard;
 
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.function.FetchEntityById;
 import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
 import rgo.tt.common.persistence.sqlresult.SqlDeleteResult;
 import rgo.tt.common.persistence.sqlresult.SqlReadResult;
@@ -13,7 +14,6 @@ import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStat
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.LongFunction;
 
 import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstElement;
 
@@ -41,8 +41,8 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        LongFunction<TasksBoard> fetchEntity = this::getEntityById;
-        SqlCreateStatement<TasksBoard> statement = TasksBoardSqlStatement.save(board, fetchEntity);
+        FetchEntityById<TasksBoard> function = this::getEntityById;
+        SqlCreateStatement<TasksBoard> statement = TasksBoardSqlStatement.save(board, function);
         SqlCreateResult<TasksBoard> result = jdbc.save(statement);
         return result.getEntity();
     }
