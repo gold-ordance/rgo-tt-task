@@ -15,11 +15,6 @@ public final class TaskTypeSqlStatement {
         return SqlReadStatement.from(request, TASK_TYPE_ROW_MAPPER);
     }
 
-    public static SqlReadStatement<TaskType> findByEntityId(Long entityId) {
-        SqlRequest request = TaskTypeSqlRequest.findByEntityId(entityId);
-        return SqlReadStatement.from(request, TASK_TYPE_ROW_MAPPER);
-    }
-
     private static final RowMapper<TaskType> TASK_TYPE_ROW_MAPPER = (rs, num) -> TaskType.builder()
             .setEntityId(rs.getLong("entity_id"))
             .setName(rs.getString("name"))

@@ -210,10 +210,13 @@ class TaskRepositoryTest {
 
     @Test
     void update_typeIdIsFake() {
-        Task created = randomTaskBuilder().setType(randomTaskTypeBuilder().build()).build();
+        TasksBoard board = insertBoard(randomTasksBoard());
+        Task created = randomTaskBuilder().setBoard(board).build();
+        Task saved = insert(created);
+        Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).setType(randomTaskTypeBuilder().build()).build();
         assertThrowsWithMessage(
                 InvalidEntityException.class,
-                () -> repository.update(created),
+                () -> repository.update(updated),
                 "The typeId not found in the storage.");
     }
 

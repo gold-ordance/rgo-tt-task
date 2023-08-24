@@ -14,13 +14,9 @@ import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlUpdateStatement;
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.persistence.storage.entity.TaskStatus;
-import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.sqlstatement.task.TaskSqlStatement;
 import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStatement;
-import rgo.tt.main.persistence.storage.sqlstatement.taskstatus.TaskStatusSqlStatement;
-import rgo.tt.main.persistence.storage.sqlstatement.tasktype.TaskTypeSqlStatement;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,25 +56,15 @@ public class PostgresTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) {
-        checkBoardIdForExistence(task.getBoard().getEntityId());
-        checkTypeIdForExistence(task.getType().getEntityId());
-
         FetchEntityById<Task> function = this::getEntityById;
         SqlCreateStatement<Task> statement = TaskSqlStatement.save(task, function);
         SqlCreateResult<Task> result = jdbc.save(statement);
-
         return result.getEntity();
     }
 
     private void checkBoardIdForExistence(Long boardId) {
         String errorMsg = "The boardId not found in the storage.";
         SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
-        checkForExistence(statement, errorMsg);
-    }
-
-    private void checkTypeIdForExistence(Long typeId) {
-        String errorMsg = "The typeId not found in the storage.";
-        SqlReadStatement<TaskType> statement = TaskTypeSqlStatement.findByEntityId(typeId);
         checkForExistence(statement, errorMsg);
     }
 
@@ -92,20 +78,10 @@ public class PostgresTaskRepository implements TaskRepository {
 
     @Override
     public Task update(Task task) {
-        checkStatusIdForExistence(task.getStatus().getEntityId());
-        checkTypeIdForExistence(task.getType().getEntityId());
-
         FetchEntity<Task> function = () -> getEntityById(task.getEntityId());
         SqlUpdateStatement<Task> statement = TaskSqlStatement.update(task, function);
         SqlUpdateResult<Task> result = jdbc.update(statement);
-
         return result.getEntity();
-    }
-
-    private void checkStatusIdForExistence(Long statusId) {
-        String errorMsg = "The statusId not found in the storage.";
-        SqlReadStatement<TaskStatus> statement = TaskStatusSqlStatement.findByEntityId(statusId);
-        checkForExistence(statement, errorMsg);
     }
 
     @Override
