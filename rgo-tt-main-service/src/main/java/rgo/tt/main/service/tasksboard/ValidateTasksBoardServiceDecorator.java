@@ -7,8 +7,8 @@ import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.tt.common.validator.ValidatorUtils.checkObjectId;
-import static rgo.tt.common.validator.ValidatorUtils.checkString;
+import static rgo.tt.common.validator.ValidatorUtils.validateObjectId;
+import static rgo.tt.common.validator.ValidatorUtils.validateString;
 
 public class ValidateTasksBoardServiceDecorator implements TasksBoardService {
 
@@ -29,21 +29,21 @@ public class ValidateTasksBoardServiceDecorator implements TasksBoardService {
     @Override
     public Optional<TasksBoard> findByEntityId(Long entityId) {
         LOGGER.info("Request 'findByEntityId' received: entityId={}", entityId);
-        checkObjectId(entityId, "entityId");
+        validateObjectId(entityId, "entityId");
         return delegate.findByEntityId(entityId);
     }
 
     @Override
     public TasksBoard save(TasksBoard board) {
         LOGGER.info("Request 'save' received: board={}", board);
-        checkString(board.getName(), "name");
+        validateString(board.getName(), "name");
         return delegate.save(board);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
         LOGGER.info("Request 'deleteByEntityId' received: entityId={}", entityId);
-        checkObjectId(entityId, "entityId");
+        validateObjectId(entityId, "entityId");
         return delegate.deleteByEntityId(entityId);
     }
 }

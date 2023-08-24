@@ -7,8 +7,8 @@ import rgo.tt.main.persistence.storage.entity.Task;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.tt.common.validator.ValidatorUtils.checkObjectId;
-import static rgo.tt.common.validator.ValidatorUtils.checkString;
+import static rgo.tt.common.validator.ValidatorUtils.validateObjectId;
+import static rgo.tt.common.validator.ValidatorUtils.validateString;
 
 public class ValidateTaskServiceDecorator implements TaskService {
 
@@ -23,48 +23,48 @@ public class ValidateTaskServiceDecorator implements TaskService {
     @Override
     public List<Task> findAllForBoard(Long boardId) {
         LOGGER.info("Request 'findAll' received: boardId={}", boardId);
-        checkObjectId(boardId, "boardId");
+        validateObjectId(boardId, "boardId");
         return delegate.findAllForBoard(boardId);
     }
 
     @Override
     public Optional<Task> findByEntityId(Long entityId) {
         LOGGER.info("Request 'findByEntityId' received: entityId={}", entityId);
-        checkObjectId(entityId, "entityId");
+        validateObjectId(entityId, "entityId");
         return delegate.findByEntityId(entityId);
     }
 
     @Override
     public List<Task> findSoftlyByName(String name, Long boardId) {
         LOGGER.info("Request 'findSoftlyByName' received: name={}, boardId={}", name, boardId);
-        checkString(name, "name");
-        checkObjectId(boardId, "boardId");
+        validateString(name, "name");
+        validateObjectId(boardId, "boardId");
         return delegate.findSoftlyByName(name, boardId);
     }
 
     @Override
     public Task save(Task task) {
         LOGGER.info("Request 'save' received: task={}", task);
-        checkString(task.getName(), "name");
-        checkObjectId(task.getBoard().getEntityId(), "boardId");
-        checkObjectId(task.getType().getEntityId(), "typeId");
+        validateString(task.getName(), "name");
+        validateObjectId(task.getBoard().getEntityId(), "boardId");
+        validateObjectId(task.getType().getEntityId(), "typeId");
         return delegate.save(task);
     }
 
     @Override
     public Task update(Task task) {
         LOGGER.info("Request 'update' received: task={}", task);
-        checkObjectId(task.getEntityId(), "entityId");
-        checkString(task.getName(), "name");
-        checkObjectId(task.getType().getEntityId(), "typeId");
-        checkObjectId(task.getStatus().getEntityId(), "statusId");
+        validateObjectId(task.getEntityId(), "entityId");
+        validateString(task.getName(), "name");
+        validateObjectId(task.getType().getEntityId(), "typeId");
+        validateObjectId(task.getStatus().getEntityId(), "statusId");
         return delegate.update(task);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
         LOGGER.info("Request 'deleteByEntityId' received: entityId={}", entityId);
-        checkObjectId(entityId, "entityId");
+        validateObjectId(entityId, "entityId");
         return delegate.deleteByEntityId(entityId);
     }
 }
