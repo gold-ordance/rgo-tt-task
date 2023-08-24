@@ -9,7 +9,7 @@ import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.validator.ValidateException;
 
-import static rgo.tt.common.rest.api.RestUtils.convert;
+import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 
 @RestControllerAdvice
 public class ExceptionCommonHandler {
@@ -17,18 +17,18 @@ public class ExceptionCommonHandler {
     @ExceptionHandler(ValidateException.class)
     public ResponseEntity<Response> handle(ValidateException e) {
         Response response = ErrorResponse.invalidRq(e.getMessage());
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @ExceptionHandler(InvalidEntityException.class)
     public ResponseEntity<Response> handle(InvalidEntityException e) {
         Response response = ErrorResponse.invalidEntity(e.getMessage());
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> handle(Exception e) {
         Response response = ErrorResponse.error(ExceptionUtils.readStackTrace(e));
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 }

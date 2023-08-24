@@ -11,7 +11,7 @@ import rgo.tt.main.service.tasktype.TaskTypeService;
 
 import java.util.List;
 
-import static rgo.tt.common.rest.api.RestUtils.convert;
+import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 
 @RestController
 @RequestMapping(TaskTypeRestController.BASE_URL)
@@ -30,6 +30,6 @@ public class TaskTypeRestController implements TaskTypeController {
     public ResponseEntity<Response> findAll() {
         List<TaskType> types = service.findAll();
         Response response = TaskTypeGetListResponse.success(types);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 }

@@ -22,10 +22,9 @@ import rgo.tt.main.service.task.TaskService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
-import static rgo.tt.common.rest.api.RestUtils.convert;
+import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 import static rgo.tt.main.rest.api.task.TaskMapper.map;
 
 @RestController
@@ -45,8 +44,7 @@ public class TaskRestController implements TaskController {
     public ResponseEntity<Response> findAllForBoard(Long boardId) {
         List<Task> tasks = service.findAllForBoard(boardId);
         Response response = TaskGetListResponse.success(tasks);
-        ThreadLocalRandom.current().nextInt(100);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class TaskRestController implements TaskController {
                 ? TaskGetEntityResponse.success(task.get())
                 : ErrorResponse.notFound();
 
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -65,7 +63,7 @@ public class TaskRestController implements TaskController {
     public ResponseEntity<Response> findByName(String name, Long boardId) {
         List<Task> tasks = service.findSoftlyByName(name, boardId);
         Response response = TaskGetListResponse.success(tasks);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class TaskRestController implements TaskController {
     public ResponseEntity<Response> save(@RequestBody TaskSaveRequest rq) {
         Task stored = service.save(map(rq));
         Response response = TaskModifyResponse.saved(stored);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class TaskRestController implements TaskController {
     public ResponseEntity<Response> update(@RequestBody TaskPutRequest rq) {
         Task updated = service.update(map(rq));
         Response response = TaskModifyResponse.updated(updated);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -92,6 +90,6 @@ public class TaskRestController implements TaskController {
                 ? SuccessResponse.noContent()
                 : ErrorResponse.notFound();
 
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 }

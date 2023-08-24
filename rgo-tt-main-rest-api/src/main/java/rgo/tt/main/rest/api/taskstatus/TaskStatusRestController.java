@@ -11,7 +11,7 @@ import rgo.tt.main.service.taskstatus.TaskStatusService;
 
 import java.util.List;
 
-import static rgo.tt.common.rest.api.RestUtils.convert;
+import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 
 @RestController
 @RequestMapping(TaskStatusRestController.BASE_URL)
@@ -30,6 +30,6 @@ public class TaskStatusRestController implements TaskStatusController {
     public ResponseEntity<Response> findAll() {
         List<TaskStatus> statuses = service.findAll();
         Response response = TaskStatusGetListResponse.success(statuses);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 }

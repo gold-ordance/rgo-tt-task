@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
-import static rgo.tt.common.rest.api.RestUtils.convert;
+import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 import static rgo.tt.main.rest.api.tasksboard.TasksBoardMapper.map;
 
 @RestController
@@ -36,7 +36,7 @@ public class TasksBoardRestController implements TasksBoardController {
     public ResponseEntity<Response> findAll() {
         List<TasksBoard> boards = service.findAll();
         Response response = TasksBoardGetListResponse.success(boards);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class TasksBoardRestController implements TasksBoardController {
                 ? TasksBoardGetEntityResponse.success(board.get())
                 : ErrorResponse.notFound();
 
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TasksBoardRestController implements TasksBoardController {
     public ResponseEntity<Response> save(@RequestBody TasksBoardSaveRequest rq) {
         TasksBoard board = service.save(map(rq));
         Response response = TasksBoardModifyResponse.saved(board);
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 
     @Override
@@ -66,6 +66,6 @@ public class TasksBoardRestController implements TasksBoardController {
                 ? SuccessResponse.noContent()
                 : ErrorResponse.notFound();
 
-        return convert(response);
+        return convertToResponseEntity(response);
     }
 }
