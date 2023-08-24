@@ -43,10 +43,7 @@ public class TasksBoardRestController implements TasksBoardController {
     @GetMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> findByEntityId(@PathVariable Long entityId) {
         Optional<TasksBoard> board = service.findByEntityId(entityId);
-        Response response = board.isPresent()
-                ? TasksBoardGetEntityResponse.success(board.get())
-                : ErrorResponse.notFound();
-
+        Response response = TasksBoardGetEntityResponse.from(board);
         return convertToResponseEntity(response);
     }
 

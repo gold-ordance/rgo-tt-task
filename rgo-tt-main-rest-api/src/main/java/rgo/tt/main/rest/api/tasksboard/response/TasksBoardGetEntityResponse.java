@@ -5,6 +5,10 @@ import rgo.tt.common.rest.api.Status;
 import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
+import java.util.Optional;
+
+import static rgo.tt.common.rest.api.ErrorResponse.notFound;
+
 public class TasksBoardGetEntityResponse implements Response {
 
     private final Status status;
@@ -15,7 +19,13 @@ public class TasksBoardGetEntityResponse implements Response {
         this.board = board;
     }
 
-    public static TasksBoardGetEntityResponse success(TasksBoard board) {
+    public static Response from(Optional<TasksBoard> board) {
+        return board.isPresent()
+                ? success(board.get())
+                : notFound();
+    }
+
+    private static TasksBoardGetEntityResponse success(TasksBoard board) {
         return new TasksBoardGetEntityResponse(Status.success(StatusCode.SUCCESS), board);
     }
 

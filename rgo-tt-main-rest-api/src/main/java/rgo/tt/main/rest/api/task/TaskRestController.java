@@ -9,12 +9,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
-import rgo.tt.common.rest.api.SuccessResponse;
 import rgo.tt.main.persistence.storage.entity.Task;
-import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.task.request.TaskPutRequest;
+import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.task.response.TaskGetEntityResponse;
 import rgo.tt.main.rest.api.task.response.TaskGetListResponse;
 import rgo.tt.main.rest.api.task.response.TaskModifyResponse;
@@ -51,10 +49,7 @@ public class TaskRestController implements TaskController {
     @GetMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> findByEntityId(@PathVariable Long entityId) {
         Optional<Task> task = service.findByEntityId(entityId);
-        Response response = task.isPresent()
-                ? TaskGetEntityResponse.success(task.get())
-                : ErrorResponse.notFound();
-
+        Response response = TaskGetEntityResponse.from(task);
         return convertToResponseEntity(response);
     }
 
@@ -85,11 +80,8 @@ public class TaskRestController implements TaskController {
     @Override
     @DeleteMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> deleteByEntityId(@PathVariable Long entityId) {
-        boolean deleted = service.deleteByEntityId(entityId);
-        Response response = deleted
-                ? SuccessResponse.noContent()
-                : ErrorResponse.notFound();
-
+        boolean isDeleted = service.deleteByEntityId(entityId);
+        Response response = Response.from(isDeleted);
         return convertToResponseEntity(response);
     }
 }

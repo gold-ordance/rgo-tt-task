@@ -5,6 +5,10 @@ import rgo.tt.common.rest.api.Status;
 import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.Task;
 
+import java.util.Optional;
+
+import static rgo.tt.common.rest.api.ErrorResponse.notFound;
+
 public class TaskGetEntityResponse implements Response {
 
     private final Status status;
@@ -15,7 +19,13 @@ public class TaskGetEntityResponse implements Response {
         this.task = task;
     }
 
-    public static TaskGetEntityResponse success(Task task) {
+    public static Response from(Optional<Task> opt) {
+        return opt.isPresent()
+                ? success(opt.get())
+                : notFound();
+    }
+
+    private static TaskGetEntityResponse success(Task task) {
         return new TaskGetEntityResponse(Status.success(StatusCode.SUCCESS), task);
     }
 
