@@ -39,6 +39,15 @@ public class PostgresTaskRepository implements TaskRepository {
         return result.getEntities();
     }
 
+    private void checkBoardIdForExistence(Long boardId) {
+        SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
+        SqlReadResult<?> result = jdbc.read(statement);
+
+        if (result.getEntities().isEmpty()) {
+            throw new InvalidEntityException("The boardId not found in the storage.");
+        }
+    }
+
     @Override
     public Optional<Task> findByEntityId(Long entityId) {
         SqlReadStatement<Task> statement = TaskSqlStatement.findByEntityId(entityId);
@@ -60,20 +69,6 @@ public class PostgresTaskRepository implements TaskRepository {
         SqlCreateStatement<Task> statement = TaskSqlStatement.save(task, function);
         SqlCreateResult<Task> result = jdbc.save(statement);
         return result.getEntity();
-    }
-
-    private void checkBoardIdForExistence(Long boardId) {
-        String errorMsg = "The boardId not found in the storage.";
-        SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(boardId);
-        checkForExistence(statement, errorMsg);
-    }
-
-    private void checkForExistence(SqlReadStatement<?> statement, String errorMsg) {
-        SqlReadResult<?> result = jdbc.read(statement);
-
-        if (result.getEntities().isEmpty()) {
-            throw new InvalidEntityException(errorMsg);
-        }
     }
 
     @Override
