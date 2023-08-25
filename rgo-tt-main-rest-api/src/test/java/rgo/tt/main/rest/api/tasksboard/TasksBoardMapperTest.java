@@ -19,7 +19,7 @@ class TasksBoardMapperTest {
 
         assertEquals(rq.getName(), board.getName());
 
-        List<String> nonEmptyFields = List.of("name", "board");
+        List<String> nonEmptyFields = List.of("name");
         assertNullFields(board, nonEmptyFields);
     }
 }

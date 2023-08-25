@@ -161,27 +161,29 @@ class TaskRepositoryTest {
     @Test
     void save() {
         TasksBoard board = insertBoard(randomTasksBoard());
-        Task created = randomTaskBuilder().setBoard(board).build();
+        Task expected = randomTaskBuilder().setBoard(board).build();
 
-        Task savedTask = repository.save(created);
-        assertEquals(created.getName(), savedTask.getName());
-        assertEquals(created.getDescription(), savedTask.getDescription());
-        assertEquals(TO_DO, savedTask.getStatus());
-        assertEquals(board, savedTask.getBoard());
-        assertEquals(created.getType(), savedTask.getType());
+        Task actual = repository.save(expected);
+
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(TO_DO, actual.getStatus());
+        assertEquals(board, actual.getBoard());
+        assertEquals(expected.getType(), actual.getType());
     }
 
     @Test
     void save_descriptionIsNull() {
         TasksBoard board = insertBoard(randomTasksBoard());
-        Task created = randomTaskBuilder().setBoard(board).setDescription(null).build();
+        Task expected = randomTaskBuilder().setBoard(board).setDescription(null).build();
 
-        Task savedTask = repository.save(created);
-        assertEquals(created.getName(), savedTask.getName());
-        assertNull(savedTask.getDescription());
-        assertEquals(TO_DO, savedTask.getStatus());
-        assertEquals(board, savedTask.getBoard());
-        assertEquals(created.getType(), savedTask.getType());
+        Task actual = repository.save(expected);
+
+        assertEquals(expected.getName(), actual.getName());
+        assertNull(actual.getDescription());
+        assertEquals(TO_DO, actual.getStatus());
+        assertEquals(board, actual.getBoard());
+        assertEquals(expected.getType(), actual.getType());
     }
 
     @Test
@@ -198,7 +200,10 @@ class TaskRepositoryTest {
         TasksBoard board = insertBoard(randomTasksBoard());
         Task created = randomTaskBuilder().setBoard(board).build();
         Task saved = insert(created);
-        Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).setStatus(randomTaskStatusBuilder().build()).build();
+        Task updated = randomTaskBuilder()
+                .setEntityId(saved.getEntityId())
+                .setStatus(randomTaskStatusBuilder().build())
+                .build();
 
         assertThrowsWithMessage(
                 InvalidEntityException.class,
@@ -211,7 +216,11 @@ class TaskRepositoryTest {
         TasksBoard board = insertBoard(randomTasksBoard());
         Task created = randomTaskBuilder().setBoard(board).build();
         Task saved = insert(created);
-        Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).setType(randomTaskTypeBuilder().build()).build();
+        Task updated = randomTaskBuilder()
+                .setEntityId(saved.getEntityId())
+                .setType(randomTaskTypeBuilder().build())
+                .build();
+
         assertThrowsWithMessage(
                 InvalidEntityException.class,
                 () -> repository.update(updated),

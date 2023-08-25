@@ -41,16 +41,16 @@ class TasksBoardRepositoryTest {
     void findAll() {
         List<TasksBoard> expected = insertRandomBoards();
 
-        List<TasksBoard> boards = repository.findAll();
-        assertIterableEquals(expected, boards);
+        List<TasksBoard> actual = repository.findAll();
+        assertIterableEquals(expected, actual);
     }
 
     @Test
     void findByEntityId_notFound() {
         long fakeId = randomPositiveLong();
 
-        Optional<TasksBoard> opt = repository.findByEntityId(fakeId);
-        assertFalse(opt.isPresent());
+        Optional<TasksBoard> actual = repository.findByEntityId(fakeId);
+        assertFalse(actual.isPresent());
     }
 
     @Test
@@ -58,24 +58,25 @@ class TasksBoardRepositoryTest {
         TasksBoard created = randomTasksBoard();
         TasksBoard expected = insert(created);
 
-        Optional<TasksBoard> opt = repository.findByEntityId(expected.getEntityId());
-        assertTrue(opt.isPresent());
-        assertEquals(expected, opt.get());
+        Optional<TasksBoard> actual = repository.findByEntityId(expected.getEntityId());
+        assertTrue(actual.isPresent());
+        assertEquals(expected, actual.get());
     }
 
     @Test
     void save() {
-        TasksBoard created = randomTasksBoard();
+        TasksBoard expected = randomTasksBoard();
 
-        TasksBoard savedBoard = repository.save(created);
-        assertEquals(created.getName(), savedBoard.getName());
-        assertEquals(created.getShortName(), savedBoard.getShortName());
+        TasksBoard actual = repository.save(expected);
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getShortName(), actual.getShortName());
     }
 
     @Test
     void deleteByEntityId_notFound() {
         long fakeId = randomPositiveLong();
-        assertFalse(repository.deleteByEntityId(fakeId));
+        boolean isDeleted = repository.deleteByEntityId(fakeId);
+        assertFalse(isDeleted);
     }
 
     @Test
@@ -83,7 +84,8 @@ class TasksBoardRepositoryTest {
         TasksBoard created =  randomTasksBoard();
         TasksBoard saved = insert(created);
 
-        assertTrue(repository.deleteByEntityId(saved.getEntityId()));
+        boolean isDeleted = repository.deleteByEntityId(saved.getEntityId());
+        assertTrue(isDeleted);
     }
 
     private List<TasksBoard> insertRandomBoards() {

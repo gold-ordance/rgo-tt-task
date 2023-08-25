@@ -10,15 +10,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import rgo.tt.main.service.tasksboard.TasksBoardService;
 
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static rgo.tt.common.rest.api.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
@@ -41,27 +46,27 @@ class TasksBoardRestControllerTest {
 
     @Test
     void getAll_empty() throws Exception {
-        int taskSize = 0;
+        int found = 0;
 
         mvc.perform(get(TasksBoardRestController.BASE_URL))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.boards", hasSize(taskSize)));
+                .andExpect(jsonPath("$.boards", hasSize(found)));
     }
 
     @Test
     void getAll() throws Exception {
         TasksBoard board = insertTasksBoard();
-        int taskSize = 1;
+        int found = 1;
 
         mvc.perform(get(TasksBoardRestController.BASE_URL))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.boards", hasSize(taskSize)))
+                .andExpect(jsonPath("$.boards", hasSize(found)))
                 .andExpect(jsonPath("$.boards[0].entityId", is(board.getEntityId().intValue())))
                 .andExpect(jsonPath("$.boards[0].name", is(board.getName())));
     }

@@ -35,6 +35,7 @@ class TaskMapperTest {
 
         assertEquals(rq.getEntityId(), task.getEntityId());
         assertEquals(rq.getName(), task.getName());
+        assertEquals(rq.getDescription(), task.getDescription());
         assertEquals(rq.getTypeId(), task.getType().getEntityId());
         assertEquals(rq.getStatusId(), task.getStatus().getEntityId());
 

@@ -82,19 +82,19 @@ class TaskRestControllerTest {
     @Test
     void getAll_empty() throws Exception {
         TasksBoard board = insertTasksBoard();
-        int taskSize = 0;
+        int found = 0;
 
         mvc.perform(get(TaskRestController.BASE_URL + "?boardId=" + board.getEntityId()))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(taskSize)));
+                .andExpect(jsonPath("$.tasks", hasSize(found)));
     }
 
     @Test
     void getAll_oneBoard() throws Exception {
-        int tasksSize = 1;
+        int found = 1;
         TasksBoard board = insertTasksBoard();
         Task saved = insertTask(board);
 
@@ -103,7 +103,7 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks", hasSize(found)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
@@ -119,7 +119,7 @@ class TaskRestControllerTest {
 
     @Test
     void getAll_twoBoard() throws Exception {
-        int tasksSize = 1;
+        int found = 1;
 
         TasksBoard board1 = insertTasksBoard();
         Task saved1 = insertTask(board1);
@@ -132,7 +132,7 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks", hasSize(found)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved1.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved1.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved1.getCreatedDate()))))
@@ -193,7 +193,7 @@ class TaskRestControllerTest {
 
     @Test
     void getByName_nameIsFake() throws Exception {
-        int taskSize = 0;
+        int found = 0;
         TasksBoard board = insertTasksBoard();
         String fakeName = randomString();
 
@@ -202,7 +202,7 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(taskSize)));
+                .andExpect(jsonPath("$.tasks", hasSize(found)));
     }
 
     @Test
@@ -230,7 +230,7 @@ class TaskRestControllerTest {
 
     @Test
     void getByName_oneBoard() throws Exception {
-        int tasksSize = 1;
+        int found = 1;
         TasksBoard board = insertTasksBoard();
         Task saved = insertTask(board);
 
@@ -239,7 +239,7 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks", hasSize(found)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
@@ -255,7 +255,7 @@ class TaskRestControllerTest {
 
     @Test
     void getByName_twoBoard() throws Exception {
-        int tasksSize = 1;
+        int found = 1;
         TasksBoard board1 = insertTasksBoard();
         TasksBoard board2 = insertTasksBoard();
         Task saved = insertTask(board1);
@@ -266,7 +266,7 @@ class TaskRestControllerTest {
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.SUCCESS.name())))
                 .andExpect(jsonPath("$.status.message", nullValue()))
-                .andExpect(jsonPath("$.tasks", hasSize(tasksSize)))
+                .andExpect(jsonPath("$.tasks", hasSize(found)))
                 .andExpect(jsonPath("$.tasks[0].entityId", is(saved.getEntityId().intValue())))
                 .andExpect(jsonPath("$.tasks[0].name", is(saved.getName())))
                 .andExpect(jsonPath("$.tasks[0].createdDate", startsWith(toString(saved.getCreatedDate()))))
