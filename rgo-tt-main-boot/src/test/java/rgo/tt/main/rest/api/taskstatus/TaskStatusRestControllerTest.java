@@ -10,12 +10,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.common.persistence.DbTxManager;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,13 +29,12 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TO_DO;
 class TaskStatusRestControllerTest {
 
     @Autowired private WebApplicationContext context;
-    @Autowired private DbTxManager tx;
 
     private MockMvc mvc;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
         mvc =  MockMvcBuilders.webAppContextSetup(context).build();
     }
 

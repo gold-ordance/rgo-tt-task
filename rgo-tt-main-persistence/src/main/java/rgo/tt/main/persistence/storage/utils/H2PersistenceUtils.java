@@ -10,24 +10,25 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import javax.sql.DataSource;
 
-public final class PersistenceUtils {
+public final class H2PersistenceUtils {
 
     private static final String DB_NAME = "task";
+    private static final DataSource h2Source = new EmbeddedDatabaseBuilder()
+            .setType(EmbeddedDatabaseType.H2)
+            .setName(DB_NAME)
+            .addScript("classpath:h2/init-tables.sql")
+            .build();
 
-    private PersistenceUtils() {
+    private H2PersistenceUtils() {
     }
 
     public static DataSource h2Source() {
-        return new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .setName(DB_NAME)
-                .addScript("classpath:h2/init-tables.sql")
-                .build();
+        return h2Source;
     }
 
-    public static void truncateTables(DataSource ds) {
+    public static void truncateTables() {
         Resource resource = new ClassPathResource("h2/truncate.sql");
         DatabasePopulator populator = new ResourceDatabasePopulator(resource);
-        DatabasePopulatorUtils.execute(populator, ds);
+        DatabasePopulatorUtils.execute(populator, h2Source);
     }
 }

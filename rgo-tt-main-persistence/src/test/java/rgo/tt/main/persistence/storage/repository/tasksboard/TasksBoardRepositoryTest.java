@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.main.persistence.config.PersistenceConfig;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.utils.EntityGenerator;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 
@@ -29,11 +31,10 @@ class TasksBoardRepositoryTest {
     private static final int TASKS_BOARDS_LIMIT = 32;
 
     @Autowired private TasksBoardRepository repository;
-    @Autowired private DbTxManager tx;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
     }
 
     @Test

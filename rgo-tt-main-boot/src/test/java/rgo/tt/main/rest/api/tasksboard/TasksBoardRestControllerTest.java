@@ -12,7 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import rgo.tt.main.service.tasksboard.TasksBoardService;
 
@@ -30,13 +30,12 @@ class TasksBoardRestControllerTest {
 
     @Autowired private WebApplicationContext context;
     @Autowired private TasksBoardService service;
-    @Autowired private DbTxManager tx;
 
     private MockMvc mvc;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
         mvc =  MockMvcBuilders.webAppContextSetup(context).build();
     }
 

@@ -10,10 +10,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.tasksboard.TasksBoardRestController;
@@ -23,18 +22,18 @@ import rgo.tt.main.service.tasksboard.TasksBoardService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static rgo.tt.common.rest.api.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
@@ -51,13 +50,12 @@ class TaskRestControllerTest {
     @Autowired private WebApplicationContext context;
     @Autowired private TaskService service;
     @Autowired private TasksBoardService boardService;
-    @Autowired private DbTxManager tx;
 
     private MockMvc mvc;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 

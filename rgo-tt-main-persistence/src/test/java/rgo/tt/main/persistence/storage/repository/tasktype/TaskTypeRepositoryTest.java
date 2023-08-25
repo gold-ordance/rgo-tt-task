@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.main.persistence.config.PersistenceConfig;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.TaskType;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 
 import java.util.List;
 
@@ -21,11 +20,10 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TYPES;
 class TaskTypeRepositoryTest {
 
     @Autowired private TaskTypeRepository repository;
-    @Autowired private DbTxManager tx;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
     }
 
     @Test

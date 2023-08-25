@@ -23,7 +23,7 @@ import rgo.tt.main.persistence.storage.repository.tasktype.TxTaskTypeRepositoryD
 import javax.sql.DataSource;
 
 import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.hikariSource;
-import static rgo.tt.main.persistence.storage.utils.PersistenceUtils.h2Source;
+import static rgo.tt.main.persistence.storage.utils.H2PersistenceUtils.h2Source;
 
 @Configuration
 @ConfigurationPropertiesScan

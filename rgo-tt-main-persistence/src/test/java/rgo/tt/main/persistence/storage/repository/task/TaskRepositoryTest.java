@@ -8,13 +8,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.main.persistence.config.PersistenceConfig;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 import rgo.tt.main.persistence.storage.utils.EntityGenerator;
-import rgo.tt.main.persistence.storage.utils.PersistenceUtils;
+import rgo.tt.main.persistence.storage.utils.H2PersistenceUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +21,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
@@ -47,11 +46,10 @@ class TaskRepositoryTest {
 
     @Autowired private TaskRepository repository;
     @Autowired private TasksBoardRepository boardRepository;
-    @Autowired private DbTxManager tx;
 
     @BeforeEach
     void setUp() {
-        PersistenceUtils.truncateTables(tx);
+        H2PersistenceUtils.truncateTables();
     }
 
     @Test
