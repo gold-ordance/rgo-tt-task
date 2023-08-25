@@ -1,5 +1,6 @@
 package rgo.tt.main.rest.api.task.request;
 
+import static org.apache.commons.lang3.StringUtils.strip;
 import static rgo.tt.common.utils.HelperUtils.size;
 
 public class TaskPutRequest {
@@ -23,7 +24,7 @@ public class TaskPutRequest {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = strip(name);
     }
 
     public String getDescription() {
@@ -31,7 +32,7 @@ public class TaskPutRequest {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = strip(description);
     }
 
     public Long getTypeId() {

@@ -1,5 +1,7 @@
 package rgo.tt.main.rest.api.tasksboard.request;
 
+import static org.apache.commons.lang3.StringUtils.strip;
+
 public class TasksBoardSaveRequest {
 
     private String name;
@@ -9,7 +11,7 @@ public class TasksBoardSaveRequest {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = strip(name);
     }
 
     @Override

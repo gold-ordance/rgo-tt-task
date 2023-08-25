@@ -21,6 +21,7 @@ import rgo.tt.main.service.task.TaskService;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.strip;
 import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
 import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
 import static rgo.tt.main.rest.api.task.TaskMapper.map;
@@ -56,7 +57,7 @@ public class TaskRestController implements TaskController {
     @Override
     @GetMapping(params = {"name", "boardId"})
     public ResponseEntity<Response> findByName(String name, Long boardId) {
-        List<Task> tasks = service.findSoftlyByName(name, boardId);
+        List<Task> tasks = service.findSoftlyByName(strip(name), boardId);
         Response response = TaskGetListResponse.success(tasks);
         return convertToResponseEntity(response);
     }

@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static rgo.tt.common.rest.api.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
+import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 import static rgo.tt.main.rest.api.RequestGenerator.createTasksBoardSaveRequest;
 
@@ -45,7 +46,7 @@ class TasksBoardRestControllerTest {
     }
 
     @Test
-    void getAll_empty() throws Exception {
+    void findAll_empty() throws Exception {
         int found = 0;
 
         mvc.perform(get(TasksBoardRestController.BASE_URL))
@@ -57,7 +58,7 @@ class TasksBoardRestControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void findAll() throws Exception {
         TasksBoard board = insertTasksBoard();
         int found = 1;
 
@@ -72,7 +73,7 @@ class TasksBoardRestControllerTest {
     }
 
     @Test
-    void getByEntityId_entityIdIsFake() throws Exception {
+    void findByEntityId_entityIdIsFake() throws Exception {
         long fakeEntityId = randomPositiveLong();
 
         mvc.perform(get(TasksBoardRestController.BASE_URL + "/" + fakeEntityId))
@@ -83,7 +84,7 @@ class TasksBoardRestControllerTest {
     }
 
     @Test
-    void getByEntityId() throws Exception {
+    void findByEntityId() throws Exception {
         TasksBoard board = insertTasksBoard();
 
         mvc.perform(get(TasksBoardRestController.BASE_URL + "/" + board.getEntityId()))
@@ -117,6 +118,20 @@ class TasksBoardRestControllerTest {
                 .andExpect(status().is(StatusCode.INVALID_RQ.getHttpCode()))
                 .andExpect(jsonPath("$.status.statusCode", is(StatusCode.INVALID_RQ.name())))
                 .andExpect(jsonPath("$.status.message", is("The name is empty.")));
+    }
+
+    @Test
+    void save_nameIsStripped() throws Exception {
+        String name = randomString();
+        TasksBoardSaveRequest rq = createTasksBoardSaveRequest();
+        rq.setName(" " + name + " ");
+
+        mvc.perform(post(TasksBoardRestController.BASE_URL).content(json(rq)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is(StatusCode.STORED.getHttpCode()))
+                .andExpect(jsonPath("$.status.statusCode", is(StatusCode.STORED.name())))
+                .andExpect(jsonPath("$.status.message", nullValue()))
+                .andExpect(jsonPath("$.board.name", is(name)));
     }
 
     @Test

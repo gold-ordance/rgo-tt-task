@@ -38,7 +38,7 @@ class TaskTypeRestControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void findAll() throws Exception {
         mvc.perform(get(TaskTypeRestController.BASE_URL))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(StatusCode.SUCCESS.getHttpCode()))

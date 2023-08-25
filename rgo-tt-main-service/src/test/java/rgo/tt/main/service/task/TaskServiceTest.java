@@ -13,9 +13,6 @@ import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 import rgo.tt.main.service.ServiceConfig;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
@@ -106,21 +103,6 @@ class TaskServiceTest {
     }
 
     @Test
-    void findBySoftlyName_clearedName() {
-        String clearedName = randomString();
-        Task created = randomTaskBuilder()
-                .setName(clearedName)
-                .build();
-        Task saved = insertTask(created);
-
-        String name = " " + clearedName + "    ";
-        List<Task> actual = service.findSoftlyByName(name, saved.getBoard().getEntityId());
-
-        assertEquals(1, actual.size());
-        assertEquals(clearedName, actual.get(0).getName());
-    }
-
-    @Test
     void save_invalidRq_nameIsNull() {
         Task task = randomTaskBuilder()
                 .setName(null)
@@ -206,21 +188,6 @@ class TaskServiceTest {
                 ValidateException.class,
                 () -> service.save(task),
                 "The typeId is negative.");
-    }
-
-    @Test
-    void save_clearedTask() {
-        TasksBoard board = insertBoard();
-        String clearedName = randomString();
-        Task created = randomTaskBuilder()
-                .setName("  " + clearedName + " ")
-                .setDescription(" " + clearedName + "  ")
-                .setBoard(board)
-                .build();
-        Task saved = service.save(created);
-
-        assertEquals(clearedName, saved.getName());
-        assertEquals(clearedName, saved.getDescription());
     }
 
     @Test
@@ -325,25 +292,6 @@ class TaskServiceTest {
                 ValidateException.class,
                 () -> service.update(task),
                 "The statusId is negative.");
-    }
-
-    @Test
-    void update_clearedTask() {
-        TasksBoard board = insertBoard();
-        Task created = randomTaskBuilder()
-                .setBoard(board)
-                .build();
-        Task saved = insertTask(created);
-
-        String clearedName = randomString();
-        Task updated = saved.toBuilder()
-                .setName(" " + clearedName + "  ")
-                .setDescription("  " + clearedName + " ")
-                .build();
-        Task actual = service.update(updated);
-
-        assertEquals(clearedName, actual.getName());
-        assertEquals(clearedName, actual.getDescription());
     }
 
     @Test

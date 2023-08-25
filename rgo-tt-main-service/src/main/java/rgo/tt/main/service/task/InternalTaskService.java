@@ -26,31 +26,21 @@ public class InternalTaskService implements TaskService {
 
     @Override
     public List<Task> findSoftlyByName(String name, Long boardId) {
-        String clearedName = name.strip();
-        return repository.findSoftlyByName(clearedName, boardId);
+        return repository.findSoftlyByName(name, boardId);
     }
 
     @Override
     public Task save(Task task) {
-        Task cleared = clearSpaces(task);
-        return repository.save(cleared);
+        return repository.save(task);
     }
 
     @Override
     public Task update(Task task) {
-        Task cleared = clearSpaces(task);
-        return repository.update(cleared);
+        return repository.update(task);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
         return repository.deleteByEntityId(entityId);
-    }
-
-    private static Task clearSpaces(Task task) {
-        return task.toBuilder()
-                .setName(task.getName().strip())
-                .setDescription(task.getDescription().strip())
-                .build();
     }
 }

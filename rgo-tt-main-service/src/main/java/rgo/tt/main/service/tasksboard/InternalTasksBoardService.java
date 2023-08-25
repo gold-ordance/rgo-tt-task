@@ -29,9 +29,8 @@ public class InternalTasksBoardService implements TasksBoardService {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        TasksBoard cleared = clearSpaces(board);
-        TasksBoard withShortName = cleared.toBuilder()
-                .setShortName(shortName(cleared.getName()))
+        TasksBoard withShortName = board.toBuilder()
+                .setShortName(shortName(board.getName()))
                 .build();
         return repository.save(withShortName);
     }
@@ -39,12 +38,6 @@ public class InternalTasksBoardService implements TasksBoardService {
     @Override
     public boolean deleteByEntityId(Long entityId) {
         return repository.deleteByEntityId(entityId);
-    }
-
-    private static TasksBoard clearSpaces(TasksBoard board) {
-        return board.toBuilder()
-                .setName(board.getName().strip())
-                .build();
     }
 
     private static String shortName(String name) {

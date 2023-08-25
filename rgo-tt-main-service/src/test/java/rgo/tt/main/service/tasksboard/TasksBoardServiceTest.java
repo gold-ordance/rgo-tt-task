@@ -11,8 +11,8 @@ import rgo.tt.main.service.ServiceConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
-import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoardBuilder;
 
 @ExtendWith(SpringExtension.class)
@@ -63,15 +63,12 @@ class TasksBoardServiceTest {
     }
 
     @Test
-    void save_clearedBoard() {
-        String clearedName = randomString();
-        TasksBoard created = randomTasksBoardBuilder()
-                .setName(" " + clearedName + "  ")
-                .build();
+    void save() {
+        TasksBoard created = randomTasksBoard();
         TasksBoard actual = service.save(created);
 
-        assertEquals(clearedName, actual.getName());
-        assertEquals(String.valueOf(clearedName.charAt(0)).toUpperCase(), actual.getShortName());
+        assertEquals(created.getName(), actual.getName());
+        assertEquals(String.valueOf(created.getName().charAt(0)).toUpperCase(), actual.getShortName());
     }
 
     @Test
