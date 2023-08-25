@@ -9,8 +9,6 @@ import rgo.tt.common.validator.ValidateException;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
-import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 import rgo.tt.main.service.ServiceConfig;
 
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
@@ -19,7 +17,6 @@ import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatusBuilder;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskTypeBuilder;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoardBuilder;
 
 @ExtendWith(SpringExtension.class)
@@ -27,8 +24,6 @@ import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksB
 class TaskServiceTest {
 
     @Autowired private TaskService service;
-    @Autowired private TaskRepository repository;
-    @Autowired private TasksBoardRepository boardRepository;
 
     @Test
     void findAll_invalidRq_boardIdIsNull() {
@@ -309,17 +304,5 @@ class TaskServiceTest {
                 ValidateException.class,
                 () -> service.deleteByEntityId(fakeId),
                 "The entityId is negative.");
-    }
-
-    private Task insertTask(Task task) {
-        TasksBoard board = boardRepository.save(randomTasksBoard());
-        task = task.toBuilder()
-                .setBoard(board)
-                .build();
-        return repository.save(task);
-    }
-
-    private TasksBoard insertBoard() {
-        return boardRepository.save(randomTasksBoard());
     }
 }

@@ -10,6 +10,7 @@ import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.service.ServiceConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static rgo.tt.common.utils.HelperUtils.getFirstSymbol;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
@@ -68,7 +69,7 @@ class TasksBoardServiceTest {
         TasksBoard actual = service.save(created);
 
         assertEquals(created.getName(), actual.getName());
-        assertEquals(String.valueOf(created.getName().charAt(0)).toUpperCase(), actual.getShortName());
+        assertEquals(getFirstSymbol(created.getName()).toUpperCase(), actual.getShortName());
     }
 
     @Test

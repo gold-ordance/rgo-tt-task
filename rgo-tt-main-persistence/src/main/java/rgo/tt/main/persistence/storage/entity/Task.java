@@ -80,7 +80,14 @@ public class Task implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name, createdDate, lastModifiedDate, description, board, type, status);
+        return Objects.hash(entityId,
+                name,
+                createdDate,
+                lastModifiedDate,
+                description,
+                board,
+                type,
+                status);
     }
 
     @Override

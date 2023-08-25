@@ -22,7 +22,7 @@ public class ValidateTaskServiceDecorator implements TaskService {
 
     @Override
     public List<Task> findAllForBoard(Long boardId) {
-        LOGGER.info("Request 'findAll' received: boardId={}", boardId);
+        LOGGER.info("Request 'findAllForBoard' received: boardId={}", boardId);
         validateObjectId(boardId, "boardId");
         return delegate.findAllForBoard(boardId);
     }

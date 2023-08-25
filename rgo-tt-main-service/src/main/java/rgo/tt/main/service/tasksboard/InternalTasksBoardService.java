@@ -1,5 +1,6 @@
 package rgo.tt.main.service.tasksboard;
 
+import rgo.tt.common.utils.HelperUtils;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 
@@ -42,7 +43,7 @@ public class InternalTasksBoardService implements TasksBoardService {
 
     private static String shortName(String name) {
         return Arrays.stream(name.split(" "))
-                .map(s -> String.valueOf(s.charAt(0)))
+                .map(HelperUtils::getFirstSymbol)
                 .collect(Collectors.joining())
                 .toUpperCase(Locale.ENGLISH);
     }
