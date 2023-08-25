@@ -1,9 +1,8 @@
-package rgo.tt.main.rest.api.task;
+package rgo.tt.main.rest.api.tasksboard;
 
 import org.junit.jupiter.api.Test;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
-import rgo.tt.main.rest.api.tasksboard.TasksBoardMapper;
 
 import java.util.List;
 

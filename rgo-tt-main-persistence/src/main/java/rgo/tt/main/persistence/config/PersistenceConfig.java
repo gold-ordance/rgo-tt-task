@@ -1,10 +1,11 @@
 package rgo.tt.main.persistence.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import rgo.tt.main.persistence.config.properties.DbProperties;
+import rgo.tt.common.persistence.DbProperties;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
@@ -21,8 +22,8 @@ import rgo.tt.main.persistence.storage.repository.tasktype.TxTaskTypeRepositoryD
 
 import javax.sql.DataSource;
 
+import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.hikariSource;
 import static rgo.tt.main.persistence.storage.utils.PersistenceUtils.h2Source;
-import static rgo.tt.main.persistence.storage.utils.PersistenceUtils.hikariSource;
 
 @Configuration
 @ConfigurationPropertiesScan
@@ -32,6 +33,12 @@ public class PersistenceConfig {
     @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
     public DataSource h2() {
         return h2Source();
+    }
+
+    @Bean
+    @ConfigurationProperties("persistence")
+    public DbProperties dbProperties() {
+        return new DbProperties();
     }
 
     @Bean
