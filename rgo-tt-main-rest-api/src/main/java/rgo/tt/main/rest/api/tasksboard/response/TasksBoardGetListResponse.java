@@ -25,6 +25,7 @@ public class TasksBoardGetListResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public List<TasksBoard> getBoards() {
         return boards;
     }

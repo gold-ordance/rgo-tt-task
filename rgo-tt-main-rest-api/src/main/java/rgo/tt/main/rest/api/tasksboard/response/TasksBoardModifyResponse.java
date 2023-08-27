@@ -16,15 +16,7 @@ public class TasksBoardModifyResponse implements Response {
     }
 
     public static TasksBoardModifyResponse saved(TasksBoard board) {
-        return response(StatusCode.STORED, board);
-    }
-
-    public static TasksBoardModifyResponse updated(TasksBoard board) {
-        return response(StatusCode.SUCCESS, board);
-    }
-
-    private static TasksBoardModifyResponse response(StatusCode code, TasksBoard board) {
-        return new TasksBoardModifyResponse(Status.success(code), board);
+        return new TasksBoardModifyResponse(Status.success(StatusCode.STORED), board);
     }
 
     @Override
@@ -32,6 +24,7 @@ public class TasksBoardModifyResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public TasksBoard getBoard() {
         return board;
     }

@@ -32,6 +32,7 @@ public class TaskModifyResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public Task getTask() {
         return task;
     }

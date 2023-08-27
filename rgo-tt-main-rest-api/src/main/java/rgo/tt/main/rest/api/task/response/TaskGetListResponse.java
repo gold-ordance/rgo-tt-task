@@ -25,6 +25,7 @@ public class TaskGetListResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public List<Task> getTasks() {
         return tasks;
     }

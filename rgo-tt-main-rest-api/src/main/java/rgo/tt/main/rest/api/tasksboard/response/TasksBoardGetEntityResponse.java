@@ -33,6 +33,7 @@ public class TasksBoardGetEntityResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public TasksBoard getBoard() {
         return board;
     }

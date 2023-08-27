@@ -33,6 +33,7 @@ public class TaskGetEntityResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public Task getTask() {
         return task;
     }

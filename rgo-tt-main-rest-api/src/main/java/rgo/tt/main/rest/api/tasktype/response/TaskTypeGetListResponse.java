@@ -25,6 +25,7 @@ public class TaskTypeGetListResponse implements Response {
         return status;
     }
 
+    @SuppressWarnings("unused")
     public List<TaskType> getTypes() {
         return types;
     }
