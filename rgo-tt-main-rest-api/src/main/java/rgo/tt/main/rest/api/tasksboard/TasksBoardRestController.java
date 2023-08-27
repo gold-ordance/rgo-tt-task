@@ -15,8 +15,8 @@ import rgo.tt.main.service.tasksboard.TasksBoardService;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
-import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
+import static rgo.tt.common.rest.api.utils.RestUtils.DIGITS_PATTERN;
+import static rgo.tt.common.rest.api.utils.RestUtils.convertToResponseEntity;
 import static rgo.tt.main.rest.api.tasksboard.TasksBoardMapper.map;
 
 @RestController

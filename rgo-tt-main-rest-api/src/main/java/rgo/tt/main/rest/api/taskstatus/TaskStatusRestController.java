@@ -11,7 +11,7 @@ import rgo.tt.main.service.taskstatus.TaskStatusService;
 
 import java.util.List;
 
-import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
+import static rgo.tt.common.rest.api.utils.RestUtils.convertToResponseEntity;
 
 @RestController
 @RequestMapping(TaskStatusRestController.BASE_URL)

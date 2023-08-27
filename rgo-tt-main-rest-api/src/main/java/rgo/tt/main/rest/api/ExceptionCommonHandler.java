@@ -9,7 +9,7 @@ import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.validator.ValidateException;
 
-import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
+import static rgo.tt.common.rest.api.utils.RestUtils.convertToResponseEntity;
 
 @RestControllerAdvice
 public class ExceptionCommonHandler {

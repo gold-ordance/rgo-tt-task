@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static rgo.tt.common.rest.api.RestUtils.json;
+import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;

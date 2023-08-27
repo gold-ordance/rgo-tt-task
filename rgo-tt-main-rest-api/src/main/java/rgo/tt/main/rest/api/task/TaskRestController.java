@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.strip;
-import static rgo.tt.common.rest.api.RestUtils.DIGITS_PATTERN;
-import static rgo.tt.common.rest.api.RestUtils.convertToResponseEntity;
+import static rgo.tt.common.rest.api.utils.RestUtils.DIGITS_PATTERN;
+import static rgo.tt.common.rest.api.utils.RestUtils.convertToResponseEntity;
 import static rgo.tt.main.rest.api.task.TaskMapper.map;
 
 @RestController
