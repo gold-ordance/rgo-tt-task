@@ -1,12 +1,14 @@
 package rgo.tt.main.persistence.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import rgo.tt.common.persistence.DbProperties;
+import org.springframework.context.annotation.Import;
 import rgo.tt.common.persistence.DbTxManager;
+import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.translator.ForeignKeyPostgresH2ExceptionHandler;
+import rgo.tt.common.persistence.translator.PostgresH2ExceptionHandler;
 import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TxTaskRepositoryDecorator;
@@ -21,58 +23,51 @@ import rgo.tt.main.persistence.storage.repository.tasktype.TaskTypeRepository;
 import rgo.tt.main.persistence.storage.repository.tasktype.TxTaskTypeRepositoryDecorator;
 
 import javax.sql.DataSource;
-
-import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.hikariSource;
-import static rgo.tt.main.persistence.storage.utils.H2PersistenceUtils.h2Source;
+import java.util.List;
 
 @Configuration
 @ConfigurationPropertiesScan
+@Import(DataSourceConfig.class)
 public class PersistenceConfig {
 
+    @Autowired private DataSource dataSource;
+
     @Bean
-    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
-    public DataSource h2() {
-        return h2Source();
+    public DbTxManager txManager() {
+        return new DbTxManager(dataSource);
     }
 
     @Bean
-    @ConfigurationProperties("persistence")
-    public DbProperties dbProperties() {
-        return new DbProperties();
+    public ForeignKeyPostgresH2ExceptionHandler foreignKeyHandler() {
+        return new ForeignKeyPostgresH2ExceptionHandler();
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
-    public DataSource pg(DbProperties dbProp) {
-        return hikariSource(dbProp);
+    public StatementJdbcTemplateAdapter jdbc(List<PostgresH2ExceptionHandler> handlers) {
+        return new StatementJdbcTemplateAdapter(txManager(), handlers);
     }
 
     @Bean
-    public DbTxManager txManager(DataSource ds) {
-        return new DbTxManager(ds);
+    public TasksBoardRepository tasksBoardRepository(StatementJdbcTemplateAdapter jdbc) {
+        TasksBoardRepository repository = new PostgresTasksBoardRepository(jdbc);
+        return new TxTasksBoardRepositoryDecorator(repository, txManager());
     }
 
     @Bean
-    public TasksBoardRepository tasksBoardRepository(DbTxManager txManager) {
-        return new TxTasksBoardRepositoryDecorator(
-                new PostgresTasksBoardRepository(txManager), txManager);
+    public TaskStatusRepository taskStatusRepository(StatementJdbcTemplateAdapter jdbc) {
+        PostgresTaskStatusRepository repository = new PostgresTaskStatusRepository(jdbc);
+        return new TxTaskStatusRepositoryDecorator(repository, txManager());
     }
 
     @Bean
-    public TaskStatusRepository taskStatusRepository(DbTxManager txManager) {
-        return new TxTaskStatusRepositoryDecorator(
-                new PostgresTaskStatusRepository(txManager), txManager);
+    public TaskTypeRepository taskTypeRepository(StatementJdbcTemplateAdapter jdbc) {
+        PostgresTaskTypeRepository repository = new PostgresTaskTypeRepository(jdbc);
+        return new TxTaskTypeRepositoryDecorator(repository, txManager());
     }
 
     @Bean
-    public TaskTypeRepository taskTypeRepository(DbTxManager txManager) {
-        return new TxTaskTypeRepositoryDecorator(
-                new PostgresTaskTypeRepository(txManager), txManager);
-    }
-
-    @Bean
-    public TaskRepository taskRepository(DbTxManager txManager) {
-        return new TxTaskRepositoryDecorator(
-                new PostgresTaskRepository(txManager), txManager);
+    public TaskRepository taskRepository(StatementJdbcTemplateAdapter jdbc) {
+        PostgresTaskRepository repository = new PostgresTaskRepository(jdbc);
+        return new TxTaskRepositoryDecorator(repository, txManager());
     }
 }

@@ -1,7 +1,6 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
 import rgo.tt.common.exceptions.InvalidEntityException;
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
 import rgo.tt.common.persistence.function.FetchEntity;
 import rgo.tt.common.persistence.function.FetchEntityById;
@@ -27,8 +26,8 @@ public class PostgresTaskRepository implements TaskRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
 
-    public PostgresTaskRepository(DbTxManager dataSource) {
-        this.jdbc = dataSource.jdbc();
+    public PostgresTaskRepository(StatementJdbcTemplateAdapter jdbc) {
+        this.jdbc = jdbc;
     }
 
     @Override

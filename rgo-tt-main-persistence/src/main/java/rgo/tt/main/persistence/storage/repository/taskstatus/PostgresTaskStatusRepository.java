@@ -1,6 +1,5 @@
 package rgo.tt.main.persistence.storage.repository.taskstatus;
 
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
 import rgo.tt.common.persistence.sqlresult.SqlReadResult;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
@@ -13,8 +12,8 @@ public class PostgresTaskStatusRepository implements TaskStatusRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
 
-    public PostgresTaskStatusRepository(DbTxManager dataSource) {
-        this.jdbc = dataSource.jdbc();
+    public PostgresTaskStatusRepository(StatementJdbcTemplateAdapter jdbc) {
+        this.jdbc = jdbc;
     }
 
     @Override

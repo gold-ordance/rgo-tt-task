@@ -1,6 +1,5 @@
 package rgo.tt.main.persistence.storage.repository.tasksboard;
 
-import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
 import rgo.tt.common.persistence.function.FetchEntityById;
 import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
@@ -21,8 +20,8 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
 
-    public PostgresTasksBoardRepository(DbTxManager dataSource) {
-        this.jdbc = dataSource.jdbc();
+    public PostgresTasksBoardRepository(StatementJdbcTemplateAdapter jdbc) {
+        this.jdbc = jdbc;
     }
 
     @Override
