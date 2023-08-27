@@ -20,16 +20,21 @@ public class DataSourceConfig {
         return h2Source();
     }
 
-    @Bean
-    @ConfigurationProperties("persistence")
-    public DbProperties dbProperties() {
-        return new DbProperties();
-    }
-
-    @Bean
+    @Configuration
     @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
-    public DataSource pg() {
-        DbProperties properties = dbProperties();
-        return hikariSource(properties);
+    public static class PostgresConfig {
+
+        @Bean
+        @ConfigurationProperties("persistence")
+        public DbProperties dbProperties() {
+            return new DbProperties();
+        }
+
+        @Bean
+        @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
+        public DataSource pg() {
+            DbProperties properties = dbProperties();
+            return hikariSource(properties);
+        }
     }
 }

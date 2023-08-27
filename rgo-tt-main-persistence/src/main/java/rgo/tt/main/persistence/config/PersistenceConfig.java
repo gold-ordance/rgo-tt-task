@@ -1,7 +1,6 @@
 package rgo.tt.main.persistence.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,7 +25,6 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Configuration
-@ConfigurationPropertiesScan
 @Import(DataSourceConfig.class)
 public class PersistenceConfig {
 
