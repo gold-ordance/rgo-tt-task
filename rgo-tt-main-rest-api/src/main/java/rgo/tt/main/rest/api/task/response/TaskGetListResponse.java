@@ -2,7 +2,6 @@ package rgo.tt.main.rest.api.task.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.Task;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class TaskGetListResponse implements Response {
     }
 
     public static TaskGetListResponse success(List<Task> tasks) {
-        return new TaskGetListResponse(Status.success(StatusCode.SUCCESS), tasks);
+        return new TaskGetListResponse(Status.success(), tasks);
     }
 
     @Override

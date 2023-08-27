@@ -2,7 +2,6 @@ package rgo.tt.main.rest.api.tasksboard.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class TasksBoardGetEntityResponse implements Response {
     }
 
     private static TasksBoardGetEntityResponse success(TasksBoard board) {
-        return new TasksBoardGetEntityResponse(Status.success(StatusCode.SUCCESS), board);
+        return new TasksBoardGetEntityResponse(Status.success(), board);
     }
 
     @Override

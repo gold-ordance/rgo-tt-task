@@ -2,7 +2,6 @@ package rgo.tt.main.rest.api.task.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.Task;
 
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class TaskGetEntityResponse implements Response {
     }
 
     private static TaskGetEntityResponse success(Task task) {
-        return new TaskGetEntityResponse(Status.success(StatusCode.SUCCESS), task);
+        return new TaskGetEntityResponse(Status.success(), task);
     }
 
     @Override

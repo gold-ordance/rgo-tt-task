@@ -2,7 +2,6 @@ package rgo.tt.main.rest.api.tasktype.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.common.rest.api.StatusCode;
 import rgo.tt.main.persistence.storage.entity.TaskType;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class TaskTypeGetListResponse implements Response {
     }
 
     public static TaskTypeGetListResponse success(List<TaskType> types) {
-        return new TaskTypeGetListResponse(Status.success(StatusCode.SUCCESS), types);
+        return new TaskTypeGetListResponse(Status.success(), types);
     }
 
     @Override
