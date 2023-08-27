@@ -53,19 +53,19 @@ public class PersistenceConfig {
 
     @Bean
     public TaskStatusRepository taskStatusRepository(StatementJdbcTemplateAdapter jdbc) {
-        PostgresTaskStatusRepository repository = new PostgresTaskStatusRepository(jdbc);
+        TaskStatusRepository repository = new PostgresTaskStatusRepository(jdbc);
         return new TxTaskStatusRepositoryDecorator(repository, txManager());
     }
 
     @Bean
     public TaskTypeRepository taskTypeRepository(StatementJdbcTemplateAdapter jdbc) {
-        PostgresTaskTypeRepository repository = new PostgresTaskTypeRepository(jdbc);
+        TaskTypeRepository repository = new PostgresTaskTypeRepository(jdbc);
         return new TxTaskTypeRepositoryDecorator(repository, txManager());
     }
 
     @Bean
     public TaskRepository taskRepository(StatementJdbcTemplateAdapter jdbc) {
-        PostgresTaskRepository repository = new PostgresTaskRepository(jdbc);
+        TaskRepository repository = new PostgresTaskRepository(jdbc);
         return new TxTaskRepositoryDecorator(repository, txManager());
     }
 }
