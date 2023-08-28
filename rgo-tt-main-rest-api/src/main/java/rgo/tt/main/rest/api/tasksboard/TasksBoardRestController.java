@@ -58,11 +58,8 @@ public class TasksBoardRestController implements TasksBoardController {
     @Override
     @DeleteMapping("/{entityId:" + DIGITS_PATTERN + "}")
     public ResponseEntity<Response> deleteByEntityId(@PathVariable Long entityId) {
-        boolean deleted = service.deleteByEntityId(entityId);
-        Response response = deleted
-                ? SuccessResponse.noContent()
-                : ErrorResponse.notFound();
-
+        boolean isDeleted = service.deleteByEntityId(entityId);
+        Response response = Response.from(isDeleted);
         return convertToResponseEntity(response);
     }
 }
