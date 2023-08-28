@@ -40,5 +40,13 @@
             <artifactId>springdoc-openapi-ui</artifactId>
         </dependency>
         <!-- others -->
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- test -->
     </dependencies>
 </project>
