@@ -7,19 +7,19 @@ import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static rgo.tt.common.utils.TestUtils.assertNullFields;
+import static rgo.tt.common.utils.TestUtils.validateNullFieldsExcept;
 import static rgo.tt.main.rest.api.RequestGenerator.createTasksBoardSaveRequest;
 
 class TasksBoardMapperTest {
 
     @Test
-    void map_saveRequest() throws IllegalAccessException {
+    void map_saveRequest() {
         TasksBoardSaveRequest rq = createTasksBoardSaveRequest();
         TasksBoard board = TasksBoardMapper.map(rq);
 
         assertEquals(rq.getName(), board.getName());
 
         List<String> nonEmptyFields = List.of("name");
-        assertNullFields(board, nonEmptyFields);
+        validateNullFieldsExcept(board, nonEmptyFields);
     }
 }

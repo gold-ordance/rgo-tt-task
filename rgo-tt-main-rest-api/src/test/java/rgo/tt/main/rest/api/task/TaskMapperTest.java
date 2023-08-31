@@ -8,14 +8,14 @@ import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static rgo.tt.common.utils.TestUtils.assertNullFields;
+import static rgo.tt.common.utils.TestUtils.validateNullFieldsExcept;
 import static rgo.tt.main.rest.api.RequestGenerator.createTaskPutRequest;
 import static rgo.tt.main.rest.api.RequestGenerator.createTaskSaveRequest;
 
 class TaskMapperTest {
 
     @Test
-    void map_saveRequest() throws IllegalAccessException {
+    void map_saveRequest() {
         TaskSaveRequest rq = createTaskSaveRequest();
         Task task = TaskMapper.map(rq);
 
@@ -25,11 +25,11 @@ class TaskMapperTest {
         assertEquals(rq.getTypeId(), task.getType().getEntityId());
 
         List<String> nonEmptyFields = List.of("name", "description", "board", "type");
-        assertNullFields(task, nonEmptyFields);
+        validateNullFieldsExcept(task, nonEmptyFields);
     }
 
     @Test
-    void map_putRequest() throws IllegalAccessException {
+    void map_putRequest() {
         TaskPutRequest rq = createTaskPutRequest();
         Task task = TaskMapper.map(rq);
 
@@ -40,6 +40,6 @@ class TaskMapperTest {
         assertEquals(rq.getStatusId(), task.getStatus().getEntityId());
 
         List<String> nonEmptyFields = List.of("entityId", "name", "description", "type", "status");
-        assertNullFields(task, nonEmptyFields);
+        validateNullFieldsExcept(task, nonEmptyFields);
     }
 }

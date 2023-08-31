@@ -5,25 +5,25 @@ import rgo.tt.main.rest.api.task.request.TaskPutRequest;
 import rgo.tt.main.rest.api.task.request.TaskSaveRequest;
 import rgo.tt.main.rest.api.tasksboard.request.TasksBoardSaveRequest;
 
-import static rgo.tt.common.utils.TestUtils.assertNonNullFields;
+import static rgo.tt.common.utils.TestUtils.validateNonNullFields;
 
 class RequestGeneratorTest {
 
     @Test
-    void createTaskSaveRequest() throws IllegalAccessException {
+    void createTaskSaveRequest() {
         TaskSaveRequest rq = RequestGenerator.createTaskSaveRequest();
-        assertNonNullFields(rq);
+        validateNonNullFields(rq);
     }
 
     @Test
-    void createTaskPutRequest() throws IllegalAccessException {
+    void createTaskPutRequest() {
         TaskPutRequest rq = RequestGenerator.createTaskPutRequest();
-        assertNonNullFields(rq);
+        validateNonNullFields(rq);
     }
 
     @Test
-    void createTasksBoardSaveRequest() throws IllegalAccessException {
+    void createTasksBoardSaveRequest() {
         TasksBoardSaveRequest rq = RequestGenerator.createTasksBoardSaveRequest();
-        assertNonNullFields(rq);
+        validateNonNullFields(rq);
     }
 }
