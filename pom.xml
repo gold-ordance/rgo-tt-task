@@ -29,6 +29,9 @@
         <java.version>15</java.version>
 
         <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
+
+        <guava.version>32.1.2-jre</guava.version>
+        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
     </properties>
 
     <dependencyManagement>
@@ -76,9 +79,14 @@
 
             <!-- others -->
             <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-ui</artifactId>
-                <version>1.7.0</version>
+                <version>${springdoc-openapi-ui.version}</version>
             </dependency>
             <!-- others -->
         </dependencies>

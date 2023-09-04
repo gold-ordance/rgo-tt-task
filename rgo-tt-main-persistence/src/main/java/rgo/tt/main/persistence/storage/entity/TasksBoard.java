@@ -54,13 +54,6 @@ public class TasksBoard implements Serializable {
                 '}';
     }
 
-    public Builder toBuilder() {
-        return new Builder()
-                .setEntityId(entityId)
-                .setName(name)
-                .setShortName(shortName);
-    }
-
     public static Builder builder() {
         return new Builder();
     }

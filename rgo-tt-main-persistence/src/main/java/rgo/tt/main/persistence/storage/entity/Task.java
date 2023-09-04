@@ -104,18 +104,6 @@ public class Task implements Serializable {
                 '}';
     }
 
-    public Builder toBuilder() {
-        return new Builder()
-                .setEntityId(entityId)
-                .setName(name)
-                .setCreatedDate(createdDate)
-                .setLastModifiedDate(lastModifiedDate)
-                .setDescription(description)
-                .setBoard(board)
-                .setType(type)
-                .setStatus(status);
-    }
-
     public static Builder builder() {
         return new Builder();
     }

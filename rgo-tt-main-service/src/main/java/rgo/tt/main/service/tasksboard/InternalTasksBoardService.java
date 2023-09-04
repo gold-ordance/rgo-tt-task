@@ -1,14 +1,10 @@
 package rgo.tt.main.service.tasksboard;
 
-import rgo.tt.common.utils.HelperUtils;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
 import rgo.tt.main.persistence.storage.repository.tasksboard.TasksBoardRepository;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class InternalTasksBoardService implements TasksBoardService {
 
@@ -30,21 +26,11 @@ public class InternalTasksBoardService implements TasksBoardService {
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        TasksBoard withShortName = board.toBuilder()
-                .setShortName(shortName(board.getName()))
-                .build();
-        return repository.save(withShortName);
+        return repository.save(board);
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
         return repository.deleteByEntityId(entityId);
-    }
-
-    private static String shortName(String name) {
-        return Arrays.stream(name.split(" "))
-                .map(HelperUtils::getFirstSymbol)
-                .collect(Collectors.joining())
-                .toUpperCase(Locale.ENGLISH);
     }
 }

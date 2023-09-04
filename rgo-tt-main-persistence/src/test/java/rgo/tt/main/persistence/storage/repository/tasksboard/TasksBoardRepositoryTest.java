@@ -69,7 +69,6 @@ class TasksBoardRepositoryTest {
 
         TasksBoard actual = repository.save(expected);
         assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getShortName(), actual.getShortName());
     }
 
     @Test
