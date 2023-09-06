@@ -7,6 +7,7 @@ CREATE TABLE task (
     created_date       TIMESTAMP      DEFAULT (now() AT TIME ZONE 'UTC'),
     last_modified_date TIMESTAMP      DEFAULT (now() AT TIME ZONE 'UTC'),
     description        VARCHAR(4096),
+    number             BIGINT,
     board_id           BIGINT         NOT NULL REFERENCES tasks_board(entity_id) ON DELETE CASCADE,
     type_id            BIGINT         NOT NULL REFERENCES task_type(entity_id),
     status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id) DEFAULT 1
@@ -15,6 +16,10 @@ CREATE TABLE task (
 CREATE INDEX board_id_name_task_idx
           ON task(board_id, lower(name))
   TABLESPACE ${tbsIndexes};
+
+CREATE UNIQUE INDEX board_id_number_task_uq_idx
+    ON task(board_id, number)
+    TABLESPACE ${tbsIndexes};
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON task TO ${appRole};
 GRANT SELECT ON task TO ${readerRole};

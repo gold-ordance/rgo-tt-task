@@ -10,3 +10,8 @@ persistence:
   username: task_appl
   password: qwe123
   maxPoolSize: 10
+  retry-policy:
+    entities:
+      task:
+        save:
+          attempts: 3

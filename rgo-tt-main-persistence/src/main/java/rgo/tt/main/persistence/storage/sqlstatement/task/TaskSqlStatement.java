@@ -54,6 +54,7 @@ public final class TaskSqlStatement {
             .setCreatedDate(rs.getTimestamp("t_created_date").toLocalDateTime())
             .setLastModifiedDate(rs.getTimestamp("t_last_modified_date").toLocalDateTime())
             .setDescription(rs.getString("t_description"))
+            .setNumber(rs.getLong("t_number"))
             .setBoard(TasksBoard.builder()
                     .setEntityId(rs.getLong("tb_entity_id"))
                     .setName(rs.getString("tb_name"))

@@ -16,6 +16,7 @@ public class Task implements Serializable {
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
     private final String description;
+    private final Long number;
     private final TasksBoard board;
     private final TaskType type;
     private final TaskStatus status;
@@ -26,6 +27,7 @@ public class Task implements Serializable {
         createdDate = builder.createdDate;
         lastModifiedDate = builder.lastModifiedDate;
         description = builder.description;
+        number = builder.number;
         board = builder.board;
         type = builder.type;
         status = builder.status;
@@ -51,6 +53,10 @@ public class Task implements Serializable {
         return description;
     }
 
+    public Long getNumber() {
+        return number;
+    }
+
     public TasksBoard getBoard() {
         return board;
     }
@@ -73,6 +79,7 @@ public class Task implements Serializable {
                 && Objects.equals(createdDate, task.createdDate)
                 && Objects.equals(lastModifiedDate, task.lastModifiedDate)
                 && Objects.equals(description, task.description)
+                && Objects.equals(number, task.number)
                 && Objects.equals(board, task.board)
                 && Objects.equals(type, task.type)
                 && Objects.equals(status, task.status);
@@ -85,6 +92,7 @@ public class Task implements Serializable {
                 createdDate,
                 lastModifiedDate,
                 description,
+                number,
                 board,
                 type,
                 status);
@@ -98,6 +106,7 @@ public class Task implements Serializable {
                 ", createdDate=" + createdDate +
                 ", lastModifiedDate=" + lastModifiedDate +
                 ", description=" + size(description) +
+                ", number=" + number +
                 ", board=" + board +
                 ", type=" + type +
                 ", status=" + status +
@@ -115,6 +124,7 @@ public class Task implements Serializable {
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
         private String description;
+        private Long number;
         private TasksBoard board;
         private TaskType type;
         private TaskStatus status;
@@ -141,6 +151,11 @@ public class Task implements Serializable {
 
         public Builder setDescription(String description) {
             this.description = description;
+            return this;
+        }
+
+        public Builder setNumber(Long number) {
+            this.number = number;
             return this;
         }
 

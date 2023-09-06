@@ -27,7 +27,7 @@ public final class TaskSqlRequest {
     }
 
     public static SqlRequest findSoftlyByName(String name, Long boardId) {
-        String query = TaskSqlRequest.select() + """
+        String query = select() + """
                   WHERE t.board_id = :board_id
                     AND lower(t.name) LIKE lower(:name)
                  """;
@@ -41,9 +41,13 @@ public final class TaskSqlRequest {
 
     public static SqlRequest save(Task task) {
         String query = """
-                INSERT INTO %s(name, description, board_id, type_id)
-                VALUES(:name, :description, :board_id, :type_id)
-                """.formatted(TABLE_NAME);
+                INSERT INTO %table_name(name, description, number, board_id, type_id)
+                VALUES(:name,
+                       :description,
+                       COALESCE((SELECT max(number) FROM %table_name WHERE board_id = :board_id), 0) + 1,
+                       :board_id,
+                       :type_id);
+                """.replace("%table_name", TABLE_NAME);
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", task.getName())
@@ -94,6 +98,7 @@ public final class TaskSqlRequest {
                        t.created_date       AS t_created_date,
                        t.last_modified_date AS t_last_modified_date,
                        t.description        AS t_description,
+                       t.number             AS t_number,
                        tb.entity_id         AS tb_entity_id,
                        tb.name              AS tb_name,
                        tb.short_name        AS tb_short_name,

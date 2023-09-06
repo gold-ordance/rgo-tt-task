@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
 import rgo.tt.common.persistence.translator.ForeignKeyPostgresH2ExceptionHandler;
 import rgo.tt.common.persistence.translator.PostgresH2ExceptionHandler;
 import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
@@ -25,10 +26,11 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Configuration
-@Import(DataSourceConfig.class)
+@Import(DbDialectConfig.class)
 public class PersistenceConfig {
 
     @Autowired private DataSource dataSource;
+    @Autowired private RetryPolicyProperties retryPolicyProperties;
 
     @Bean
     public DbTxManager txManager() {
@@ -65,7 +67,7 @@ public class PersistenceConfig {
 
     @Bean
     public TaskRepository taskRepository(StatementJdbcTemplateAdapter jdbc) {
-        TaskRepository repository = new PostgresTaskRepository(jdbc);
+        TaskRepository repository = new PostgresTaskRepository(jdbc, retryPolicyProperties);
         return new TxTaskRepositoryDecorator(repository, txManager());
     }
 }
