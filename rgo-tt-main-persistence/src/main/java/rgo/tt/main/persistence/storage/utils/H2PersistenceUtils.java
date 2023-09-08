@@ -7,8 +7,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
+import rgo.tt.common.persistence.sqlstatement.retry.SqlRetryParameters;
 
 import javax.sql.DataSource;
+import java.util.Map;
 
 public final class H2PersistenceUtils {
 
@@ -24,6 +27,12 @@ public final class H2PersistenceUtils {
 
     public static DataSource h2Source() {
         return h2Source;
+    }
+
+    public static RetryPolicyProperties h2RetryPolicy() {
+        Map<String, Map<String, SqlRetryParameters>> entities =
+                Map.of("task", Map.of("save", new SqlRetryParameters(5)));
+        return new RetryPolicyProperties(entities);
     }
 
     public static void truncateTables() {
