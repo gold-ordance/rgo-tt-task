@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
+import rgo.tt.common.persistence.sqlstatement.retry.RetryManager;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
 import rgo.tt.common.persistence.translator.ForeignKeyPostgresH2ExceptionHandler;
 import rgo.tt.common.persistence.translator.PostgresH2ExceptionHandler;
+import rgo.tt.common.persistence.translator.UniqueViolationPostgresH2ExceptionHandler;
 import rgo.tt.main.persistence.storage.repository.task.PostgresTaskRepository;
+import rgo.tt.main.persistence.storage.repository.task.RetryableTaskRepositoryDecorator;
 import rgo.tt.main.persistence.storage.repository.task.TaskRepository;
 import rgo.tt.main.persistence.storage.repository.task.TxTaskRepositoryDecorator;
 import rgo.tt.main.persistence.storage.repository.tasksboard.PostgresTasksBoardRepository;
@@ -43,8 +46,18 @@ public class PersistenceConfig {
     }
 
     @Bean
+    public UniqueViolationPostgresH2ExceptionHandler uniqueViolationHandler() {
+        return new UniqueViolationPostgresH2ExceptionHandler();
+    }
+
+    @Bean
     public StatementJdbcTemplateAdapter jdbc(List<PostgresH2ExceptionHandler> handlers) {
         return new StatementJdbcTemplateAdapter(txManager(), handlers);
+    }
+
+    @Bean
+    public RetryManager retryManager() {
+        return new RetryManager(retryPolicyProperties);
     }
 
     @Bean
@@ -67,7 +80,8 @@ public class PersistenceConfig {
 
     @Bean
     public TaskRepository taskRepository(StatementJdbcTemplateAdapter jdbc) {
-        TaskRepository repository = new PostgresTaskRepository(jdbc, retryPolicyProperties);
-        return new TxTaskRepositoryDecorator(repository, txManager());
+        TaskRepository nativeRepository = new PostgresTaskRepository(jdbc);
+        TaskRepository retryableRepository = new RetryableTaskRepositoryDecorator(nativeRepository, retryManager());
+        return new TxTaskRepositoryDecorator(retryableRepository, txManager());
     }
 }

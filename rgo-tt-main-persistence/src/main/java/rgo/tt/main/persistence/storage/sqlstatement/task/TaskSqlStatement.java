@@ -1,8 +1,8 @@
 package rgo.tt.main.persistence.storage.sqlstatement.task;
 
 import org.springframework.jdbc.core.RowMapper;
-import rgo.tt.common.persistence.function.FetchEntity;
-import rgo.tt.common.persistence.function.FetchEntityById;
+import rgo.tt.common.persistence.sqlstatement.FetchEntity;
+import rgo.tt.common.persistence.sqlstatement.FetchEntityById;
 import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;

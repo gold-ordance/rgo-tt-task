@@ -1,10 +1,10 @@
 package rgo.tt.main.persistence.storage.repository.tasksboard;
 
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.function.FetchEntityById;
 import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
 import rgo.tt.common.persistence.sqlresult.SqlDeleteResult;
 import rgo.tt.common.persistence.sqlresult.SqlReadResult;
+import rgo.tt.common.persistence.sqlstatement.FetchEntityById;
 import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;

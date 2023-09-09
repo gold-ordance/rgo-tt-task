@@ -21,11 +21,21 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
-import static rgo.tt.main.persistence.storage.utils.EntityGenerator.*;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.TO_DO;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTask;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskStatusBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTaskTypeBuilder;
+import static rgo.tt.main.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = PersistenceConfig.class)

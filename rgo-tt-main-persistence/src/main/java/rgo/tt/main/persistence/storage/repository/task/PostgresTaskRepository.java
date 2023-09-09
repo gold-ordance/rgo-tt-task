@@ -2,21 +2,18 @@ package rgo.tt.main.persistence.storage.repository.task;
 
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.function.FetchEntity;
-import rgo.tt.common.persistence.function.FetchEntityById;
 import rgo.tt.common.persistence.sqlresult.SqlCreateResult;
 import rgo.tt.common.persistence.sqlresult.SqlDeleteResult;
 import rgo.tt.common.persistence.sqlresult.SqlReadResult;
 import rgo.tt.common.persistence.sqlresult.SqlUpdateResult;
+import rgo.tt.common.persistence.sqlstatement.FetchEntity;
+import rgo.tt.common.persistence.sqlstatement.FetchEntityById;
+import rgo.tt.common.persistence.sqlstatement.SqlCreateStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlDeleteStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlReadStatement;
 import rgo.tt.common.persistence.sqlstatement.SqlUpdateStatement;
-import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
-import rgo.tt.common.persistence.sqlstatement.retry.RetryableSqlCreateStatement;
-import rgo.tt.common.persistence.sqlstatement.retry.SqlRetryParameters;
 import rgo.tt.main.persistence.storage.entity.Task;
 import rgo.tt.main.persistence.storage.entity.TasksBoard;
-import rgo.tt.main.persistence.storage.sqlstatement.task.TaskRetryableSqlStatement;
 import rgo.tt.main.persistence.storage.sqlstatement.task.TaskSqlStatement;
 import rgo.tt.main.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStatement;
 
@@ -28,11 +25,9 @@ import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstEnt
 public class PostgresTaskRepository implements TaskRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
-    private final RetryPolicyProperties config;
 
-    public PostgresTaskRepository(StatementJdbcTemplateAdapter jdbc, RetryPolicyProperties config) {
+    public PostgresTaskRepository(StatementJdbcTemplateAdapter jdbc) {
         this.jdbc = jdbc;
-        this.config = config;
     }
 
     @Override
@@ -70,8 +65,7 @@ public class PostgresTaskRepository implements TaskRepository {
     @Override
     public Task save(Task task) {
         FetchEntityById<Task> function = this::getEntityById;
-        SqlRetryParameters retryParams = config.policy(Task.class, "save");
-        RetryableSqlCreateStatement<Task> statement = TaskRetryableSqlStatement.saveWithRetry(task, function, retryParams);
+        SqlCreateStatement<Task> statement = TaskSqlStatement.save(task, function);
         SqlCreateResult<Task> result = jdbc.save(statement);
         return result.getEntity();
     }
