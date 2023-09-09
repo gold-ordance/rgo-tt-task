@@ -1,6 +1,5 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
-import rgo.tt.common.exceptions.UniqueViolationException;
 import rgo.tt.common.persistence.sqlstatement.retry.OperationParameters;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryManager;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryableOperation;
@@ -37,7 +36,7 @@ public class RetryableTaskRepositoryDecorator implements TaskRepository {
     @Override
     public Task save(Task task) {
         RetryableOperation<Task> operation = () -> delegate.save(task);
-        OperationParameters params = OperationParameters.from(Task.class, "save", UniqueViolationException.class);
+        OperationParameters params = OperationParameters.from(Task.class, "save");
         return manager.execute(operation, params);
     }
 

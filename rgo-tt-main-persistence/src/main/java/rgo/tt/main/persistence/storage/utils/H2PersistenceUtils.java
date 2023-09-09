@@ -7,6 +7,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import rgo.tt.common.exceptions.UniqueViolationException;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
 import rgo.tt.common.persistence.sqlstatement.retry.SqlRetryParameters;
 
@@ -31,7 +32,9 @@ public final class H2PersistenceUtils {
 
     public static RetryPolicyProperties h2RetryPolicy() {
         Map<String, Map<String, SqlRetryParameters>> entities =
-                Map.of("task", Map.of("save", new SqlRetryParameters(5)));
+                Map.of("task",
+                        Map.of("save", SqlRetryParameters.builder().setAttempts(3).setException(UniqueViolationException.class).build()));
+
         return new RetryPolicyProperties(entities);
     }
 

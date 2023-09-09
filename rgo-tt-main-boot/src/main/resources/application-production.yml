@@ -15,3 +15,4 @@ persistence:
       task:
         save:
           attempts: 3
+          exception: rgo.tt.common.exceptions.UniqueViolationException

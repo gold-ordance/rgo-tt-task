@@ -5,8 +5,3 @@ springdoc:
 
 persistence:
   dialect: H2
-  retry-policy:
-    entities:
-      task:
-        save:
-          attempts: 3
