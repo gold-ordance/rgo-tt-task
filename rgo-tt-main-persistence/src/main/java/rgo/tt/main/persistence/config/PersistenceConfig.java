@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.persistence.DbTxManager;
 import rgo.tt.common.persistence.StatementJdbcTemplateAdapter;
-import rgo.tt.common.persistence.sqlstatement.retry.RetryManager;
+import rgo.tt.common.persistence.sqlstatement.retry.DbRetryManager;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryPolicyProperties;
 import rgo.tt.common.persistence.translator.ForeignKeyPostgresH2ExceptionHandler;
 import rgo.tt.common.persistence.translator.PostgresH2ExceptionHandler;
@@ -56,8 +56,8 @@ public class PersistenceConfig {
     }
 
     @Bean
-    public RetryManager retryManager() {
-        return new RetryManager(retryPolicyProperties);
+    public DbRetryManager retryManager() {
+        return new DbRetryManager(retryPolicyProperties);
     }
 
     @Bean

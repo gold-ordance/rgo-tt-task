@@ -1,7 +1,7 @@
 package rgo.tt.main.persistence.storage.repository.task;
 
 import rgo.tt.common.persistence.sqlstatement.retry.OperationParameters;
-import rgo.tt.common.persistence.sqlstatement.retry.RetryManager;
+import rgo.tt.common.persistence.sqlstatement.retry.DbRetryManager;
 import rgo.tt.common.persistence.sqlstatement.retry.RetryableOperation;
 import rgo.tt.main.persistence.storage.entity.Task;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
 public class RetryableTaskRepositoryDecorator implements TaskRepository {
 
     private final TaskRepository delegate;
-    private final RetryManager manager;
+    private final DbRetryManager manager;
 
-    public RetryableTaskRepositoryDecorator(TaskRepository delegate, RetryManager manager) {
+    public RetryableTaskRepositoryDecorator(TaskRepository delegate, DbRetryManager manager) {
         this.delegate = delegate;
         this.manager = manager;
     }
