@@ -3,8 +3,8 @@ version: '3'
 services:
   postgresql:
     build: ./
-    image: postgresql:15
-    container_name: native-db
+    image: task-db
+    container_name: task-db
     ports:
       - 5433:5432
     healthcheck:
