@@ -1,0 +1,45 @@
+package rgo.tt.task.rest.api.task;
+
+import org.junit.jupiter.api.Test;
+import rgo.tt.task.persistence.storage.entity.Task;
+import rgo.tt.task.rest.api.task.request.TaskPutRequest;
+import rgo.tt.task.rest.api.task.request.TaskSaveRequest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static rgo.tt.common.utils.TestUtils.validateNullFieldsExcept;
+import static rgo.tt.task.rest.api.RequestGenerator.createTaskPutRequest;
+import static rgo.tt.task.rest.api.RequestGenerator.createTaskSaveRequest;
+
+class TaskMapperTest {
+
+    @Test
+    void map_saveRequest() {
+        TaskSaveRequest rq = createTaskSaveRequest();
+        Task task = TaskMapper.map(rq);
+
+        assertEquals(rq.getName(), task.getName());
+        assertEquals(rq.getDescription(), task.getDescription());
+        assertEquals(rq.getBoardId(), task.getBoard().getEntityId());
+        assertEquals(rq.getTypeId(), task.getType().getEntityId());
+
+        List<String> nonEmptyFields = List.of("name", "description", "board", "type");
+        validateNullFieldsExcept(task, nonEmptyFields);
+    }
+
+    @Test
+    void map_putRequest() {
+        TaskPutRequest rq = createTaskPutRequest();
+        Task task = TaskMapper.map(rq);
+
+        assertEquals(rq.getEntityId(), task.getEntityId());
+        assertEquals(rq.getName(), task.getName());
+        assertEquals(rq.getDescription(), task.getDescription());
+        assertEquals(rq.getTypeId(), task.getType().getEntityId());
+        assertEquals(rq.getStatusId(), task.getStatus().getEntityId());
+
+        List<String> nonEmptyFields = List.of("entityId", "name", "description", "type", "status");
+        validateNullFieldsExcept(task, nonEmptyFields);
+    }
+}

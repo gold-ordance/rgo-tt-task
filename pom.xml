@@ -12,17 +12,17 @@
     </parent>
 
     <groupId>ru.gold.ordance</groupId>
-    <artifactId>rgo-tt-main</artifactId>
+    <artifactId>rgo-tt-task</artifactId>
     <version>23.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
     <modules>
-        <module>rgo-tt-main-boot</module>
-        <module>rgo-tt-main-persistence</module>
-        <module>rgo-tt-main-service</module>
-        <module>rgo-tt-main-rest-api</module>
-        <module>rgo-tt-main-db-migration</module>
+        <module>rgo-tt-task-boot</module>
+        <module>rgo-tt-task-persistence</module>
+        <module>rgo-tt-task-service</module>
+        <module>rgo-tt-task-rest-api</module>
+        <module>rgo-tt-task-db-migration</module>
     </modules>
 
     <properties>
@@ -39,17 +39,17 @@
             <!-- self modules -->
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-main-persistence</artifactId>
+                <artifactId>rgo-tt-task-persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-main-service</artifactId>
+                <artifactId>rgo-tt-task-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-main-rest-api</artifactId>
+                <artifactId>rgo-tt-task-rest-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- self modules -->
