@@ -8,31 +8,31 @@ import java.util.Optional;
 
 public class TxTasksBoardRepositoryDecorator implements TasksBoardRepository {
 
-    private final TasksBoardRepository repository;
+    private final TasksBoardRepository delegate;
     private final DbTxManager tx;
 
-    public TxTasksBoardRepositoryDecorator(TasksBoardRepository repository, DbTxManager tx) {
-        this.repository = repository;
+    public TxTasksBoardRepositoryDecorator(TasksBoardRepository delegate, DbTxManager tx) {
+        this.delegate = delegate;
         this.tx = tx;
     }
 
     @Override
     public List<TasksBoard> findAll() {
-        return tx.tx(repository::findAll);
+        return tx.tx(delegate::findAll);
     }
 
     @Override
     public Optional<TasksBoard> findByEntityId(Long entityId) {
-        return tx.tx(() -> repository.findByEntityId(entityId));
+        return tx.tx(() -> delegate.findByEntityId(entityId));
     }
 
     @Override
     public TasksBoard save(TasksBoard board) {
-        return tx.tx(() -> repository.save(board));
+        return tx.tx(() -> delegate.save(board));
     }
 
     @Override
     public boolean deleteByEntityId(Long entityId) {
-        return tx.tx(() -> repository.deleteByEntityId(entityId));
+        return tx.tx(() -> delegate.deleteByEntityId(entityId));
     }
 }

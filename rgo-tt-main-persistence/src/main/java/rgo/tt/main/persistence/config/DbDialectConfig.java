@@ -48,7 +48,6 @@ public class DbDialectConfig {
         }
 
         @Bean
-        @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
         public DataSource pg() {
             DbProperties properties = dbProperties();
             return hikariSource(properties);
