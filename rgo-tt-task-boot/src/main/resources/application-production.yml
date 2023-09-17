@@ -3,6 +3,9 @@ springdoc:
     enabled: true
     path: /docs
 
+logging:
+  config: classpath:logback-production.xml
+
 persistence:
   dialect: POSTGRES
   url: jdbc:postgresql://task-db:5432/task

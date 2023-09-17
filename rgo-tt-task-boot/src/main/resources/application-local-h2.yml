@@ -3,5 +3,8 @@ springdoc:
     enabled: true
     path: /docs
 
+logging:
+  config: classpath:logback-local.xml
+
 persistence:
   dialect: H2
