@@ -34,7 +34,7 @@
         </dependency>
         <!-- spring -->
 
-        <!-- others -->
+        <!-- utils -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -43,7 +43,7 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
         </dependency>
-        <!-- others -->
+        <!-- utils -->
 
         <!-- test -->
         <dependency>
