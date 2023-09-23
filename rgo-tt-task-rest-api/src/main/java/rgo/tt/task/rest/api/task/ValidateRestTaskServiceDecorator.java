@@ -5,6 +5,7 @@ import com.linecorp.armeria.server.annotation.Blocking;
 import com.linecorp.armeria.server.annotation.Delete;
 import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
+import com.linecorp.armeria.server.annotation.MatchesParam;
 import com.linecorp.armeria.server.annotation.Param;
 import com.linecorp.armeria.server.annotation.Post;
 import com.linecorp.armeria.server.annotation.Put;
@@ -30,6 +31,7 @@ public class ValidateRestTaskServiceDecorator implements RestTaskService {
     }
 
     @Get
+    @MatchesParam("boardId")
     @Override
     public HttpResponse findAllForBoard(@Param Long boardId) {
         LOGGER.info("Request 'findAllForBoard' received: boardId={}", boardId);
@@ -46,6 +48,8 @@ public class ValidateRestTaskServiceDecorator implements RestTaskService {
     }
 
     @Get
+    @MatchesParam("name")
+    @MatchesParam("boardId")
     @Override
     public HttpResponse findByName(@Param String name, @Param Long boardId) {
         LOGGER.info("Request 'findSoftlyByName' received: name={}, boardId={}", name, boardId);

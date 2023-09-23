@@ -62,64 +62,64 @@ class InternalRestTaskServiceTest {
         stopServer();
     }
 
-//    @Test
-//    void findAllForBoard_boardIdIsFake() {
-//        long fakeBoardId = randomPositiveLong();
-//
-//        String json = ArmeriaClientManager.get("?boardId=" + fakeBoardId);
-//        ErrorResponse response = fromJson(json, ErrorResponse.class);
-//
-//        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.INVALID_ENTITY);
-//        assertThat(response.getStatus().getMessage()).isEqualTo("The boardId not found in the storage.");
-//    }
-//
-//    @Test
-//    void findAllForBoard_empty() {
-//        TasksBoard board = insertTasksBoard();
-//
-//        String json = ArmeriaClientManager.get("?boardId=" + board.getEntityId());
-//        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
-//        List<TaskDto> actual = response.getTasks();
-//
-//        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
-//        assertThat(response.getStatus().getMessage()).isNull();
-//        assertThat(actual).isEmpty();
-//    }
-//
-//    @Test
-//    void findAllForBoard_oneBoard() {
-//        TasksBoard board = insertTasksBoard();
-//        TaskDto saved = insertTask(board);
-//
-//        String json = ArmeriaClientManager.get("?boardId=" + board.getEntityId());
-//        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
-//        List<TaskDto> actual = response.getTasks();
-//
-//        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
-//        assertThat(response.getStatus().getMessage()).isNull();
-//        assertThat(actual)
-//                .hasSize(1)
-//                .contains(saved);
-//    }
-//
-//    @Test
-//    void findAllForBoard_twoBoard() {
-//        TasksBoard board1 = insertTasksBoard();
-//        TaskDto saved1 = insertTask(board1);
-//
-//        TasksBoard board2 = insertTasksBoard();
-//        insertTask(board2);
-//
-//        String json = ArmeriaClientManager.get("?boardId=" + board1.getEntityId());
-//        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
-//        List<TaskDto> actual = response.getTasks();
-//
-//        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
-//        assertThat(response.getStatus().getMessage()).isNull();
-//        assertThat(actual)
-//                .hasSize(1)
-//                .contains(saved1);
-//    }
+    @Test
+    void findAllForBoard_boardIdIsFake() {
+        long fakeBoardId = randomPositiveLong();
+
+        String json = get("?boardId=" + fakeBoardId);
+        ErrorResponse response = fromJson(json, ErrorResponse.class);
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.INVALID_ENTITY);
+        assertThat(response.getStatus().getMessage()).isEqualTo("The boardId not found in the storage.");
+    }
+
+    @Test
+    void findAllForBoard_empty() {
+        TasksBoard board = insertTasksBoard();
+
+        String json = get("?boardId=" + board.getEntityId());
+        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
+        List<TaskDto> actual = response.getTasks();
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
+        assertThat(response.getStatus().getMessage()).isNull();
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void findAllForBoard_oneBoard() {
+        TasksBoard board = insertTasksBoard();
+        TaskDto saved = insertTask(board);
+
+        String json = get("?boardId=" + board.getEntityId());
+        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
+        List<TaskDto> actual = response.getTasks();
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
+        assertThat(response.getStatus().getMessage()).isNull();
+        assertThat(actual)
+                .hasSize(1)
+                .contains(saved);
+    }
+
+    @Test
+    void findAllForBoard_twoBoard() {
+        TasksBoard board1 = insertTasksBoard();
+        TaskDto saved1 = insertTask(board1);
+
+        TasksBoard board2 = insertTasksBoard();
+        insertTask(board2);
+
+        String json = get("?boardId=" + board1.getEntityId());
+        TaskGetListResponse response = fromJson(json, TaskGetListResponse.class);
+        List<TaskDto> actual = response.getTasks();
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.SUCCESS);
+        assertThat(response.getStatus().getMessage()).isNull();
+        assertThat(actual)
+                .hasSize(1)
+                .contains(saved1);
+    }
 
     @Test
     void findByEntityId_entityIdIsFake() {

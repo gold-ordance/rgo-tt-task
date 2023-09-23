@@ -41,7 +41,7 @@ class TasksBoardMapperTest {
 
         List<String> nonEmptyFields = List.of("name", "shortName");
         validateNullFieldsExcept(board, nonEmptyFields);
-        assertThat(board.getShortName()).isEqualTo(getFirstSymbol(board.getName()));
+        assertThat(board.getShortName()).isEqualToIgnoringCase(getFirstSymbol(board.getName()));
     }
 
     @Test

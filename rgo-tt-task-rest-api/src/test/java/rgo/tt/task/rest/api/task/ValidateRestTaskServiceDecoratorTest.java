@@ -43,16 +43,16 @@ class ValidateRestTaskServiceDecoratorTest {
         stopServer();
     }
 
-//    @Test
-//    void findAllForBoard_invalidRq_boardIdIsNegative() {
-//        long negativeBoardId = -randomPositiveLong();
-//
-//        String json = get("?boardId=" + negativeBoardId);
-//        ErrorResponse response = fromJson(json, ErrorResponse.class);
-//
-//        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.INVALID_RQ);
-//        assertThat(response.getStatus().getMessage()).isEqualTo("The boardId is negative.");
-//    }
+    @Test
+    void findAllForBoard_invalidRq_boardIdIsNegative() {
+        long negativeBoardId = -randomPositiveLong();
+
+        String json = get("?boardId=" + negativeBoardId);
+        ErrorResponse response = fromJson(json, ErrorResponse.class);
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.INVALID_RQ);
+        assertThat(response.getStatus().getMessage()).isEqualTo("The boardId is negative.");
+    }
 
     @Test
     void findBySoftlyName_invalidRq_nameIsEmpty() {
