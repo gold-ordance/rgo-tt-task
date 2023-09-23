@@ -2,22 +2,20 @@ package rgo.tt.task.rest.api.task.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.task.persistence.storage.entity.Task;
+import rgo.tt.task.rest.api.task.dto.TaskDto;
 
 import java.util.List;
 
 public class TaskGetListResponse implements Response {
 
-    private final Status status;
-    private final List<Task> tasks;
+    private Status status;
+    private List<TaskDto> tasks;
 
-    private TaskGetListResponse(Status status, List<Task> tasks) {
-        this.status = status;
-        this.tasks = tasks;
-    }
-
-    public static TaskGetListResponse success(List<Task> tasks) {
-        return new TaskGetListResponse(Status.success(), tasks);
+    public static TaskGetListResponse success(List<TaskDto> tasks) {
+        TaskGetListResponse response = new TaskGetListResponse();
+        response.status = Status.success();
+        response.tasks = tasks;
+        return response;
     }
 
     @Override
@@ -25,16 +23,15 @@ public class TaskGetListResponse implements Response {
         return status;
     }
 
-    @SuppressWarnings("unused")
-    public List<Task> getTasks() {
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public List<TaskDto> getTasks() {
         return tasks;
     }
 
-    @Override
-    public String toString() {
-        return "TaskGetListResponse{" +
-                "status=" + status +
-                ", tasksSize=" + tasks.size() +
-                '}';
+    public void setTasks(List<TaskDto> tasks) {
+        this.tasks = tasks;
     }
 }

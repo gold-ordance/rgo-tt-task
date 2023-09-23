@@ -1,7 +1,13 @@
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: /docs
+spring:
+  main:
+    web-application-type: none
+    banner-mode: off
+
+armeria:
+  ports:
+    - port: 8080
+      protocols:
+        - HTTP
 
 logging:
   config: classpath:logback-production.xml

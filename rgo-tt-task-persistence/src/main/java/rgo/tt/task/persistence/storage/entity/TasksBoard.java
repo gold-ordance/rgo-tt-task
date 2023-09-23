@@ -1,12 +1,8 @@
 package rgo.tt.task.persistence.storage.entity;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Objects;
 
-public class TasksBoard implements Serializable {
-
-    @Serial private static final long serialVersionUID = 1L;
+public class TasksBoard {
 
     private final Long entityId;
     private final String name;
@@ -42,7 +38,9 @@ public class TasksBoard implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityId, name, shortName);
+        return Objects.hash(entityId,
+                name,
+                shortName);
     }
 
     @Override

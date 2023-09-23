@@ -1,34 +1,32 @@
 package rgo.tt.task.rest.api;
 
+import com.linecorp.armeria.common.HttpRequest;
+import com.linecorp.armeria.common.HttpResponse;
+import com.linecorp.armeria.server.ServiceRequestContext;
+import com.linecorp.armeria.server.annotation.ExceptionHandlerFunction;
 import org.junit.platform.commons.util.ExceptionUtils;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.validator.ValidateException;
 
-import static rgo.tt.common.rest.api.utils.RestUtils.convertToResponseEntity;
+import static rgo.tt.common.rest.api.utils.RestUtils.mapToHttp;
 
-@RestControllerAdvice
-public class ExceptionCommonHandler {
+public class ExceptionCommonHandler implements ExceptionHandlerFunction {
 
-    @ExceptionHandler(ValidateException.class)
-    public ResponseEntity<Response> handle(ValidateException e) {
-        Response response = ErrorResponse.invalidRq(e.getMessage());
-        return convertToResponseEntity(response);
-    }
+    @Override
+    public HttpResponse handleException(ServiceRequestContext ctx, HttpRequest req, Throwable cause) {
+        if (cause instanceof ValidateException e) {
+            Response response = ErrorResponse.invalidRq(e.getMessage());
+            return mapToHttp(response);
+        }
 
-    @ExceptionHandler(InvalidEntityException.class)
-    public ResponseEntity<Response> handle(InvalidEntityException e) {
-        Response response = ErrorResponse.invalidEntity(e.getMessage());
-        return convertToResponseEntity(response);
-    }
+        if (cause instanceof InvalidEntityException e) {
+            Response response = ErrorResponse.invalidEntity(e.getMessage());
+            return mapToHttp(response);
+        }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response> handle(Exception e) {
-        Response response = ErrorResponse.error(ExceptionUtils.readStackTrace(e));
-        return convertToResponseEntity(response);
+        Response response = ErrorResponse.error(ExceptionUtils.readStackTrace(cause));
+        return mapToHttp(response);
     }
 }

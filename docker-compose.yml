@@ -19,7 +19,7 @@ services:
     ports:
       - "8080:8080"
     healthcheck:
-      test: "curl http://localhost:8080/actuator/health"
+      test: "curl http://localhost:8080/internal/readiness"
       interval: 3s
       timeout: 5s
       retries: 5

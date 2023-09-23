@@ -26,12 +26,20 @@
         </dependency>
         <!-- self modules -->
 
-        <!-- spring -->
+        <!-- armeria -->
+        <dependency>
+            <groupId>com.linecorp.armeria</groupId>
+            <artifactId>armeria-spring-boot3-starter</artifactId>
+        </dependency>
+        <!-- armeria -->
+
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
-        <!-- spring -->
+        <!-- test -->
     </dependencies>
 
     <profiles>

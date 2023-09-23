@@ -2,30 +2,18 @@ package rgo.tt.task.rest.api.task.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.task.persistence.storage.entity.Task;
-
-import java.util.Optional;
-
-import static rgo.tt.common.rest.api.ErrorResponse.notFound;
+import rgo.tt.task.rest.api.task.dto.TaskDto;
 
 public class TaskGetEntityResponse implements Response {
 
-    private final Status status;
-    private final Task task;
+    private Status status;
+    private TaskDto task;
 
-    private TaskGetEntityResponse(Status status, Task task) {
-        this.status = status;
-        this.task = task;
-    }
-
-    public static Response from(Optional<Task> opt) {
-        return opt.isPresent()
-                ? success(opt.get())
-                : notFound();
-    }
-
-    private static TaskGetEntityResponse success(Task task) {
-        return new TaskGetEntityResponse(Status.success(), task);
+    public static TaskGetEntityResponse success(TaskDto task) {
+        TaskGetEntityResponse response = new TaskGetEntityResponse();
+        response.status = Status.success();
+        response.task = task;
+        return response;
     }
 
     @Override
@@ -33,17 +21,16 @@ public class TaskGetEntityResponse implements Response {
         return status;
     }
 
-    @SuppressWarnings("unused")
-    public Task getTask() {
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public TaskDto getTask() {
         return task;
     }
 
-    @Override
-    public String toString() {
-        return "TaskGetEntityResponse{" +
-                "status=" + status +
-                ", task=" + task +
-                '}';
+    public void setTask(TaskDto task) {
+        this.task = task;
     }
 }
 

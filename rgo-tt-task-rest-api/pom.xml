@@ -25,14 +25,11 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-tt-common-rest-api</artifactId>
         </dependency>
-        <!-- external modules -->
-
-        <!-- spring -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-tt-common-validator</artifactId>
         </dependency>
-        <!-- spring -->
+        <!-- external modules -->
 
         <!-- utils -->
         <dependency>
@@ -40,8 +37,8 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <!-- utils -->
 

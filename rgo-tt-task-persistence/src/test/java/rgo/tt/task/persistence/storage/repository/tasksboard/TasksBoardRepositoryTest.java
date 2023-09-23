@@ -17,10 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 
@@ -42,7 +39,7 @@ class TasksBoardRepositoryTest {
         List<TasksBoard> expected = insertRandomBoards();
 
         List<TasksBoard> actual = repository.findAll();
-        assertIterableEquals(expected, actual);
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
@@ -50,7 +47,7 @@ class TasksBoardRepositoryTest {
         long fakeId = randomPositiveLong();
 
         Optional<TasksBoard> actual = repository.findByEntityId(fakeId);
-        assertFalse(actual.isPresent());
+        assertThat(actual).isNotPresent();
     }
 
     @Test
@@ -59,8 +56,9 @@ class TasksBoardRepositoryTest {
         TasksBoard expected = insert(created);
 
         Optional<TasksBoard> actual = repository.findByEntityId(expected.getEntityId());
-        assertTrue(actual.isPresent());
-        assertEquals(expected, actual.get());
+        assertThat(actual)
+                .isPresent()
+                .contains(expected);
     }
 
     @Test
@@ -68,14 +66,14 @@ class TasksBoardRepositoryTest {
         TasksBoard expected = randomTasksBoard();
 
         TasksBoard actual = repository.save(expected);
-        assertEquals(expected.getName(), actual.getName());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
     }
 
     @Test
     void deleteByEntityId_notFound() {
         long fakeId = randomPositiveLong();
         boolean isDeleted = repository.deleteByEntityId(fakeId);
-        assertFalse(isDeleted);
+        assertThat(isDeleted).isFalse();
     }
 
     @Test
@@ -84,7 +82,7 @@ class TasksBoardRepositoryTest {
         TasksBoard saved = insert(created);
 
         boolean isDeleted = repository.deleteByEntityId(saved.getEntityId());
-        assertTrue(isDeleted);
+        assertThat(isDeleted).isTrue();
     }
 
     private List<TasksBoard> insertRandomBoards() {

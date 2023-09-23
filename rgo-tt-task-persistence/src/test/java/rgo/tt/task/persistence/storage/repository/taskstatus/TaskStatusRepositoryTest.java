@@ -12,7 +12,7 @@ import rgo.tt.task.persistence.storage.utils.H2PersistenceUtils;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.STATUSES;
 
 @ExtendWith(SpringExtension.class)
@@ -29,6 +29,6 @@ class TaskStatusRepositoryTest {
     @Test
     void findAll() {
         List<TaskStatus> tasks = repository.findAll();
-        assertIterableEquals(STATUSES, tasks);
+        assertThat(tasks).containsExactlyInAnyOrderElementsOf(STATUSES);
     }
 }

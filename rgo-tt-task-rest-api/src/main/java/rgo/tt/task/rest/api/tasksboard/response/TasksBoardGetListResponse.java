@@ -2,22 +2,20 @@ package rgo.tt.task.rest.api.tasksboard.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.task.persistence.storage.entity.TasksBoard;
+import rgo.tt.task.rest.api.tasksboard.dto.TasksBoardDto;
 
 import java.util.List;
 
 public class TasksBoardGetListResponse implements Response {
 
-    private final Status status;
-    private final List<TasksBoard> boards;
+    private Status status;
+    private List<TasksBoardDto> boards;
 
-    private TasksBoardGetListResponse(Status status, List<TasksBoard> boards) {
-        this.status = status;
-        this.boards = boards;
-    }
-
-    public static TasksBoardGetListResponse success(List<TasksBoard> boards) {
-        return new TasksBoardGetListResponse(Status.success(), boards);
+    public static TasksBoardGetListResponse success(List<TasksBoardDto> boards) {
+        TasksBoardGetListResponse response = new TasksBoardGetListResponse();
+        response.status = Status.success();
+        response.boards = boards;
+        return response;
     }
 
     @Override
@@ -25,16 +23,15 @@ public class TasksBoardGetListResponse implements Response {
         return status;
     }
 
-    @SuppressWarnings("unused")
-    public List<TasksBoard> getBoards() {
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public List<TasksBoardDto> getBoards() {
         return boards;
     }
 
-    @Override
-    public String toString() {
-        return "TasksBoardGetListResponse{" +
-                "status=" + status +
-                ", boardsSize=" + boards.size() +
-                '}';
+    public void setBoards(List<TasksBoardDto> boards) {
+        this.boards = boards;
     }
 }

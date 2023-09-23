@@ -21,15 +21,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
-import static rgo.tt.common.utils.TestUtils.assertThrowsWithMessage;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.TO_DO;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTask;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTaskBuilder;
@@ -55,10 +50,10 @@ class TaskRepositoryTest {
     @Test
     void findAll_boardIdIsFake() {
         long fakeBoardId = randomPositiveLong();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.findAllForBoard(fakeBoardId),
-                "The boardId not found in the storage.");
+
+        assertThatThrownBy(() -> repository.findAllForBoard(fakeBoardId))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The boardId not found in the storage.");
     }
 
     @Test
@@ -67,7 +62,8 @@ class TaskRepositoryTest {
         List<Task> expected = insertRandomTasks(board);
 
         List<Task> tasks = repository.findAllForBoard(board.getEntityId());
-        assertIterableEquals(expected, tasks);
+
+        assertThat(tasks).containsExactlyInAnyOrderElementsOf(expected);
     }
 
     @Test
@@ -75,24 +71,23 @@ class TaskRepositoryTest {
         List<TasksBoard> boards = Stream.generate(EntityGenerator::randomTasksBoard)
                 .limit(TASKS_BOARDS_LIMIT)
                 .map(this::insertBoard)
-                .collect(Collectors.toList());
+                .toList();
 
         List<List<Task>> expectedList = boards.stream()
                 .map(this::insertRandomTasks)
-                .collect(Collectors.toList());
+                .toList();
 
         for (int i = 0; i < boards.size(); i++) {
             List<Task> tasks = repository.findAllForBoard(boards.get(i).getEntityId());
-            assertIterableEquals(expectedList.get(i), tasks);
+            assertThat(tasks).containsExactlyInAnyOrderElementsOf(expectedList.get(i));
         }
     }
 
     @Test
     void findByEntityId_notFound() {
         long fakeId = randomPositiveLong();
-
         Optional<Task> opt = repository.findByEntityId(fakeId);
-        assertFalse(opt.isPresent());
+        assertThat(opt).isNotPresent();
     }
 
     @Test
@@ -102,18 +97,20 @@ class TaskRepositoryTest {
         Task expected = insert(created);
 
         Optional<Task> opt = repository.findByEntityId(expected.getEntityId());
-        assertTrue(opt.isPresent());
-        assertEquals(expected, opt.get());
+
+        assertThat(opt)
+                .isPresent()
+                .contains(expected);
     }
 
     @Test
     void findSoftlyByName_boardIdIsFake() {
         String name = randomString();
         long fakeBoardId = randomPositiveLong();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.findSoftlyByName(name, fakeBoardId),
-                "The boardId not found in the storage.");
+
+        assertThatThrownBy(() -> repository.findSoftlyByName(name, fakeBoardId))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage( "The boardId not found in the storage.");
     }
 
     @Test
@@ -133,18 +130,20 @@ class TaskRepositoryTest {
         Task savedTask = insert(task5);
 
         List<Task> actualTasks = repository.findSoftlyByName(name, board1.getEntityId());
-        assertFalse(actualTasks.contains(savedTask));
-        assertIterableEquals(savedTasks, actualTasks);
+
+        assertThat(actualTasks)
+                .doesNotContain(savedTask)
+                .containsExactlyInAnyOrderElementsOf(savedTasks);
     }
 
     @Test
     void save_boardIsFake() {
         TasksBoard fakeBoard = randomTasksBoard();
         Task created = randomTaskBuilder().setBoard(fakeBoard).build();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.save(created),
-                "The boardId not found in the storage.");
+
+        assertThatThrownBy(() -> repository.save(created))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The boardId not found in the storage.");
     }
 
     @Test
@@ -152,10 +151,10 @@ class TaskRepositoryTest {
         TasksBoard board = insertBoard(randomTasksBoard());
         TaskType fakeType = randomTaskTypeBuilder().build();
         Task created = randomTaskBuilder().setBoard(board).setType(fakeType).build();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.save(created),
-                "The typeId not found in the storage.");
+
+        assertThatThrownBy(() -> repository.save(created))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The typeId not found in the storage.");
     }
 
     @Test
@@ -166,7 +165,7 @@ class TaskRepositoryTest {
         Task actual1 = repository.save(created);
         Task actual2 = repository.save(created);
 
-        assertEquals(actual1.getNumber() + 1, actual2.getNumber());
+        assertThat(actual2.getNumber()).isEqualTo(actual1.getNumber() + 1);
     }
 
     @Test
@@ -176,11 +175,11 @@ class TaskRepositoryTest {
 
         Task actual = repository.save(expected);
 
-        assertEquals(expected.getName(), actual.getName());
-        assertEquals(expected.getDescription(), actual.getDescription());
-        assertEquals(TO_DO, actual.getStatus());
-        assertEquals(board, actual.getBoard());
-        assertEquals(expected.getType(), actual.getType());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
+        assertThat(actual.getStatus()).isEqualTo(TO_DO);
+        assertThat(actual.getBoard()).isEqualTo(board);
+        assertThat(actual.getType()).isEqualTo(expected.getType());
     }
 
     @Test
@@ -190,20 +189,20 @@ class TaskRepositoryTest {
 
         Task actual = repository.save(expected);
 
-        assertEquals(expected.getName(), actual.getName());
-        assertNull(actual.getDescription());
-        assertEquals(TO_DO, actual.getStatus());
-        assertEquals(board, actual.getBoard());
-        assertEquals(expected.getType(), actual.getType());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getDescription()).isNull();
+        assertThat(actual.getStatus()).isEqualTo(TO_DO);
+        assertThat(actual.getBoard()).isEqualTo(board);
+        assertThat(actual.getType()).isEqualTo(expected.getType());
     }
 
     @Test
     void update_entityIdIsFake() {
         Task created = randomTask();
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.update(created),
-                "The entityId not found in the storage.");
+
+        assertThatThrownBy(() -> repository.update(created))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The entityId not found in the storage.");
     }
 
     @Test
@@ -216,10 +215,9 @@ class TaskRepositoryTest {
                 .setStatus(randomTaskStatusBuilder().build())
                 .build();
 
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.update(updated),
-                "The statusId not found in the storage.");
+        assertThatThrownBy(() -> repository.update(updated))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The statusId not found in the storage.");
     }
 
     @Test
@@ -232,10 +230,9 @@ class TaskRepositoryTest {
                 .setType(randomTaskTypeBuilder().build())
                 .build();
 
-        assertThrowsWithMessage(
-                InvalidEntityException.class,
-                () -> repository.update(updated),
-                "The typeId not found in the storage.");
+        assertThatThrownBy(() -> repository.update(updated))
+                .isInstanceOf(InvalidEntityException.class)
+                .hasMessage("The typeId not found in the storage.");
     }
 
     @Test
@@ -247,20 +244,20 @@ class TaskRepositoryTest {
         Task updated = randomTaskBuilder().setEntityId(saved.getEntityId()).build();
         Task actual = repository.update(updated);
 
-        assertEquals(saved.getEntityId(), actual.getEntityId());
-        assertEquals(updated.getName(), actual.getName());
-        assertEquals(saved.getCreatedDate(), actual.getCreatedDate());
-        assertNotEquals(saved.getLastModifiedDate(), actual.getLastModifiedDate());
-        assertEquals(updated.getStatus(), actual.getStatus());
-        assertEquals(saved.getBoard(), actual.getBoard());
-        assertEquals(updated.getType(), actual.getType());
-        assertEquals(updated.getDescription(), actual.getDescription());
+        assertThat(actual.getEntityId()).isEqualTo(saved.getEntityId());
+        assertThat(actual.getName()).isEqualTo(updated.getName());
+        assertThat(actual.getCreatedDate()).isEqualTo(saved.getCreatedDate());
+        assertThat(actual.getLastModifiedDate()).isNotEqualTo(saved.getLastModifiedDate());
+        assertThat(actual.getStatus()).isEqualTo(updated.getStatus());
+        assertThat(actual.getBoard()).isEqualTo(saved.getBoard());
+        assertThat(actual.getType()).isEqualTo(updated.getType());
+        assertThat(actual.getDescription()).isEqualTo(updated.getDescription());
     }
 
     @Test
     void deleteByEntityId_notFound() {
         long fakeId = randomPositiveLong();
-        assertFalse(repository.deleteByEntityId(fakeId));
+        assertThat(repository.deleteByEntityId(fakeId)).isFalse();
     }
 
     @Test
@@ -269,7 +266,7 @@ class TaskRepositoryTest {
         Task created =  randomTaskBuilder().setBoard(board).build();
         Task saved = insert(created);
 
-        assertTrue(repository.deleteByEntityId(saved.getEntityId()));
+        assertThat(repository.deleteByEntityId(saved.getEntityId())).isTrue();
     }
 
     private List<Task> insertRandomTasks(TasksBoard board) {

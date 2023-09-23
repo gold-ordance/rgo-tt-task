@@ -1,63 +1,68 @@
 package rgo.tt.task.rest.api;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.linecorp.armeria.common.HttpRequest;
+import com.linecorp.armeria.common.HttpResponse;
+import com.linecorp.armeria.server.ServiceRequestContext;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import rgo.tt.common.exceptions.InvalidEntityException;
-import rgo.tt.common.rest.api.Response;
-import rgo.tt.common.rest.api.StatusCode;
+import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.validator.ValidateException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static rgo.tt.common.rest.api.StatusCode.ERROR;
+import static rgo.tt.common.rest.api.StatusCode.INVALID_ENTITY;
+import static rgo.tt.common.rest.api.StatusCode.INVALID_RQ;
+import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 
+@ExtendWith(MockitoExtension.class)
 class ExceptionCommonHandlerTest {
 
-    private ExceptionCommonHandler handler;
+    private final ExceptionCommonHandler handler = new ExceptionCommonHandler();
 
-    @BeforeEach
-    void setUp() {
-        handler = new ExceptionCommonHandler();
+    @Mock private ServiceRequestContext ctx;
+    @Mock private HttpRequest req;
+
+    @Test
+    void handleException_validateException() {
+        String errorMsg = randomString();
+        ValidateException e = new ValidateException(errorMsg);
+
+        ErrorResponse response = handle(e);
+
+        assertThat(response.getStatus().getMessage()).isEqualTo(errorMsg);
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(INVALID_RQ);
     }
 
     @Test
-    void handle_validateException() {
-        String msg = randomString();
-        ValidateException e = new ValidateException(msg);
+    void handleException_invalidEntityException() {
+        String errorMsg = randomString();
+        InvalidEntityException e = new InvalidEntityException(errorMsg);
 
-        ResponseEntity<Response> responseEntity = handler.handle(e);
-        Response response = responseEntity.getBody();
+        ErrorResponse response = handle(e);
 
-        assertNotNull(response);
-        assertEquals(msg, response.getStatus().getMessage());
-        assertEquals(StatusCode.INVALID_RQ, response.getStatus().getStatusCode());
+        assertThat(response.getStatus().getMessage()).isEqualTo(errorMsg);
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(INVALID_ENTITY);
     }
 
     @Test
-    void handle_invalidEntityException() {
-        String msg = randomString();
-        InvalidEntityException e = new InvalidEntityException(msg);
+    void handleException_undefinedException() {
+        UndefinedException e = new UndefinedException();
 
-        ResponseEntity<Response> responseEntity = handler.handle(e);
-        Response response = responseEntity.getBody();
+        ErrorResponse response = handle(e);
 
-        assertNotNull(response);
-        assertEquals(msg, response.getStatus().getMessage());
-        assertEquals(StatusCode.INVALID_ENTITY, response.getStatus().getStatusCode());
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(ERROR);
     }
 
-    @Test
-    void handle_exception() {
-        String msg = randomString();
-        Exception e = new Exception(msg);
+    private ErrorResponse handle(Exception e) {
+        HttpResponse httpResponse = handler.handleException(ctx, req, e);
+        String json = httpResponse.aggregate().join().contentUtf8();
+        return fromJson(json, ErrorResponse.class);
+    }
 
-        ResponseEntity<Response> responseEntity = handler.handle(e);
-        Response response = responseEntity.getBody();
-
-        assertNotNull(response);
-        assertTrue(response.getStatus().getMessage().contains(msg));
-        assertEquals(StatusCode.ERROR, response.getStatus().getStatusCode());
+    private static class UndefinedException extends RuntimeException {
     }
 }

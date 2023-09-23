@@ -2,30 +2,18 @@ package rgo.tt.task.rest.api.tasksboard.response;
 
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
-import rgo.tt.task.persistence.storage.entity.TasksBoard;
-
-import java.util.Optional;
-
-import static rgo.tt.common.rest.api.ErrorResponse.notFound;
+import rgo.tt.task.rest.api.tasksboard.dto.TasksBoardDto;
 
 public class TasksBoardGetEntityResponse implements Response {
 
-    private final Status status;
-    private final TasksBoard board;
+    private Status status;
+    private TasksBoardDto board;
 
-    private TasksBoardGetEntityResponse(Status status, TasksBoard board) {
-        this.status = status;
-        this.board = board;
-    }
-
-    public static Response from(Optional<TasksBoard> board) {
-        return board.isPresent()
-                ? success(board.get())
-                : notFound();
-    }
-
-    private static TasksBoardGetEntityResponse success(TasksBoard board) {
-        return new TasksBoardGetEntityResponse(Status.success(), board);
+    public static TasksBoardGetEntityResponse success(TasksBoardDto board) {
+        TasksBoardGetEntityResponse response = new TasksBoardGetEntityResponse();
+        response.status = Status.success();
+        response.board = board;
+        return response;
     }
 
     @Override
@@ -33,17 +21,16 @@ public class TasksBoardGetEntityResponse implements Response {
         return status;
     }
 
-    @SuppressWarnings("unused")
-    public TasksBoard getBoard() {
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public TasksBoardDto getBoard() {
         return board;
     }
 
-    @Override
-    public String toString() {
-        return "TasksBoardGetEntityResponse{" +
-                "status=" + status +
-                ", board=" + board +
-                '}';
+    public void setBoard(TasksBoardDto board) {
+        this.board = board;
     }
 }
 

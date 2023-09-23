@@ -3,20 +3,19 @@ package rgo.tt.task.rest.api.tasksboard.response;
 import rgo.tt.common.rest.api.Response;
 import rgo.tt.common.rest.api.Status;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.task.persistence.storage.entity.TasksBoard;
+import rgo.tt.task.rest.api.tasksboard.dto.TasksBoardDto;
 
 public class TasksBoardModifyResponse implements Response {
 
-    private final Status status;
-    private final TasksBoard board;
+    private Status status;
+    private TasksBoardDto board;
 
-    private TasksBoardModifyResponse(Status status, TasksBoard board) {
-        this.status = status;
-        this.board = board;
-    }
 
-    public static TasksBoardModifyResponse saved(TasksBoard board) {
-        return new TasksBoardModifyResponse(Status.success(StatusCode.STORED), board);
+    public static TasksBoardModifyResponse saved(TasksBoardDto board) {
+        TasksBoardModifyResponse response = new TasksBoardModifyResponse();
+        response.status = Status.success(StatusCode.STORED);
+        response.board = board;
+        return response;
     }
 
     @Override
@@ -24,16 +23,15 @@ public class TasksBoardModifyResponse implements Response {
         return status;
     }
 
-    @SuppressWarnings("unused")
-    public TasksBoard getBoard() {
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public TasksBoardDto getBoard() {
         return board;
     }
 
-    @Override
-    public String toString() {
-        return "TasksBoardModifyResponse{" +
-                "status=" + status +
-                ", board=" + board +
-                '}';
+    public void setBoard(TasksBoardDto board) {
+        this.board = board;
     }
 }
