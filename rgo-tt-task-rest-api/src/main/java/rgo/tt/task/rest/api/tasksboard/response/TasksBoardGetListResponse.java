@@ -34,4 +34,12 @@ public class TasksBoardGetListResponse implements Response {
     public void setBoards(List<TasksBoardDto> boards) {
         this.boards = boards;
     }
+
+    @Override
+    public String toString() {
+        return "TasksBoardGetListResponse{" +
+                "status=" + status +
+                ", boards=<size=" + boards.size() + ">" +
+                '}';
+    }
 }

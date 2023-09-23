@@ -34,4 +34,12 @@ public class TaskStatusGetListResponse implements Response {
     public void setTaskStatuses(List<TaskStatusDto> taskStatuses) {
         this.taskStatuses = taskStatuses;
     }
+
+    @Override
+    public String toString() {
+        return "TaskStatusGetListResponse{" +
+                "status=" + status +
+                ", taskStatuses=<size=" + taskStatuses.size() + ">" +
+                '}';
+    }
 }

@@ -34,4 +34,12 @@ public class TaskTypeGetListResponse implements Response {
     public void setTypes(List<TaskTypeDto> types) {
         this.types = types;
     }
+
+    @Override
+    public String toString() {
+        return "TaskTypeGetListResponse{" +
+                "status=" + status +
+                ", types=<size=" + types.size() + ">" +
+                '}';
+    }
 }

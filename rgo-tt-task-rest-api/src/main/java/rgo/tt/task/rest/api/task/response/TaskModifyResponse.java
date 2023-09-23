@@ -41,4 +41,12 @@ public class TaskModifyResponse implements Response {
     public void setTask(TaskDto task) {
         this.task = task;
     }
+
+    @Override
+    public String toString() {
+        return "TaskModifyResponse{" +
+                "status=" + status +
+                ", task=" + task +
+                '}';
+    }
 }

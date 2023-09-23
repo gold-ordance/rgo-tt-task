@@ -4,7 +4,7 @@ import com.linecorp.armeria.common.HttpRequest;
 import com.linecorp.armeria.common.HttpResponse;
 import com.linecorp.armeria.server.ServiceRequestContext;
 import com.linecorp.armeria.server.annotation.ExceptionHandlerFunction;
-import org.junit.platform.commons.util.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import rgo.tt.common.exceptions.InvalidEntityException;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
@@ -26,7 +26,7 @@ public class ExceptionCommonHandler implements ExceptionHandlerFunction {
             return mapToHttp(response);
         }
 
-        Response response = ErrorResponse.error(ExceptionUtils.readStackTrace(cause));
+        Response response = ErrorResponse.error(ExceptionUtils.getStackTrace(cause));
         return mapToHttp(response);
     }
 }

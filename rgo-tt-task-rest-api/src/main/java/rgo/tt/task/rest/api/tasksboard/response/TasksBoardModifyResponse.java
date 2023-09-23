@@ -34,4 +34,12 @@ public class TasksBoardModifyResponse implements Response {
     public void setBoard(TasksBoardDto board) {
         this.board = board;
     }
+
+    @Override
+    public String toString() {
+        return "TasksBoardModifyResponse{" +
+                "status=" + status +
+                ", board=" + board +
+                '}';
+    }
 }

@@ -32,5 +32,13 @@ public class TasksBoardGetEntityResponse implements Response {
     public void setBoard(TasksBoardDto board) {
         this.board = board;
     }
+
+    @Override
+    public String toString() {
+        return "TasksBoardGetEntityResponse{" +
+                "status=" + status +
+                ", board=" + board +
+                '}';
+    }
 }
 
