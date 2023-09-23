@@ -17,9 +17,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
-import static rgo.tt.common.rest.api.utils.test.ArmeriaClientManager.get;
-import static rgo.tt.common.rest.api.utils.test.ArmeriaServerManager.startServerWithService;
-import static rgo.tt.common.rest.api.utils.test.ArmeriaServerManager.stopServer;
+import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.get;
+import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.startServerWithService;
+import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.stopServer;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.STATUSES;
 import static rgo.tt.task.rest.api.taskstatus.TaskStatusMapper.map;
 

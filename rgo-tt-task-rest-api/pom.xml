@@ -29,6 +29,10 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-tt-common-validator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-tt-common-armeria</artifactId>
+        </dependency>
         <!-- external modules -->
 
         <!-- utils -->

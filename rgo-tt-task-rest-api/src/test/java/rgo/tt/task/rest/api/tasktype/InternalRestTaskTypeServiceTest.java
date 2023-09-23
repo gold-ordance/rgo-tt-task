@@ -7,8 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import rgo.tt.common.armeria.utils.test.ArmeriaClientManager;
 import rgo.tt.common.rest.api.StatusCode;
-import rgo.tt.common.rest.api.utils.test.ArmeriaClientManager;
 import rgo.tt.task.persistence.storage.utils.H2PersistenceUtils;
 import rgo.tt.task.rest.api.RestConfig;
 import rgo.tt.task.rest.api.tasktype.dto.TaskTypeDto;
@@ -17,9 +17,9 @@ import rgo.tt.task.rest.api.tasktype.response.TaskTypeGetListResponse;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.startServerWithService;
+import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.stopServer;
 import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
-import static rgo.tt.common.rest.api.utils.test.ArmeriaServerManager.startServerWithService;
-import static rgo.tt.common.rest.api.utils.test.ArmeriaServerManager.stopServer;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.TYPES;
 import static rgo.tt.task.rest.api.tasktype.TaskTypeMapper.map;
 
