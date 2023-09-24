@@ -12,6 +12,11 @@ armeria:
 logging:
   config: classpath:logback-production.xml
 
+cors:
+  origins: 'http://localhost:5173'
+  methods: GET, POST, PUT, DELETE
+  maxAgeSeconds: 3600
+
 persistence:
   dialect: POSTGRES
   url: jdbc:postgresql://task-db:5432/task
