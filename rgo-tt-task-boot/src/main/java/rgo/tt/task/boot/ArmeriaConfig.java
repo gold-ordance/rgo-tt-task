@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.armeria.config.ArmeriaCommonConfig;
-import rgo.tt.task.boot.healthcheck.ProbeService;
+import rgo.tt.common.armeria.service.ProbeService;
 import rgo.tt.task.rest.api.task.RestTaskService;
 import rgo.tt.task.rest.api.tasksboard.RestTasksBoardService;
 import rgo.tt.task.rest.api.taskstatus.RestTaskStatusService;
@@ -27,18 +27,15 @@ public class ArmeriaConfig {
     @Autowired private RestTaskStatusService restTaskStatusService;
     @Autowired private RestTaskTypeService restTaskTypeService;
 
-    @Autowired private Function<? super HttpService, CorsService> corsDecorator;
+    @Autowired private ProbeService probeService;
 
-    @Bean
-    public ProbeService probeService() {
-        return new ProbeService();
-    }
+    @Autowired private Function<? super HttpService, CorsService> corsDecorator;
 
     @Bean
     public ArmeriaServerConfigurator armeriaConfigurator() {
         return serverBuilder ->
                 serverBuilder
-                        .annotatedService("/internal", probeService())
+                        .annotatedService("/internal", probeService)
                         .annotatedService("/tasks", restTaskService)
                         .annotatedService("/tasks-boards", restTasksBoardService)
                         .annotatedService("/types", restTaskTypeService)
