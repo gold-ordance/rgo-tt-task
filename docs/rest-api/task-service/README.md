@@ -1,4 +1,4 @@
-### TaskService
+### RestTaskService
 
 #### Get all the tasks of the specified board
 
