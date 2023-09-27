@@ -1,5 +1,13 @@
 ### RestTaskService
 
+Methods:
+* [GET ALL](#get-all-the-tasks-of-the-specified-board)
+* [GET BY ENTITY ID](#get-task-by-entityid)
+* [GET BY NAME](#get-task-by-name)
+* [SAVE](#save-task)
+* [UPDATE](#update-task)
+* [DELETE BY ENTITY ID](#delete-task-by-entityid)
+
 #### Get all the tasks of the specified board
 
 **Request**:

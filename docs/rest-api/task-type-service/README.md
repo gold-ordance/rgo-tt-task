@@ -1,5 +1,8 @@
 ### RestTaskTypeService
 
+Methods:
+* [GET ALL](#get-all-the-task-types)
+
 #### Get all the task types
 
 **Request**:

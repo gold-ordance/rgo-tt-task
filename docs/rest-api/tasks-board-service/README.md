@@ -1,5 +1,11 @@
 ### RestTasksBoardService
 
+Methods:
+* [GET ALL](#get-all-the-tasks-boards)
+* [GET BY ENTITY ID](#get-tasks-board-by-entityid)
+* [SAVE](#save-board)
+* [DELETE BY ENTITY ID](#delete-board-by-entityid)
+
 #### Get all the tasks boards
 
 **Request**:
@@ -124,7 +130,7 @@ Body:
 }
 ```
 
-#### Save task
+#### Save board
 
 **Request**:
 ```http request
@@ -206,7 +212,7 @@ Body:
 }
 ```
 
-#### Delete task by entityId
+#### Delete board by entityId
 
 **Request**:
 ```http request

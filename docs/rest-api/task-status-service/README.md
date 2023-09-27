@@ -1,5 +1,8 @@
 ### RestTaskStatusService
 
+Methods:
+* [GET ALL](#get-all-the-task-statuses)
+
 #### Get all the task statuses
 
 **Request**:
