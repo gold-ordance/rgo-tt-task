@@ -23,6 +23,7 @@
         <module>rgo-tt-task-service</module>
         <module>rgo-tt-task-rest-api</module>
         <module>rgo-tt-task-db-migration</module>
+        <module>rgo-tt-task-metrics</module>
     </modules>
 
     <properties>
@@ -33,6 +34,8 @@
         <armeria.version>1.25.2</armeria.version>
         <guava.version>32.1.2-jre</guava.version>
         <commons-lang3.version>3.13.0</commons-lang3.version>
+        <jvm-extras.version>0.2.2</jvm-extras.version>
+        <micrometer.version>1.8.2</micrometer.version>
     </properties>
 
     <dependencyManagement>
@@ -51,6 +54,11 @@
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-tt-task-rest-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.gold.ordance</groupId>
+                <artifactId>rgo-tt-task-metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- self modules -->
@@ -90,6 +98,19 @@
                 <version>${armeria.version}</version>
             </dependency>
             <!-- armeria -->
+
+            <!-- metrics -->
+            <dependency>
+                <groupId>io.github.mweirauch</groupId>
+                <artifactId>micrometer-jvm-extras</artifactId>
+                <version>${jvm-extras.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer.version}</version>
+            </dependency>
+            <!-- metrics -->
 
             <!-- utils -->
             <dependency>
