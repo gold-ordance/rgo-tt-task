@@ -1,6 +1,5 @@
 package rgo.tt.task.rest.api.tasksboard;
 
-import com.google.common.annotations.VisibleForTesting;
 import rgo.tt.common.utils.HelperUtils;
 import rgo.tt.task.persistence.storage.entity.TasksBoard;
 import rgo.tt.task.rest.api.tasksboard.dto.TasksBoardDto;
@@ -39,7 +38,6 @@ public final class TasksBoardMapper {
                 .build();
     }
 
-    @VisibleForTesting
     static String shortName(String name) {
         if (name == null) return null;
         return Arrays.stream(name.split(SPACE))

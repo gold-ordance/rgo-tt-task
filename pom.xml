@@ -29,13 +29,11 @@
     <properties>
         <java.version>17</java.version>
 
-        <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
-
         <armeria.version>1.25.2</armeria.version>
-        <guava.version>32.1.2-jre</guava.version>
         <commons-lang3.version>3.13.0</commons-lang3.version>
+        <guava.version>32.1.2-jre</guava.version>
         <jvm-extras.version>0.2.2</jvm-extras.version>
-        <micrometer.version>1.8.2</micrometer.version>
+        <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
     </properties>
 
     <dependencyManagement>
@@ -105,19 +103,9 @@
                 <artifactId>micrometer-jvm-extras</artifactId>
                 <version>${jvm-extras.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-registry-prometheus</artifactId>
-                <version>${micrometer.version}</version>
-            </dependency>
             <!-- metrics -->
 
             <!-- utils -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
