@@ -12,7 +12,6 @@ services:
       timeout: 5s
       retries: 5
 
-
   task-service:
     image: michisig/tt-task-service:${version}
     container_name: task-service
@@ -27,7 +26,6 @@ services:
       task-db:
         condition: service_healthy
 
-
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -35,7 +33,6 @@ services:
       - "9090:9090"
     volumes:
       - "./metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-
 
   grafana:
     image: grafana/grafana:latest
