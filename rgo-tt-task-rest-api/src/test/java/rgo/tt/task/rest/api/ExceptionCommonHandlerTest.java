@@ -8,8 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import rgo.tt.common.exceptions.InvalidEntityException;
+import rgo.tt.common.exceptions.ValidateException;
 import rgo.tt.common.rest.api.ErrorResponse;
-import rgo.tt.common.validator.ValidateException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.rest.api.StatusCode.ERROR;

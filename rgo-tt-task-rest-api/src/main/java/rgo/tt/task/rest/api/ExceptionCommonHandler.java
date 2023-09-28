@@ -6,9 +6,9 @@ import com.linecorp.armeria.server.ServiceRequestContext;
 import com.linecorp.armeria.server.annotation.ExceptionHandlerFunction;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import rgo.tt.common.exceptions.InvalidEntityException;
+import rgo.tt.common.exceptions.ValidateException;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
-import rgo.tt.common.validator.ValidateException;
 
 import static rgo.tt.common.rest.api.utils.RestUtils.mapToHttp;
 
