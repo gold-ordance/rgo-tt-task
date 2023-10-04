@@ -359,6 +359,7 @@ POST http://localhost:8080/tasks
     "name": <string>,
     "boardId": <number>,
     "typeId": <number>,
+    "statusId": <number>:optional,
     "description": <string>:optional
 }
 ```

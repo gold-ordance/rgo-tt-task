@@ -169,9 +169,23 @@ class TaskRepositoryTest {
     }
 
     @Test
-    void save() {
+    void save_statusIsSpecified() {
         TasksBoard board = insertBoard(randomTasksBoard());
         Task expected = randomTaskBuilder().setBoard(board).build();
+
+        Task actual = repository.save(expected);
+
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
+        assertThat(actual.getStatus()).isEqualTo(expected.getStatus());
+        assertThat(actual.getBoard()).isEqualTo(board);
+        assertThat(actual.getType()).isEqualTo(expected.getType());
+    }
+
+    @Test
+    void save_statusNotSpecified() {
+        TasksBoard board = insertBoard(randomTasksBoard());
+        Task expected = randomTaskBuilder().setBoard(board).setStatus(null).build();
 
         Task actual = repository.save(expected);
 
@@ -191,7 +205,7 @@ class TaskRepositoryTest {
 
         assertThat(actual.getName()).isEqualTo(expected.getName());
         assertThat(actual.getDescription()).isNull();
-        assertThat(actual.getStatus()).isEqualTo(TO_DO);
+        assertThat(actual.getStatus()).isEqualTo(expected.getStatus());
         assertThat(actual.getBoard()).isEqualTo(board);
         assertThat(actual.getType()).isEqualTo(expected.getType());
     }

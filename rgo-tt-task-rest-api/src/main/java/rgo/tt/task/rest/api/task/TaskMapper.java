@@ -1,9 +1,6 @@
 package rgo.tt.task.rest.api.task;
 
 import rgo.tt.task.persistence.storage.entity.Task;
-import rgo.tt.task.persistence.storage.entity.TaskStatus;
-import rgo.tt.task.persistence.storage.entity.TaskType;
-import rgo.tt.task.persistence.storage.entity.TasksBoard;
 import rgo.tt.task.rest.api.task.dto.TaskDto;
 import rgo.tt.task.rest.api.task.request.TaskPutRequest;
 import rgo.tt.task.rest.api.task.request.TaskSaveRequest;
@@ -42,12 +39,9 @@ public final class TaskMapper {
         return Task.builder()
                 .setName(rq.getName())
                 .setDescription(rq.getDescription())
-                .setBoard(TasksBoard.builder()
-                        .setEntityId(rq.getBoardId())
-                        .build())
-                .setType(TaskType.builder()
-                        .setEntityId(rq.getTypeId())
-                        .build())
+                .setBoard(TasksBoardMapper.map(rq.getBoardId()))
+                .setType(TaskTypeMapper.map(rq.getTypeId()))
+                .setStatus(TaskStatusMapper.map(rq.getStatusId()))
                 .build();
     }
 
@@ -56,12 +50,8 @@ public final class TaskMapper {
                 .setEntityId(rq.getEntityId())
                 .setName(rq.getName())
                 .setDescription(rq.getDescription())
-                .setType(TaskType.builder()
-                        .setEntityId(rq.getTypeId())
-                        .build())
-                .setStatus(TaskStatus.builder()
-                        .setEntityId(rq.getStatusId())
-                        .build())
+                .setType(TaskTypeMapper.map(rq.getTypeId()))
+                .setStatus(TaskStatusMapper.map(rq.getStatusId()))
                 .build();
     }
 }

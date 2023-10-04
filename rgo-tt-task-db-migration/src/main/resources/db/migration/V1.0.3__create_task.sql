@@ -10,7 +10,7 @@ CREATE TABLE task (
     number             BIGINT,
     board_id           BIGINT         NOT NULL REFERENCES tasks_board(entity_id) ON DELETE CASCADE,
     type_id            BIGINT         NOT NULL REFERENCES task_type(entity_id),
-    status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id) DEFAULT 1
+    status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id)
 );
 
 CREATE INDEX board_id_name_task_idx

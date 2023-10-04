@@ -22,4 +22,9 @@ public final class TaskStatusMapper {
                 .map(TaskStatusMapper::map)
                 .toList();
     }
+
+    public static TaskStatus map(Long entityId) {
+        if (entityId == null) return null;
+        return TaskStatus.builder().setEntityId(entityId).build();
+    }
 }

@@ -9,6 +9,7 @@ public class TaskSaveRequest {
     private String description;
     private Long boardId;
     private Long typeId;
+    private Long statusId;
 
     public String getName() {
         return name;
@@ -42,6 +43,14 @@ public class TaskSaveRequest {
         this.typeId = typeId;
     }
 
+    public Long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
+    }
+
     @Override
     public String toString() {
         return "TaskSaveRequest{" +
@@ -49,6 +58,7 @@ public class TaskSaveRequest {
                 ", description=" + size(description) +
                 ", boardId=" + boardId +
                 ", typeId=" + typeId +
+                ", statusId=" + statusId +
                 '}';
     }
 }

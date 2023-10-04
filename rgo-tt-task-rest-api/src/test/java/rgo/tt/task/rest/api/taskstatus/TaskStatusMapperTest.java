@@ -7,6 +7,7 @@ import rgo.tt.task.rest.api.taskstatus.dto.TaskStatusDto;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTaskStatus;
 
 class TaskStatusMapperTest {
@@ -26,6 +27,14 @@ class TaskStatusMapperTest {
         assertThat(statuses).hasSize(1);
         assertThat(dtoList).hasSize(1);
         compare(dtoList.get(0), statuses.get(0));
+    }
+
+    @Test
+    void map_entityId() {
+        long randomEntityId = randomPositiveLong();
+        TaskStatus type = TaskStatusMapper.map(randomEntityId);
+
+        assertThat(type.getEntityId()).isEqualTo(randomEntityId);
     }
 
     private void compare(TaskStatusDto dto, TaskStatus status) {

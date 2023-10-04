@@ -21,6 +21,7 @@ public final class RequestGenerator {
         rq.setDescription(randomBigString());
         rq.setBoardId(randomPositiveLong());
         rq.setTypeId(randomTaskType().getEntityId());
+        rq.setStatusId(randomTaskStatus().getEntityId());
         return rq;
     }
 

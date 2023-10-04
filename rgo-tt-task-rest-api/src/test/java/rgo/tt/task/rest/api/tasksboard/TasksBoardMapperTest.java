@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.utils.HelperUtils.getFirstSymbol;
+import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.TestUtils.validateNullFieldsExcept;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTasksBoard;
 import static rgo.tt.task.rest.api.RequestGenerator.createTasksBoardSaveRequest;
@@ -56,6 +57,14 @@ class TasksBoardMapperTest {
 
         String actual = TasksBoardMapper.shortName(string);
         assertThat(actual).isEqualTo(shortString);
+    }
+
+    @Test
+    void map_entityId() {
+        long randomEntityId = randomPositiveLong();
+        TasksBoard board = TasksBoardMapper.map(randomEntityId);
+
+        assertThat(board.getEntityId()).isEqualTo(randomEntityId);
     }
 
     private void compare(TasksBoardDto dto, TasksBoard board) {

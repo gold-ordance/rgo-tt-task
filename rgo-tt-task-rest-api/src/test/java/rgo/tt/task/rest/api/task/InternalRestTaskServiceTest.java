@@ -25,14 +25,14 @@ import rgo.tt.task.service.tasksboard.TasksBoardService;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
-import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.delete;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.get;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.post;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.put;
 import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.startServerWithService;
 import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.stopServer;
+import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
+import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.TO_DO;
@@ -233,9 +233,32 @@ class InternalRestTaskServiceTest {
     }
 
     @Test
-    void save() {
+    void save_statusIsSpecified() {
         TasksBoard board = insertTasksBoard();
         TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setBoardId(board.getEntityId());
+
+        String json = post(json(rq));
+        TaskModifyResponse response = fromJson(json, TaskModifyResponse.class);
+        TaskDto actual = response.getTask();
+
+        assertThat(response.getStatus().getStatusCode()).isEqualTo(StatusCode.STORED);
+        assertThat(response.getStatus().getMessage()).isNull();
+        assertThat(actual.getName()).isEqualTo(rq.getName());
+        assertThat(actual.getDescription()).isEqualTo(rq.getDescription());
+        assertThat(actual.getBoard().getEntityId()).isEqualTo(rq.getBoardId());
+        assertThat(actual.getType().getEntityId()).isEqualTo(rq.getTypeId());
+        assertThat(actual.getCreatedDate()).isNotNull();
+        assertThat(actual.getLastModifiedDate()).isNotNull();
+        assertThat(actual.getNumber()).isNotNull();
+        assertThat(actual.getStatus().getEntityId()).isEqualTo(rq.getStatusId());
+    }
+
+    @Test
+    void save_statusNotSpecified() {
+        TasksBoard board = insertTasksBoard();
+        TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setStatusId(null);
         rq.setBoardId(board.getEntityId());
 
         String json = post(json(rq));

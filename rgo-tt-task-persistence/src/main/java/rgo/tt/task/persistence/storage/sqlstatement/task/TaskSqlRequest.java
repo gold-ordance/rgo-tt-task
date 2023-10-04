@@ -41,19 +41,21 @@ public final class TaskSqlRequest {
 
     public static SqlRequest save(Task task) {
         String query = """
-                INSERT INTO %table_name(name, description, number, board_id, type_id)
+                INSERT INTO %table_name(name, description, number, board_id, type_id, status_id)
                 VALUES(:name,
                        :description,
                        COALESCE((SELECT max(number) FROM %table_name WHERE board_id = :board_id), 0) + 1,
                        :board_id,
-                       :type_id);
+                       :type_id,
+                       COALESCE(:status_id, 1));
                 """.replace("%table_name", TABLE_NAME);
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", task.getName())
                 .addValue("board_id", task.getBoard().getEntityId())
                 .addValue("type_id", task.getType().getEntityId())
-                .addValue("description", task.getDescription());
+                .addValue("description", task.getDescription())
+                .addValue("status_id", task.getStatus() != null ? task.getStatus().getEntityId() : null);
 
         return new SqlRequest(query, params);
     }

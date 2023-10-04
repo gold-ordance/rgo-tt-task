@@ -45,4 +45,8 @@ public final class TasksBoardMapper {
                 .collect(Collectors.joining())
                 .toUpperCase(Locale.ENGLISH);
     }
+
+    public static TasksBoard map(Long entityId) {
+        return TasksBoard.builder().setEntityId(entityId).build();
+    }
 }

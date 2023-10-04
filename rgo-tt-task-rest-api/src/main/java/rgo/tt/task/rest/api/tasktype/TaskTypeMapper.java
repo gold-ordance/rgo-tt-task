@@ -22,4 +22,8 @@ public final class TaskTypeMapper {
                 .map(TaskTypeMapper::map)
                 .toList();
     }
+
+    public static TaskType map(Long entityId) {
+        return TaskType.builder().setEntityId(entityId).build();
+    }
 }

@@ -34,8 +34,9 @@ class TaskMapperTest {
     }
 
     @Test
-    void map_saveRequest() {
+    void map_saveRequest_statusIdIsNull() {
         TaskSaveRequest rq = createTaskSaveRequest();
+        rq.setStatusId(null);
         Task task = TaskMapper.map(rq);
 
         assertThat(task.getName()).isEqualTo(rq.getName());
@@ -44,6 +45,20 @@ class TaskMapperTest {
         assertThat(task.getType().getEntityId()).isEqualTo(rq.getTypeId());
 
         List<String> nonEmptyFields = List.of("name", "description", "board", "type");
+        validateNullFieldsExcept(task, nonEmptyFields);
+    }
+
+    @Test
+    void map_saveRequest_statusIdNotNull() {
+        TaskSaveRequest rq = createTaskSaveRequest();
+        Task task = TaskMapper.map(rq);
+
+        assertThat(task.getName()).isEqualTo(rq.getName());
+        assertThat(task.getDescription()).isEqualTo(rq.getDescription());
+        assertThat(task.getBoard().getEntityId()).isEqualTo(rq.getBoardId());
+        assertThat(task.getType().getEntityId()).isEqualTo(rq.getTypeId());
+
+        List<String> nonEmptyFields = List.of("name", "description", "board", "type", "status");
         validateNullFieldsExcept(task, nonEmptyFields);
     }
 

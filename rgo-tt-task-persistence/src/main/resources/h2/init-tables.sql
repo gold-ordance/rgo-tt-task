@@ -1,4 +1,4 @@
-CREATE TABLE tasks_board (
+ CREATE TABLE tasks_board (
     PRIMARY KEY(entity_id),
     entity_id  IDENTITY,
     name       VARCHAR(64) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE task (
     number             BIGINT,
     board_id           BIGINT         NOT NULL REFERENCES tasks_board(entity_id) ON DELETE CASCADE,
     type_id            BIGINT         NOT NULL REFERENCES task_type(entity_id),
-    status_id          BIGINT         NOT NULL DEFAULT 1 REFERENCES task_status(entity_id)
+    status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id)
 );
 
 CREATE UNIQUE INDEX board_id_number_task_uq_idx
