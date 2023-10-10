@@ -1,4 +1,4 @@
- CREATE TABLE tasks_board (
+CREATE TABLE tasks_board (
     PRIMARY KEY(entity_id),
     entity_id  IDENTITY,
     name       VARCHAR(64) NOT NULL,
