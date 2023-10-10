@@ -33,7 +33,6 @@ Body:
     ...
   ]
 }
-
 ```
 
 * **Internal error (500):**
