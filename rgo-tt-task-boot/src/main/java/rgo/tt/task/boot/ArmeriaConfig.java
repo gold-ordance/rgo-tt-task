@@ -4,6 +4,7 @@ import com.linecorp.armeria.server.HttpService;
 import com.linecorp.armeria.server.cors.CorsService;
 import com.linecorp.armeria.server.docs.DocService;
 import com.linecorp.armeria.server.logging.LoggingService;
+import com.linecorp.armeria.server.metric.MetricCollectingService;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
 import com.linecorp.armeria.spring.ArmeriaServerConfigurator;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
@@ -34,6 +35,7 @@ public class ArmeriaConfig {
 
     @Autowired private Function<? super HttpService, CorsService> corsDecorator;
     @Autowired private Function<? super HttpService, HeadersService> headersDecorator;
+    @Autowired private Function<? super HttpService, MetricCollectingService> metricsDecorator;
 
     @Autowired private PrometheusMeterRegistry registry;
 
@@ -50,6 +52,7 @@ public class ArmeriaConfig {
                         .serviceUnder("/docs", docService())
                         .decorator(LoggingService.newDecorator())
                         .decorator(headersDecorator)
+                        .decorator(metricsDecorator)
                         .decorator(corsDecorator);
     }
 
