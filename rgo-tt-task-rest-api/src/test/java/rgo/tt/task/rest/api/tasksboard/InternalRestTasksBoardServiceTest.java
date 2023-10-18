@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
-import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.delete;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.get;
 import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.post;
 import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.startServerWithService;
 import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.stopServer;
+import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
+import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.utils.HelperUtils.getFirstSymbol;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTasksBoard;

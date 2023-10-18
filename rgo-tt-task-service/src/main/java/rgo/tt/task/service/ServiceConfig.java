@@ -11,6 +11,7 @@ import rgo.tt.task.persistence.storage.repository.tasktype.TaskTypeRepository;
 import rgo.tt.task.service.task.TaskService;
 import rgo.tt.task.service.task.InternalTaskService;
 import rgo.tt.task.service.tasksboard.InternalTasksBoardService;
+import rgo.tt.task.service.tasksboard.ShortenedNameTasksBoardServiceDecorator;
 import rgo.tt.task.service.tasksboard.TasksBoardService;
 import rgo.tt.task.service.taskstatus.InternalTaskStatusService;
 import rgo.tt.task.service.taskstatus.TaskStatusService;
@@ -23,7 +24,8 @@ public class ServiceConfig {
 
     @Bean
     public TasksBoardService tasksBoardService(TasksBoardRepository repository) {
-        return new InternalTasksBoardService(repository);
+        return new ShortenedNameTasksBoardServiceDecorator(
+                new InternalTasksBoardService(repository));
     }
 
     @Bean

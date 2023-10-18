@@ -8,7 +8,6 @@ import rgo.tt.task.rest.api.tasksboard.request.TasksBoardSaveRequest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.utils.HelperUtils.getFirstSymbol;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.TestUtils.validateNullFieldsExcept;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.randomTasksBoard;
@@ -40,23 +39,8 @@ class TasksBoardMapperTest {
 
         assertThat(board.getName()).isEqualTo(rq.getName());
 
-        List<String> nonEmptyFields = List.of("name", "shortName");
+        List<String> nonEmptyFields = List.of("name");
         validateNullFieldsExcept(board, nonEmptyFields);
-        assertThat(board.getShortName()).isEqualToIgnoringCase(getFirstSymbol(board.getName()));
-    }
-
-    @Test
-    void shortName_null() {
-        assertThat(TasksBoardMapper.shortName(null)).isNull();
-    }
-
-    @Test
-    void shortName() {
-        String string = "Task tracker";
-        String shortString = "TT";
-
-        String actual = TasksBoardMapper.shortName(string);
-        assertThat(actual).isEqualTo(shortString);
     }
 
     @Test

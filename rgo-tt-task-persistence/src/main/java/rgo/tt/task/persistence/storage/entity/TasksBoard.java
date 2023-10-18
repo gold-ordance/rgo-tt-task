@@ -6,7 +6,7 @@ public class TasksBoard {
 
     private final Long entityId;
     private final String name;
-    private final String shortName;
+    private String shortName;
 
     private TasksBoard(Builder builder) {
         entityId = builder.entityId;
@@ -24,6 +24,10 @@ public class TasksBoard {
 
     public String getShortName() {
         return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     @Override
