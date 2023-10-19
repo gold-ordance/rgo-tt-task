@@ -19,3 +19,34 @@ cors:
 
 persistence:
   dialect: H2
+
+rate-limiter:
+  services:
+    ValidateRestTaskServiceDecorator:
+      - method: findAllForBoard
+        limit: 2000
+      - method: findByEntityId
+        limit: 2000
+      - method: findByName
+        limit: 2000
+      - method: save
+        limit: 2000
+      - method: update
+        limit: 2000
+      - method: deleteByEntityId
+        limit: 2000
+    ValidateRestTasksBoardServiceDecorator:
+      - method: findAll
+        limit: 2000
+      - method: findByEntityId
+        limit: 2000
+      - method: save
+        limit: 2000
+      - method: deleteByEntityId
+        limit: 2000
+    ValidateRestTaskStatusServiceDecorator:
+      - method: findAll
+        limit: 2000
+    ValidateRestTaskTypeServiceDecorator:
+      - method: findAll
+        limit: 2000

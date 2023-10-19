@@ -7,6 +7,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import rgo.tt.common.utils.HelperUtils;
 import rgo.tt.task.persistence.storage.entity.TasksBoard;
 
+import java.util.Locale;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,6 +32,7 @@ class ShortenedNameTasksBoardServiceDecoratorTest {
         when(service.save(board)).thenReturn(board);
 
         TasksBoard saved = decorator.save(board);
-        assertThat(saved.getShortName()).isEqualTo(HelperUtils.getFirstSymbol(board.getName()));
+        assertThat(saved.getShortName())
+                .isEqualTo(HelperUtils.getFirstSymbol(board.getName()).toUpperCase(Locale.ENGLISH));
     }
 }

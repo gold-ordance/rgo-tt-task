@@ -64,11 +64,6 @@
             <!-- external modules -->
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-common-rest-api</artifactId>
-                <version>${rgo-tt-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-tt-common-validator</artifactId>
                 <version>${rgo-tt-common.version}</version>
             </dependency>

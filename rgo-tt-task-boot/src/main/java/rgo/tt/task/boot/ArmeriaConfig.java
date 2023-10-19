@@ -1,11 +1,13 @@
 package rgo.tt.task.boot;
 
 import com.linecorp.armeria.server.HttpService;
+import com.linecorp.armeria.server.ServiceNaming;
 import com.linecorp.armeria.server.cors.CorsService;
 import com.linecorp.armeria.server.docs.DocService;
 import com.linecorp.armeria.server.logging.LoggingService;
 import com.linecorp.armeria.server.metric.MetricCollectingService;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
+import com.linecorp.armeria.server.throttling.ThrottlingService;
 import com.linecorp.armeria.spring.ArmeriaServerConfigurator;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ public class ArmeriaConfig {
 
     @Autowired private ProbeService probeService;
 
+    @Autowired private Function<? super HttpService, ThrottlingService> throttlingDecorator;
     @Autowired private Function<? super HttpService, CorsService> corsDecorator;
     @Autowired private Function<? super HttpService, HeadersService> headersDecorator;
     @Autowired private Function<? super HttpService, MetricCollectingService> metricsDecorator;
@@ -43,6 +46,7 @@ public class ArmeriaConfig {
     public ArmeriaServerConfigurator armeriaConfigurator() {
         return serverBuilder ->
                 serverBuilder
+                        .defaultServiceNaming(ServiceNaming.simpleTypeName())
                         .annotatedService("/internal", probeService)
                         .annotatedService("/tasks", restTaskService)
                         .annotatedService("/tasks-boards", restTasksBoardService)
@@ -53,7 +57,8 @@ public class ArmeriaConfig {
                         .decorator(LoggingService.newDecorator())
                         .decorator(headersDecorator)
                         .decorator(metricsDecorator)
-                        .decorator(corsDecorator);
+                        .decorator(corsDecorator)
+                        .decorator(throttlingDecorator);
     }
 
     private DocService docService() {
