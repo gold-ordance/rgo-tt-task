@@ -39,6 +39,23 @@ Body:
 }
 ```
 
+* **Too Many Requests (429):**
+  * Too many requests.
+
+Headers:
+```code
+content-type: application/json; charset=utf-8
+```
+
+Body:
+```code
+{
+    "status": {
+        "statusCode": "TOO_MANY_REQUESTS"
+    }
+}
+```
+
 * **Internal error (500):**
     * Internal unexpected error.
 
@@ -108,6 +125,23 @@ Body:
 {
     "status": {
         "statusCode": "NOT_FOUND"
+    }
+}
+```
+
+* **Too Many Requests (429):**
+  * Too many requests.
+
+Headers:
+```code
+content-type: application/json; charset=utf-8
+```
+
+Body:
+```code
+{
+    "status": {
+        "statusCode": "TOO_MANY_REQUESTS"
     }
 }
 ```
@@ -194,6 +228,23 @@ Bodies:
 }
 ```
 
+* **Too Many Requests (429):**
+  * Too many requests.
+
+Headers:
+```code
+content-type: application/json; charset=utf-8
+```
+
+Body:
+```code
+{
+    "status": {
+        "statusCode": "TOO_MANY_REQUESTS"
+    }
+}
+```
+
 * **Internal error (500):**
     * Internal unexpected error.
 
@@ -261,6 +312,23 @@ Body:
 {
     "status": {
         "statusCode": "NOT_FOUND"
+    }
+}
+```
+
+* **Too Many Requests (429):**
+  * Too many requests.
+
+Headers:
+```code
+content-type: application/json; charset=utf-8
+```
+
+Body:
+```code
+{
+    "status": {
+        "statusCode": "TOO_MANY_REQUESTS"
     }
 }
 ```

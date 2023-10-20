@@ -33,7 +33,23 @@ Body:
     ...
   ]
 }
+```
 
+* **Too Many Requests (429):**
+  * Too many requests.
+
+Headers:
+```code
+content-type: application/json; charset=utf-8
+```
+
+Body:
+```code
+{
+    "status": {
+        "statusCode": "TOO_MANY_REQUESTS"
+    }
+}
 ```
 
 * **Internal error (500):**
