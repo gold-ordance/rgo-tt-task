@@ -25,12 +25,12 @@ import rgo.tt.task.service.tasksboard.TasksBoardService;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.delete;
-import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.get;
-import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.post;
-import static rgo.tt.common.armeria.utils.test.ArmeriaClientManager.put;
-import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.startServerWithService;
-import static rgo.tt.common.armeria.utils.test.ArmeriaServerManager.stopServer;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.delete;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.get;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.post;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.put;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startServerWithService;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.stopServer;
 import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
 import static rgo.tt.common.rest.api.utils.RestUtils.json;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
