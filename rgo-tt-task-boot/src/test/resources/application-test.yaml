@@ -18,29 +18,29 @@ rate-limiter:
   services:
     ValidateRestTaskServiceDecorator:
       - method: findAllForBoard
-        limit: 2000
+        limit: 1
       - method: findByEntityId
-        limit: 2000
+        limit: 1
       - method: findByName
-        limit: 2000
+        limit: 1
       - method: save
-        limit: 2000
+        limit: 1
       - method: update
-        limit: 2000
+        limit: 1
       - method: deleteByEntityId
-        limit: 2000
+        limit: 1
     ValidateRestTasksBoardServiceDecorator:
       - method: findAll
-        limit: 2000
+        limit: 1
       - method: findByEntityId
-        limit: 2000
+        limit: 1
       - method: save
-        limit: 2000
+        limit: 1
       - method: deleteByEntityId
-        limit: 2000
+        limit: 1
     ValidateRestTaskStatusServiceDecorator:
       - method: findAll
-        limit: 2000
+        limit: 1
     ValidateRestTaskTypeServiceDecorator:
       - method: findAll
-        limit: 2000
+        limit: 1
