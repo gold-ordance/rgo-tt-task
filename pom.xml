@@ -30,7 +30,6 @@
         <java.version>17</java.version>
 
         <armeria.version>1.25.2</armeria.version>
-        <commons-lang3.version>3.13.0</commons-lang3.version>
         <guava.version>32.1.2-jre</guava.version>
         <jvm-extras.version>0.2.2</jvm-extras.version>
         <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
@@ -99,14 +98,6 @@
                 <version>${jvm-extras.version}</version>
             </dependency>
             <!-- metrics -->
-
-            <!-- utils -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <!-- utils -->
         </dependencies>
     </dependencyManagement>
 
