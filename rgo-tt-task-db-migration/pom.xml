@@ -18,31 +18,77 @@
     </properties>
 
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>docker-deploy</id>
-                        <phase>${docker-release.phase}</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>docker-deploy.cmd</executable>
-                    <arguments>
-                        <argument>${docker.tag}</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <id>docker-deploy</id>
+                            <phase>${docker-release.phase}</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <executable>${docker-file.executable}</executable>
+                        <arguments>
+                            <argument>${docker.tag}</argument>
+                        </arguments>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+
+            <properties>
+                <docker-file.executable>docker-deploy.cmd</docker-file.executable>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>macos</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+
+            <properties>
+                <docker-file.executable>docker-deploy.sh</docker-file.executable>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>docker-db-dev</id>
 
