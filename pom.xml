@@ -62,8 +62,8 @@
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-tt-common</artifactId>
                 <version>${rgo-tt-common.version}</version>
-                <scope>import</scope>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <!-- external modules -->
         </dependencies>
