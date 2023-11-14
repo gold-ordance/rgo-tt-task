@@ -29,9 +29,6 @@
     <properties>
         <java.version>17</java.version>
 
-        <armeria.version>1.25.2</armeria.version>
-        <guava.version>32.1.2-jre</guava.version>
-        <jvm-extras.version>0.2.2</jvm-extras.version>
         <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
     </properties>
 
@@ -63,41 +60,12 @@
             <!-- external modules -->
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-common-validator</artifactId>
+                <artifactId>rgo-tt-common</artifactId>
                 <version>${rgo-tt-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-common-exceptions</artifactId>
-                <version>${rgo-tt-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-common-persistence</artifactId>
-                <version>${rgo-tt-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-common-armeria</artifactId>
-                <version>${rgo-tt-common.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <!-- external modules -->
-
-            <!-- armeria -->
-            <dependency>
-                <groupId>com.linecorp.armeria</groupId>
-                <artifactId>armeria-spring-boot3-starter</artifactId>
-                <version>${armeria.version}</version>
-            </dependency>
-            <!-- armeria -->
-
-            <!-- metrics -->
-            <dependency>
-                <groupId>io.github.mweirauch</groupId>
-                <artifactId>micrometer-jvm-extras</artifactId>
-                <version>${jvm-extras.version}</version>
-            </dependency>
-            <!-- metrics -->
         </dependencies>
     </dependencyManagement>
 
