@@ -14,8 +14,6 @@ import rgo.tt.task.persistence.storage.sqlstatement.tasksboard.TasksBoardSqlStat
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.tt.common.persistence.utils.CommonPersistenceUtils.getFirstEntity;
-
 public class PostgresTasksBoardRepository implements TasksBoardRepository {
 
     private final StatementJdbcTemplateAdapter jdbc;
@@ -35,7 +33,7 @@ public class PostgresTasksBoardRepository implements TasksBoardRepository {
     public Optional<TasksBoard> findByEntityId(Long entityId) {
         SqlReadStatement<TasksBoard> statement = TasksBoardSqlStatement.findByEntityId(entityId);
         SqlReadResult<TasksBoard> result = jdbc.read(statement);
-        return getFirstEntity(result.getEntities());
+        return result.getEntity();
     }
 
     @Override
