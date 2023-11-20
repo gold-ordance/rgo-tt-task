@@ -17,7 +17,7 @@ import static rgo.tt.task.persistence.storage.utils.H2PersistenceUtils.h2RetryPo
 public class DbDialectConfig {
 
     @Configuration
-    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "app.persistence", name = "dialect", havingValue = "H2", matchIfMissing = true)
     public static class H2Config {
 
         @Bean
@@ -32,17 +32,17 @@ public class DbDialectConfig {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = "persistence", name = "dialect", havingValue = "POSTGRES")
+    @ConditionalOnProperty(prefix = "app.persistence", name = "dialect", havingValue = "POSTGRES")
     public static class PostgresConfig {
 
         @Bean
-        @ConfigurationProperties("persistence.retry-policy")
+        @ConfigurationProperties("app.persistence.retry-policy")
         public RetryPolicyProperties retryPolicyProperties() {
             return new RetryPolicyProperties();
         }
 
         @Bean
-        @ConfigurationProperties("persistence")
+        @ConfigurationProperties("app.persistence")
         public DbProperties dbProperties() {
             return new DbProperties();
         }

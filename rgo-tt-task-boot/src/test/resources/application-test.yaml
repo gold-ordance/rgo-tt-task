@@ -3,44 +3,43 @@ spring:
     web-application-type: none
     banner-mode: off
 
-cors:
-  origins: 'http://localhost:5173'
-  methods: GET, POST, PUT, DELETE
-  maxAgeSeconds: 3600
-
 armeria:
   ports:
     - port: 8080
-      protocols:
-        - HTTP
 
-rate-limiter:
-  services:
-    ValidateRestTaskServiceDecorator:
-      - method: findAllForBoard
-        limit: 1
-      - method: findByEntityId
-        limit: 1
-      - method: findByName
-        limit: 1
-      - method: save
-        limit: 1
-      - method: update
-        limit: 1
-      - method: deleteByEntityId
-        limit: 1
-    ValidateRestTasksBoardServiceDecorator:
-      - method: findAll
-        limit: 1
-      - method: findByEntityId
-        limit: 1
-      - method: save
-        limit: 1
-      - method: deleteByEntityId
-        limit: 1
-    ValidateRestTaskStatusServiceDecorator:
-      - method: findAll
-        limit: 1
-    ValidateRestTaskTypeServiceDecorator:
-      - method: findAll
-        limit: 1
+app:
+  cors:
+    origins: 'http://localhost:5173'
+    methods: GET, POST, PUT, DELETE
+    maxAgeSeconds: 3600
+
+  rate-limiter:
+    services:
+      ValidateRestTaskServiceDecorator:
+        - method: findAllForBoard
+          limit: 1
+        - method: findByEntityId
+          limit: 1
+        - method: findByName
+          limit: 1
+        - method: save
+          limit: 1
+        - method: update
+          limit: 1
+        - method: deleteByEntityId
+          limit: 1
+      ValidateRestTasksBoardServiceDecorator:
+        - method: findAll
+          limit: 1
+        - method: findByEntityId
+          limit: 1
+        - method: save
+          limit: 1
+        - method: deleteByEntityId
+          limit: 1
+      ValidateRestTaskStatusServiceDecorator:
+        - method: findAll
+          limit: 1
+      ValidateRestTaskTypeServiceDecorator:
+        - method: findAll
+          limit: 1

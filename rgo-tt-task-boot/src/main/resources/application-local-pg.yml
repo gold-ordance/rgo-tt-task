@@ -6,58 +6,57 @@ spring:
 armeria:
   ports:
     - port: 8080
-      protocols:
-        - HTTP
 
 logging:
   config: classpath:logback-local.xml
 
-cors:
-  origins: 'http://localhost:5173'
-  methods: GET, POST, PUT, DELETE
-  maxAgeSeconds: 3600
+app:
+  cors:
+    origins: 'http://localhost:5173'
+    methods: GET, POST, PUT, DELETE
+    maxAgeSeconds: 3600
 
-persistence:
-  dialect: POSTGRES
-  url: jdbc:postgresql://localhost:5433/task
-  schema: task
-  username: task_appl
-  password: qwe123
-  maxPoolSize: 10
-  retry-policy:
-    entities:
-      task:
-        save:
-          attempts: 3
-          exception: rgo.tt.common.exceptions.UniqueViolationException
+  persistence:
+    dialect: POSTGRES
+    url: jdbc:postgresql://localhost:5433/task
+    schema: task
+    username: task_appl
+    password: qwe123
+    maxPoolSize: 10
+    retry-policy:
+      entities:
+        task:
+          save:
+            attempts: 3
+            exception: rgo.tt.common.exceptions.UniqueViolationException
 
-rate-limiter:
-  services:
-    ValidateRestTaskServiceDecorator:
-      - method: findAllForBoard
-        limit: 2000
-      - method: findByEntityId
-        limit: 2000
-      - method: findByName
-        limit: 2000
-      - method: save
-        limit: 2000
-      - method: update
-        limit: 2000
-      - method: deleteByEntityId
-        limit: 2000
-    ValidateRestTasksBoardServiceDecorator:
-      - method: findAll
-        limit: 2000
-      - method: findByEntityId
-        limit: 2000
-      - method: save
-        limit: 2000
-      - method: deleteByEntityId
-        limit: 2000
-    ValidateRestTaskStatusServiceDecorator:
-      - method: findAll
-        limit: 2000
-    ValidateRestTaskTypeServiceDecorator:
-      - method: findAll
-        limit: 2000
+  rate-limiter:
+    services:
+      ValidateRestTaskServiceDecorator:
+        - method: findAllForBoard
+          limit: 2000
+        - method: findByEntityId
+          limit: 2000
+        - method: findByName
+          limit: 2000
+        - method: save
+          limit: 2000
+        - method: update
+          limit: 2000
+        - method: deleteByEntityId
+          limit: 2000
+      ValidateRestTasksBoardServiceDecorator:
+        - method: findAll
+          limit: 2000
+        - method: findByEntityId
+          limit: 2000
+        - method: save
+          limit: 2000
+        - method: deleteByEntityId
+          limit: 2000
+      ValidateRestTaskStatusServiceDecorator:
+        - method: findAll
+          limit: 2000
+      ValidateRestTaskTypeServiceDecorator:
+        - method: findAll
+          limit: 2000
