@@ -20,7 +20,7 @@ import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.delet
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.get;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.post;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.put;
-import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startServerWithService;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startArmeriaServer;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.stopServer;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
 import static rgo.tt.common.utils.RandomUtils.randomString;
@@ -35,7 +35,7 @@ class ValidateRestTaskServiceDecoratorTest {
 
     @BeforeEach
     void setUp() {
-        startServerWithService(restService);
+        startArmeriaServer(restService);
     }
 
     @AfterAll

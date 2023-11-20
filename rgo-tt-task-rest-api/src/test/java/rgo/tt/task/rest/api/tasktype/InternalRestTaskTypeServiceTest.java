@@ -17,7 +17,7 @@ import rgo.tt.task.rest.api.tasktype.response.TaskTypeGetListResponse;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startServerWithService;
+import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startArmeriaServer;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.stopServer;
 import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.TYPES;
@@ -31,7 +31,7 @@ class InternalRestTaskTypeServiceTest {
 
     @BeforeEach
     void setUp() {
-        startServerWithService(restService);
+        startArmeriaServer(restService);
         H2PersistenceUtils.truncateTables();
     }
 
