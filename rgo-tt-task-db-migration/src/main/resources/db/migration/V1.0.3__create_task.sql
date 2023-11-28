@@ -13,13 +13,13 @@ CREATE TABLE task (
     status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id)
 );
 
-CREATE INDEX board_id_name_task_idx
+CREATE INDEX task_board_id_name_idx
           ON task(board_id, lower(name))
   TABLESPACE ${tbsIndexes};
 
-CREATE UNIQUE INDEX board_id_number_task_uq_idx
-    ON task(board_id, number)
-    TABLESPACE ${tbsIndexes};
+CREATE UNIQUE INDEX task_board_id_number_idx
+                 ON task(board_id, number)
+         TABLESPACE ${tbsIndexes};
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON task TO ${appRole};
 GRANT SELECT ON task TO ${readerRole};

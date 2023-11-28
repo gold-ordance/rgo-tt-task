@@ -11,6 +11,9 @@ CREATE TABLE task_status (
     name      VARCHAR(64) NOT NULL
 );
 
+CREATE UNIQUE INDEX task_status_name_idx
+                 ON task_status(name);
+
 INSERT INTO task_status(name)
 VALUES ('TO DO'),
        ('IN PROGRESS'),
@@ -21,6 +24,9 @@ CREATE TABLE task_type (
     entity_id IDENTITY,
     name      VARCHAR(64) NOT NULL
 );
+
+CREATE UNIQUE INDEX task_type_name_idx
+                 ON task_type(name);
 
 INSERT INTO task_type(name)
 VALUES ('Task'),
@@ -39,5 +45,5 @@ CREATE TABLE task (
     status_id          BIGINT         NOT NULL REFERENCES task_status(entity_id)
 );
 
-CREATE UNIQUE INDEX board_id_number_task_uq_idx
-    ON task(board_id, number);
+CREATE UNIQUE INDEX task_board_id_number_idx
+                 ON task(board_id, number);

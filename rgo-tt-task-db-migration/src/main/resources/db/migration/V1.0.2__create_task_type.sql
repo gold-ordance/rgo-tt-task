@@ -6,6 +6,10 @@ CREATE TABLE task_type (
     name      VARCHAR(64) NOT NULL
 );
 
+CREATE UNIQUE INDEX task_type_name_idx
+                 ON task_type(name)
+         TABLESPACE ${tbsIndexes};
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON task_type TO ${appRole};
 GRANT SELECT ON task_type TO ${readerRole};
 
