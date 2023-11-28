@@ -14,7 +14,7 @@ app:
     maxAgeSeconds: 3600
 
   rate-limiter:
-    services:
+    rest-services:
       ValidateRestTaskServiceDecorator:
         - method: findAllForBoard
           limit: 1

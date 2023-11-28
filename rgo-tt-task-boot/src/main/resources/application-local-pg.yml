@@ -31,7 +31,7 @@ app:
             exception: rgo.tt.common.exceptions.UniqueViolationException
 
   rate-limiter:
-    services:
+    rest-services:
       ValidateRestTaskServiceDecorator:
         - method: findAllForBoard
           limit: 2000
