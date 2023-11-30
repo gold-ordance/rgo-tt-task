@@ -1,5 +1,6 @@
 package rgo.tt.task.boot;
 
+import com.linecorp.armeria.common.logging.LogLevel;
 import com.linecorp.armeria.server.HttpService;
 import com.linecorp.armeria.server.ServiceNaming;
 import com.linecorp.armeria.server.cors.CorsService;
@@ -54,7 +55,11 @@ public class ArmeriaConfig {
                         .annotatedService("/statuses", restTaskStatusService)
                         .serviceUnder("/internal/metrics", PrometheusExpositionService.of(registry.getPrometheusRegistry()))
                         .serviceUnder("/docs", docService())
-                        .decorator(LoggingService.newDecorator())
+                        .decorator(LoggingService.builder()
+                                .requestLogLevel(LogLevel.INFO)
+                                .successfulResponseLogLevel(LogLevel.INFO)
+                                .failureResponseLogLevel(LogLevel.WARN)
+                                .newDecorator())
                         .decorator(headersDecorator)
                         .decorator(metricsDecorator)
                         .decorator(corsDecorator)
