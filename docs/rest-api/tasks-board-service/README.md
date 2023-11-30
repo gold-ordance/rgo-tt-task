@@ -18,12 +18,12 @@ GET http://localhost:8080/tasks-boards
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
   "status": {
     "statusCode": "SUCCESS"
@@ -43,12 +43,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -60,12 +60,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -82,7 +82,7 @@ GET http://localhost:8080/tasks-boards/{entityId}
 ```
 
 **Query params**:
-```code
+```
 entityId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -93,12 +93,12 @@ entityId:
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
   "status": {
     "statusCode": "SUCCESS"
@@ -116,12 +116,12 @@ Body:
     * Not found by {entityId}.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "NOT_FOUND"
@@ -133,12 +133,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -150,12 +150,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -172,7 +172,7 @@ POST http://localhost:8080/tasks-boards
 ```
 
 **Body**:
-```code
+```
 {
     "name": <string>
 }
@@ -183,12 +183,12 @@ POST http://localhost:8080/tasks-boards
 * **CREATED (201):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
   "status": {
     "statusCode": "SUCCESS"
@@ -206,12 +206,12 @@ Body:
     * The {name} is [null, empty].
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -219,7 +219,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -232,12 +232,12 @@ Bodies:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -249,12 +249,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -271,7 +271,7 @@ DELETE http://localhost:8080/tasks-boards/{entityId}
 ```
 
 **Query params**:
-```code
+```
 entityId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -285,12 +285,12 @@ entityId:
     * The {entityId} is negative.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -303,12 +303,12 @@ Body:
     * Not found by {entityId}.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "NOT_FOUND"
@@ -320,12 +320,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -337,6 +337,6 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```

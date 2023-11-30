@@ -16,7 +16,7 @@ GET http://localhost:8080/tasks?boardId={boardId}
 ```
 
 **Query params**:
-```code
+```
 boardId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -27,12 +27,12 @@ boardId:
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "SUCCESS"
@@ -68,12 +68,12 @@ Body:
     * The {boardId} parameter is negative.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -86,12 +86,12 @@ Body:
     * The {boardId} not found in the storage.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -104,12 +104,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -121,12 +121,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -143,7 +143,7 @@ GET http://localhost:8080/tasks/{entityId}
 ```
 
 **Query params**:
-```code
+```
 entityId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -154,12 +154,12 @@ entityId:
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "SUCCESS"
@@ -192,12 +192,12 @@ Body:
     * The {entityId} is negative.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -210,12 +210,12 @@ Body:
     * Not found by {entityId}.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "NOT_FOUND"
@@ -227,12 +227,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -244,12 +244,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -266,7 +266,7 @@ GET http://localhost:8080/tasks?name={name}&boardId={boardId}
 ```
 
 **Query params**:
-```code
+```
 boardId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -280,12 +280,12 @@ name:
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "SUCCESS"
@@ -322,12 +322,12 @@ Body:
     * The {boardId} is negative.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -335,7 +335,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -348,12 +348,12 @@ Bodies:
     * The {boardId} not found in the storage.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -366,12 +366,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -383,12 +383,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -405,7 +405,7 @@ POST http://localhost:8080/tasks
 ```
 
 **Body**:
-```code
+```
 {
     "name": <string>,
     "boardId": <number>,
@@ -420,12 +420,12 @@ POST http://localhost:8080/tasks
 * **CREATED (201):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "STORED"
@@ -460,12 +460,12 @@ Body:
     * The {typeId} is [null, negative].
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -473,7 +473,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -481,7 +481,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -489,7 +489,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -497,7 +497,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -505,7 +505,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -519,12 +519,12 @@ Bodies:
     * The {typeId} not found in the storage.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -532,7 +532,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -545,12 +545,12 @@ Bodies:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -562,12 +562,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -584,7 +584,7 @@ PUT http://localhost:8080/tasks
 ```
 
 **Body**:
-```code
+```
 {
     "entityId": <number>,
     "name": <string>,
@@ -599,12 +599,12 @@ PUT http://localhost:8080/tasks
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "SUCCESS"
@@ -640,12 +640,12 @@ Body:
     * The {typeId} is [null, negative].
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -653,7 +653,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -661,7 +661,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -669,7 +669,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -677,7 +677,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -685,7 +685,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -693,7 +693,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -701,7 +701,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -716,12 +716,12 @@ Bodies:
     * The {typeId} not found in the storage.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Bodies:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -729,7 +729,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -737,7 +737,7 @@ Bodies:
     }
 }
 ```
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_ENTITY",
@@ -750,12 +750,12 @@ Bodies:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -767,12 +767,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
@@ -789,7 +789,7 @@ DELETE http://localhost:8080/tasks/{entityId}
 ```
 
 **Query params**:
-```code
+```
 entityId:
   type: number
   valid-value: [1, 2^63 - 1]
@@ -803,12 +803,12 @@ entityId:
     * The {entityId} is negative.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "INVALID_RQ",
@@ -821,12 +821,12 @@ Body:
     * Not found by {entityId}.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "NOT_FOUND"
@@ -838,12 +838,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -855,6 +855,6 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```

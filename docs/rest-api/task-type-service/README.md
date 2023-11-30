@@ -15,12 +15,12 @@ GET http://localhost:8080/types
 * **OK (200):**
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
   "status": {
     "statusCode": "SUCCESS"
@@ -39,12 +39,12 @@ Body:
   * Too many requests.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "TOO_MANY_REQUESTS"
@@ -56,12 +56,12 @@ Body:
     * Internal unexpected error.
 
 Headers:
-```code
+```
 content-type: application/json; charset=utf-8
 ```
 
 Body:
-```code
+```
 {
     "status": {
         "statusCode": "ERROR",
