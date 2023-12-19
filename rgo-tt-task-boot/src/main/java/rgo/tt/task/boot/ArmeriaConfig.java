@@ -60,10 +60,10 @@ public class ArmeriaConfig {
                                 .successfulResponseLogLevel(LogLevel.INFO)
                                 .failureResponseLogLevel(LogLevel.WARN)
                                 .newDecorator())
-                        .decorator(headersDecorator)
                         .decorator(metricsDecorator)
                         .decorator(corsDecorator)
-                        .decorator(throttlingDecorator);
+                        .decorator(throttlingDecorator)
+                        .decorator(headersDecorator);
     }
 
     private DocService docService() {
