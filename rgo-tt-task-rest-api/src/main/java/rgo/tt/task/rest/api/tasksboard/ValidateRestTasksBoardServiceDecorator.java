@@ -7,8 +7,6 @@ import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
 import com.linecorp.armeria.server.annotation.Param;
 import com.linecorp.armeria.server.annotation.Post;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rgo.tt.task.rest.api.ExceptionCommonHandler;
 import rgo.tt.task.rest.api.tasksboard.request.TasksBoardSaveRequest;
 
@@ -19,8 +17,6 @@ import static rgo.tt.common.validator.ValidatorUtils.validateString;
 @ExceptionHandler(ExceptionCommonHandler.class)
 public class ValidateRestTasksBoardServiceDecorator implements RestTasksBoardService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidateRestTasksBoardServiceDecorator.class);
-
     private final RestTasksBoardService delegate;
 
     public ValidateRestTasksBoardServiceDecorator(RestTasksBoardService delegate) {
@@ -30,14 +26,12 @@ public class ValidateRestTasksBoardServiceDecorator implements RestTasksBoardSer
     @Get
     @Override
     public HttpResponse findAll() {
-        LOGGER.info("Request 'findAll' received.");
         return delegate.findAll();
     }
 
     @Get("/{entityId}")
     @Override
     public HttpResponse findByEntityId(@Param Long entityId) {
-        LOGGER.info("Request 'findByEntityId' received: entityId={}", entityId);
         validateObjectId(entityId, "entityId");
         return delegate.findByEntityId(entityId);
     }
@@ -45,7 +39,6 @@ public class ValidateRestTasksBoardServiceDecorator implements RestTasksBoardSer
     @Post
     @Override
     public HttpResponse save(TasksBoardSaveRequest rq) {
-        LOGGER.info("Request 'save' received: request={}", rq);
         validateString(rq.getName(), "name");
         return delegate.save(rq);
     }
@@ -53,7 +46,6 @@ public class ValidateRestTasksBoardServiceDecorator implements RestTasksBoardSer
     @Delete("/{entityId}")
     @Override
     public HttpResponse deleteByEntityId(@Param Long entityId) {
-        LOGGER.info("Request 'deleteByEntityId' received: entityId={}", entityId);
         validateObjectId(entityId, "entityId");
         return delegate.deleteByEntityId(entityId);
     }
