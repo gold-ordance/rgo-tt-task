@@ -1,11 +1,10 @@
 package rgo.tt.task.boot;
 
-import com.linecorp.armeria.common.logging.LogLevel;
+import com.linecorp.armeria.server.DecoratingHttpServiceFunction;
 import com.linecorp.armeria.server.HttpService;
 import com.linecorp.armeria.server.ServiceNaming;
 import com.linecorp.armeria.server.cors.CorsService;
 import com.linecorp.armeria.server.docs.DocService;
-import com.linecorp.armeria.server.logging.LoggingService;
 import com.linecorp.armeria.server.metric.MetricCollectingService;
 import com.linecorp.armeria.server.metric.PrometheusExpositionService;
 import com.linecorp.armeria.server.throttling.ThrottlingService;
@@ -16,8 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.armeria.ArmeriaCommonConfig;
-import rgo.tt.common.armeria.headers.HeadersService;
 import rgo.tt.common.armeria.ProbeService;
+import rgo.tt.common.armeria.headers.HeadersService;
 import rgo.tt.task.rest.api.task.RestTaskService;
 import rgo.tt.task.rest.api.tasksboard.RestTasksBoardService;
 import rgo.tt.task.rest.api.taskstatus.RestTaskStatusService;
@@ -40,6 +39,7 @@ public class ArmeriaConfig {
     @Autowired private Function<? super HttpService, CorsService> corsDecorator;
     @Autowired private Function<? super HttpService, HeadersService> headersDecorator;
     @Autowired private Function<? super HttpService, MetricCollectingService> metricsDecorator;
+    @Autowired private DecoratingHttpServiceFunction loggingDecorator;
 
     @Autowired private PrometheusMeterRegistry registry;
 
@@ -55,11 +55,7 @@ public class ArmeriaConfig {
                         .annotatedService("/statuses", restTaskStatusService)
                         .serviceUnder("/internal/metrics", PrometheusExpositionService.of(registry.getPrometheusRegistry()))
                         .serviceUnder("/docs", docService())
-                        .decorator(LoggingService.builder()
-                                .requestLogLevel(LogLevel.INFO)
-                                .successfulResponseLogLevel(LogLevel.INFO)
-                                .failureResponseLogLevel(LogLevel.WARN)
-                                .newDecorator())
+                        .decorator(loggingDecorator)
                         .decorator(metricsDecorator)
                         .decorator(corsDecorator)
                         .decorator(throttlingDecorator)
