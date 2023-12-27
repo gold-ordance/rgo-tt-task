@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import rgo.tt.common.armeria.ArmeriaCommonConfig;
 import rgo.tt.common.armeria.ProbeService;
-import rgo.tt.common.armeria.headers.HeadersService;
+import rgo.tt.common.armeria.headers.HeadersDecorator;
 import rgo.tt.common.armeria.logger.LoggingDecorator;
 import rgo.tt.task.rest.api.task.RestTaskService;
 import rgo.tt.task.rest.api.tasksboard.RestTasksBoardService;
@@ -37,7 +37,7 @@ public class ArmeriaConfig {
 
     @Autowired private Function<? super HttpService, ThrottlingService> throttlingDecorator;
     @Autowired private Function<? super HttpService, CorsService> corsDecorator;
-    @Autowired private Function<? super HttpService, HeadersService> headersDecorator;
+    @Autowired private Function<? super HttpService, HeadersDecorator> headersDecorator;
     @Autowired private Function<? super HttpService, MetricCollectingService> metricsDecorator;
     @Autowired private Function<? super HttpService, LoggingDecorator> loggingDecorator;
 
