@@ -3,7 +3,7 @@ package rgo.tt.task.rest.api.task;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import rgo.tt.common.armeria.test.ratelimiter.AbstractRateLimiterTest;
+import rgo.tt.common.armeria.test.ratelimiter.AbstractRestRateLimiterTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.utils.RandomUtils.randomPositiveLong;
@@ -11,7 +11,7 @@ import static rgo.tt.common.utils.RandomUtils.randomString;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class RateLimiterRestTaskServiceTest extends AbstractRateLimiterTest {
+class RateLimiterRestTaskServiceTest extends AbstractRestRateLimiterTest {
 
     private static final int PORT = 8080;
     private static final String BASE_URL = "/tasks";
