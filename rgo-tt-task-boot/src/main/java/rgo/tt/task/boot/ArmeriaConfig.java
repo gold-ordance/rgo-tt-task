@@ -57,8 +57,8 @@ public class ArmeriaConfig {
                         .serviceUnder("/docs", docService())
                         .decorator(loggingDecorator)
                         .decorator(metricsDecorator)
-                        .decorator(corsDecorator)
                         .decorator(headersDecorator)
+                        .decorator(corsDecorator)
                         .decorator(throttlingDecorator);
     }
 
