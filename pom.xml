@@ -23,7 +23,6 @@
         <module>rgo-tt-task-service</module>
         <module>rgo-tt-task-rest-api</module>
         <module>rgo-tt-task-db-migration</module>
-        <module>rgo-tt-task-metrics</module>
     </modules>
 
     <properties>
@@ -48,11 +47,6 @@
             <dependency>
                 <groupId>ru.gold.ordance</groupId>
                 <artifactId>rgo-tt-task-rest-api</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ru.gold.ordance</groupId>
-                <artifactId>rgo-tt-task-metrics</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- self modules -->

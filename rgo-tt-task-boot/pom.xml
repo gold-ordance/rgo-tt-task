@@ -24,10 +24,6 @@
             <groupId>ru.gold.ordance</groupId>
             <artifactId>rgo-tt-task-rest-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-task-metrics</artifactId>
-        </dependency>
         <!-- self modules -->
 
         <!-- armeria -->
