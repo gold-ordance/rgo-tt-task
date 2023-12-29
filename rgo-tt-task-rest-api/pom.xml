@@ -27,7 +27,7 @@
         </dependency>
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-common-rest-api</artifactId>
+            <artifactId>rgo-tt-common-armeria-rest</artifactId>
         </dependency>
         <!-- external modules -->
 

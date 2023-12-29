@@ -8,7 +8,7 @@ import rgo.tt.task.service.tasktype.TaskTypeService;
 
 import java.util.List;
 
-import static rgo.tt.common.rest.api.utils.RestUtils.mapToHttp;
+import static rgo.tt.common.armeria.rest.RestUtils.mapToHttp;
 import static rgo.tt.task.rest.api.tasktype.TaskTypeMapper.map;
 
 public class InternalRestTaskTypeService implements RestTaskTypeService {

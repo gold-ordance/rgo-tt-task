@@ -10,7 +10,7 @@ import rgo.tt.common.exceptions.ValidateException;
 import rgo.tt.common.rest.api.ErrorResponse;
 import rgo.tt.common.rest.api.Response;
 
-import static rgo.tt.common.rest.api.utils.RestUtils.mapToHttp;
+import static rgo.tt.common.armeria.rest.RestUtils.mapToHttp;
 
 public class ExceptionCommonHandler implements ExceptionHandlerFunction {
 

@@ -14,8 +14,8 @@ import rgo.tt.task.rest.api.task.request.TaskPutRequest;
 import rgo.tt.task.rest.api.task.request.TaskSaveRequest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
-import static rgo.tt.common.rest.api.utils.RestUtils.json;
+import static rgo.tt.common.armeria.rest.RestUtils.fromJson;
+import static rgo.tt.common.armeria.rest.RestUtils.json;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.delete;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.get;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.post;

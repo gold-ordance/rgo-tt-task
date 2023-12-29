@@ -16,7 +16,7 @@ import rgo.tt.task.rest.api.taskstatus.response.TaskStatusGetListResponse;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
+import static rgo.tt.common.armeria.rest.RestUtils.fromJson;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaClientManager.get;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startArmeriaServer;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.stopServer;

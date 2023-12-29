@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.strip;
-import static rgo.tt.common.rest.api.utils.RestUtils.mapToHttp;
+import static rgo.tt.common.armeria.rest.RestUtils.mapToHttp;
 import static rgo.tt.task.rest.api.task.TaskMapper.map;
 
 public class InternalRestTaskService implements RestTaskService {

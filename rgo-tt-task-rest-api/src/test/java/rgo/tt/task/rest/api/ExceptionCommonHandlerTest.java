@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.rest.api.StatusCode.ERROR;
 import static rgo.tt.common.rest.api.StatusCode.INVALID_ENTITY;
 import static rgo.tt.common.rest.api.StatusCode.INVALID_RQ;
-import static rgo.tt.common.rest.api.utils.RestUtils.fromJson;
+import static rgo.tt.common.armeria.rest.RestUtils.fromJson;
 import static rgo.tt.common.utils.RandomUtils.randomString;
 
 @ExtendWith(MockitoExtension.class)
