@@ -12,11 +12,9 @@ import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import rgo.tt.common.armeria.ArmeriaCommonConfig;
 import rgo.tt.common.armeria.ProbeService;
-import rgo.tt.common.armeria.headers.HeadersDecorator;
-import rgo.tt.common.armeria.logger.LoggingDecorator;
+import rgo.tt.common.headers.HeadersDecorator;
+import rgo.tt.common.logger.LoggingDecorator;
 import rgo.tt.task.rest.api.task.RestTaskService;
 import rgo.tt.task.rest.api.tasksboard.RestTasksBoardService;
 import rgo.tt.task.rest.api.taskstatus.RestTaskStatusService;
@@ -25,7 +23,6 @@ import rgo.tt.task.rest.api.tasktype.RestTaskTypeService;
 import java.util.function.Function;
 
 @Configuration
-@Import(ArmeriaCommonConfig.class)
 public class ArmeriaConfig {
 
     @Autowired private RestTaskService restTaskService;

@@ -27,11 +27,16 @@
         </dependency>
         <dependency>
             <groupId>ru.gold.ordance</groupId>
-            <artifactId>rgo-tt-common-armeria</artifactId>
+            <artifactId>rgo-tt-common-rest-api</artifactId>
         </dependency>
         <!-- external modules -->
 
         <!-- test -->
+        <dependency>
+            <groupId>ru.gold.ordance</groupId>
+            <artifactId>rgo-tt-common-armeria-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
