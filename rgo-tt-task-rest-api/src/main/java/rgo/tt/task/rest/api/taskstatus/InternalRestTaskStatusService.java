@@ -8,7 +8,7 @@ import rgo.tt.task.service.taskstatus.TaskStatusService;
 
 import java.util.List;
 
-import static rgo.tt.common.armeria.rest.RestUtils.mapToHttp;
+import static rgo.tt.common.armeria.rest.HttpDataProcessor.mapToHttp;
 import static rgo.tt.task.rest.api.taskstatus.TaskStatusMapper.map;
 
 public class InternalRestTaskStatusService implements RestTaskStatusService {

@@ -7,7 +7,7 @@ import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
 import com.linecorp.armeria.server.annotation.Param;
 import com.linecorp.armeria.server.annotation.Post;
-import rgo.tt.task.rest.api.ExceptionCommonHandler;
+import rgo.tt.common.armeria.rest.ExceptionCommonHandler;
 import rgo.tt.task.rest.api.tasksboard.request.TasksBoardSaveRequest;
 
 import static rgo.tt.common.validator.ValidatorUtils.validateObjectId;

@@ -13,7 +13,7 @@ import rgo.tt.task.service.tasksboard.TasksBoardService;
 import java.util.List;
 import java.util.Optional;
 
-import static rgo.tt.common.armeria.rest.RestUtils.mapToHttp;
+import static rgo.tt.common.armeria.rest.HttpDataProcessor.mapToHttp;
 import static rgo.tt.task.rest.api.tasksboard.TasksBoardMapper.map;
 
 public class InternalRestTasksBoardService implements RestTasksBoardService {

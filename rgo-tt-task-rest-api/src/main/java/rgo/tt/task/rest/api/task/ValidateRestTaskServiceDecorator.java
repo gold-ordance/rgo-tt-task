@@ -9,7 +9,7 @@ import com.linecorp.armeria.server.annotation.MatchesParam;
 import com.linecorp.armeria.server.annotation.Param;
 import com.linecorp.armeria.server.annotation.Post;
 import com.linecorp.armeria.server.annotation.Put;
-import rgo.tt.task.rest.api.ExceptionCommonHandler;
+import rgo.tt.common.armeria.rest.ExceptionCommonHandler;
 import rgo.tt.task.rest.api.task.request.TaskPutRequest;
 import rgo.tt.task.rest.api.task.request.TaskSaveRequest;
 

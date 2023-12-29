@@ -19,7 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.startArmeriaServer;
 import static rgo.tt.common.armeria.test.simpleserver.ArmeriaServerManager.stopServer;
-import static rgo.tt.common.armeria.rest.RestUtils.fromJson;
+import static rgo.tt.common.armeria.rest.HttpDataProcessor.fromJson;
 import static rgo.tt.task.persistence.storage.utils.EntityGenerator.TYPES;
 import static rgo.tt.task.rest.api.tasktype.TaskTypeMapper.map;
 

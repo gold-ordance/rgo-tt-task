@@ -4,7 +4,7 @@ import com.linecorp.armeria.common.HttpResponse;
 import com.linecorp.armeria.server.annotation.Blocking;
 import com.linecorp.armeria.server.annotation.ExceptionHandler;
 import com.linecorp.armeria.server.annotation.Get;
-import rgo.tt.task.rest.api.ExceptionCommonHandler;
+import rgo.tt.common.armeria.rest.ExceptionCommonHandler;
 
 @Blocking
 @ExceptionHandler(ExceptionCommonHandler.class)
