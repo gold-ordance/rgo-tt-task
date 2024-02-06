@@ -13,7 +13,7 @@
 
     <groupId>ru.gold.ordance</groupId>
     <artifactId>rgo-tt-task</artifactId>
-    <version>23.0.0-SNAPSHOT</version>
+    <version>24.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -28,7 +28,7 @@
     <properties>
         <java.version>17</java.version>
 
-        <rgo-tt-common.version>23.0.0-SNAPSHOT</rgo-tt-common.version>
+        <rgo-tt-common.version>24.0.0-SNAPSHOT</rgo-tt-common.version>
     </properties>
 
     <dependencyManagement>
